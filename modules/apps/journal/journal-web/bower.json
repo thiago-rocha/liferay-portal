@@ -1,0 +1,7 @@
+{
+  "name": "journal-web",
+  "version": "1.0.0",
+  "dependencies": {
+  	"frontend-js-metal-web@1.0.0/crystal-tooltip/src/Tooltip": "frontend-js-metal-web@1.0.0/crystal-tooltip/src/Tooltip"
+  }
+}

@@ -24,4 +24,16 @@
 			<aui:button disabled="<%= true %>" icon="icon-lock" name="articlePermissionsButton" value="permissions" />
 		</c:if>
 	</div>
+
+	<aui:script require="journal-web/js/tooltip.es">
+		new journalWebJsTooltipEs(
+			{
+				content: 'My cool tooltip',
+				delay: [300, 150],
+				elementClasses: 'fade',
+				selector: '#<portlet:namespace />basicPreviewButton',
+				visible: false
+			}
+		).render();
+	</aui:script>
 </div>
