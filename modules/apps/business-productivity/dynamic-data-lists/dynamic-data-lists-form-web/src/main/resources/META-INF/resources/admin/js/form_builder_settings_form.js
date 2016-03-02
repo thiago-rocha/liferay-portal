@@ -42,6 +42,18 @@ AUI.add(
 						);
 					},
 
+					getAdvancedNode: function() {
+						var instance = this;
+
+						return instance.get('container').one('.advanced');
+					},
+
+					getPageNode: function() {
+						var instance = this;
+
+						return instance.get('container');
+					},
+
 					getSubmitButton: function() {
 						var instance = this;
 
@@ -173,7 +185,7 @@ AUI.add(
 					_createModeToggler: function() {
 						var instance = this;
 
-						var advancedSettingsNode = instance.getPageNode(2);
+						var advancedSettingsNode = instance.getAdvancedNode();
 
 						var modeToggler = A.Node.create(TPL_MODE_TOGGLER);
 
@@ -267,7 +279,7 @@ AUI.add(
 					_onClickModeToggler: function(event) {
 						var instance = this;
 
-						var advancedSettingsNode = instance.getPageNode(2);
+						var advancedSettingsNode = instance.getAdvancedNode();
 
 						advancedSettingsNode.toggleClass('active');
 
@@ -305,7 +317,7 @@ AUI.add(
 					_syncModeToggler: function() {
 						var instance = this;
 
-						var advancedSettingsNode = instance.getPageNode(2);
+						var advancedSettingsNode = instance.getAdvancedNode();
 
 						var modeToggler = instance.modeToggler;
 
