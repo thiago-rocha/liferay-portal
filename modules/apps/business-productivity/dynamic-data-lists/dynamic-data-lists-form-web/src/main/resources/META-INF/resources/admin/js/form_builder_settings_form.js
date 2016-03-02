@@ -180,6 +180,12 @@ AUI.add(
 						var nameField = instance.getField('name');
 
 						labelField.set('key', nameField.getValue());
+
+						var field = instance.get('field');
+
+						var existingField = field.get('builder').getField(field.get('name'));
+
+						instance.getSubmitButton().attr('disabled', !existingField);
 					},
 
 					_createModeToggler: function() {

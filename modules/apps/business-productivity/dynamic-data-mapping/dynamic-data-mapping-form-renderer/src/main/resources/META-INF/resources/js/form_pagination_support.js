@@ -11,6 +11,7 @@ AUI.add(
 				var instance = this;
 
 				instance.after('render', instance._afterPaginatedFormRender);
+				instance.after('validatedPage', instance._afterValidatedPage);
 			},
 
 			getCurrentPage: function() {
@@ -153,6 +154,24 @@ AUI.add(
 				}
 			},
 
+			_afterValidatedPage: function(event) {
+				var instance = this;
+
+				var disabled = !event.valid;
+
+				var nextButton = instance._getPaginationNextButton();
+
+				if (nextButton) {
+					nextButton.attr('disabled', disabled);
+				}
+
+				var submitButton = instance.getSubmitButton();
+
+				if (submitButton) {
+					submitButton.attr('disabled', disabled);
+				}
+			},
+
 			_getCurrentPageNode: function() {
 				var instance = this;
 
@@ -207,29 +226,11 @@ AUI.add(
 			_onPaginationChangeRequest: function(event) {
 				var instance = this;
 
-				var currentPage = instance.getCurrentPage();
-
 				var nextPage = event.state.page;
 
 				var pagination = instance.getPagination();
 
-				if (nextPage > currentPage) {
-					event.preventDefault();
-
-					var pages = instance._getPaginationNodes();
-
-					instance.validatePage(
-						pages.item(currentPage - 1),
-						function(hasErrors) {
-							if (!hasErrors) {
-								pagination.set('page', nextPage);
-							}
-						}
-					);
-				}
-				else {
-					pagination.set('page', nextPage);
-				}
+				pagination.set('page', nextPage);
 			},
 
 			_syncPaginationControlsUI: function() {

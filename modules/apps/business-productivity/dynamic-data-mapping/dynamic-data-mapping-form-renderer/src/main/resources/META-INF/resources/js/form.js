@@ -94,17 +94,11 @@ AUI.add(
 					submit: function() {
 						var instance = this;
 
-						instance.validate(
-							function(hasErrors) {
-								if (!hasErrors) {
-									var formNode = instance.getFormNode();
+						var formNode = instance.getFormNode();
 
-									instance.showLoadingFeedback();
+						instance.showLoadingFeedback();
 
-									formNode.submit();
-								}
-							}
-						);
+						formNode.submit();
 					},
 
 					toJSON: function() {
@@ -127,12 +121,6 @@ AUI.add(
 								field.render();
 							}
 						);
-
-						var submitButton = instance.getSubmitButton();
-
-						if (submitButton) {
-							submitButton.attr('disabled', false);
-						}
 					},
 
 					_onDOMSubmitForm: function(event) {
