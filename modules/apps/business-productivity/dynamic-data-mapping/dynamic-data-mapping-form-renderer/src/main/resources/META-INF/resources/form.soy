@@ -206,7 +206,7 @@
  */
 {template .simple_form}
 	<div class="lfr-ddm-form-container" id="{$containerId}">
-		<div class="lfr-ddm-form-fields">
+		<div class="lfr-ddm-form-fields lfr-ddm-form-page">
 			{foreach $page in $pages}
 				{call ddm.required_warning_message data="all"}
 					{param showRequiredFieldsWarning: $page.showRequiredFieldsWarning /}

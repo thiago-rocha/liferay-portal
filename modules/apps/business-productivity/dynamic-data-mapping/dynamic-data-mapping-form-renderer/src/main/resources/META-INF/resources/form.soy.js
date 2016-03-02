@@ -85,7 +85,7 @@ ddm.paginated_form = function(opt_data, opt_ignored) {
 
 
 ddm.simple_form = function(opt_data, opt_ignored) {
-  var output = '\t<div class="lfr-ddm-form-container" id="' + soy.$$escapeHtml(opt_data.containerId) + '"><div class="lfr-ddm-form-fields">';
+  var output = '\t<div class="lfr-ddm-form-container" id="' + soy.$$escapeHtml(opt_data.containerId) + '"><div class="lfr-ddm-form-fields lfr-ddm-form-page">';
   var pageList145 = opt_data.pages;
   var pageListLen145 = pageList145.length;
   for (var pageIndex145 = 0; pageIndex145 < pageListLen145; pageIndex145++) {
