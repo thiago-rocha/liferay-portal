@@ -111,9 +111,9 @@ AUI.add(
 
 				instance._updateSettingsFormValues();
 
-				settingsForm.render();
-
 				instance._renderSettingsModal();
+
+				settingsForm.render();
 			},
 
 			saveSettings: function() {
