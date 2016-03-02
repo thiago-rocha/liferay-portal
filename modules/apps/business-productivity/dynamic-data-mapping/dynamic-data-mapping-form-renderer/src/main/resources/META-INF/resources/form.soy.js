@@ -110,7 +110,7 @@ ddm.tabbed_form = function(opt_data, opt_ignored) {
   var pageListLen163 = pageList163.length;
   for (var pageIndex163 = 0; pageIndex163 < pageListLen163; pageIndex163++) {
     var pageData163 = pageList163[pageIndex163];
-    output += ddm.required_warning_message(soy.$$augmentMap(opt_data, {showRequiredFieldsWarning: pageData163.showRequiredFieldsWarning, requiredFieldsWarningMessageHTML: opt_data.requiredFieldsWarningMessageHTML})) + '<div class="tab-pane ' + ((pageIndex163 == 0) ? 'active' : '') + '">' + ddm.form_rows(soy.$$augmentMap(opt_data, {rows: pageData163.rows})) + '</div>';
+    output += ddm.required_warning_message(soy.$$augmentMap(opt_data, {showRequiredFieldsWarning: pageData163.showRequiredFieldsWarning, requiredFieldsWarningMessageHTML: opt_data.requiredFieldsWarningMessageHTML})) + '<div class="lfr-ddm-form-page tab-pane ' + ((pageIndex163 == 0) ? 'active' : '') + '">' + ddm.form_rows(soy.$$augmentMap(opt_data, {rows: pageData163.rows})) + '</div>';
   }
   output += '</div></div></div>';
   return output;
