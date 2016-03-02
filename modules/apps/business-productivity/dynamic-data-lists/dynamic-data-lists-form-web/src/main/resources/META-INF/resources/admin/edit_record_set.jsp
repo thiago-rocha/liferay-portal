@@ -246,6 +246,8 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 			}
 		};
 
+		var settingsDDMForm = Liferay.component('settingsDDMForm');
+
 		Liferay.namespace('DDL').openSettings = function() {
 			Liferay.Util.openWindow(
 				{
@@ -259,9 +261,7 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 								label: '<liferay-ui:message key="done" />',
 								on: {
 									click: function() {
-										var ddmForm = Liferay.component('settingsDDMForm');
-
-										ddmForm.validate(
+										settingsDDMForm.validate(
 											function(hasErrors) {
 												if (!hasErrors) {
 													Liferay.Util.getWindow('<portlet:namespace />settingsModal').hide();
@@ -294,6 +294,12 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 					settingsNode.show();
 
 					bodyNode.append(settingsNode);
+
+					var footerNode = dialogWindow.footerNode;
+
+					settingsDDMForm.getSubmitButton = function() {
+						return footerNode.one('.btn-primary');
+					};
 				}
 			);
 		};
