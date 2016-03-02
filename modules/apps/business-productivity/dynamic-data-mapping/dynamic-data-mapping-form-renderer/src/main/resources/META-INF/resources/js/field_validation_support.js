@@ -145,6 +145,11 @@ AUI.add(
 				instance.hideFeedback();
 
 				instance.processEvaluation(event.result);
+
+				instance.fire('fieldEvaluationEnded', {
+					result: event.result,
+					field: instance
+				});
 			},
 
 			_valueEvaluator: function() {

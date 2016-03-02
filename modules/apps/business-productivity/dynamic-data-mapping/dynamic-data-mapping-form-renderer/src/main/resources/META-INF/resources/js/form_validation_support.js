@@ -5,6 +5,8 @@ AUI.add(
 
 		var Renderer = Liferay.DDM.Renderer;
 
+		var Util = Renderer.Util;
+
 		var FormValidationSupport = function() {
 		};
 
@@ -21,25 +23,10 @@ AUI.add(
 				var evaluator = instance.get('evaluator');
 
 				instance._eventHandlers.push(
-					evaluator.after('evaluationEnded', A.bind('_afterEvaluationEnded', instance)),
-					evaluator.after('evaluationStarted', A.bind('_afterEvaluationStarted', instance))
+					instance.after('*:fieldEvaluationEnded', A.bind('_afterFieldEvaluationEnded', instance)),
+					instance.getPagination().after('pageChange', A.bind('_afterFormValidationSupportPageChange', instance)),
+					instance.after('render', A.bind('_afterFormValidationSupportRender', instance))
 				);
-			},
-
-			hasErrors: function() {
-				var instance = this;
-
-				var hasErrors = false;
-
-				instance.eachField(
-					function(field) {
-						hasErrors = field.hasErrors();
-
-						return hasErrors;
-					}
-				);
-
-				return hasErrors;
 			},
 
 			hasValidation: function() {
@@ -58,7 +45,25 @@ AUI.add(
 				return hasValidation;
 			},
 
-			pageHasErrors: function(pageNode) {
+			isPageValid: function(pageNode) {
+				var instance = this;
+
+				var valid = true;
+
+				instance.eachField(
+					function(field) {
+						if (pageNode.contains(field.get('container'))) {
+							valid = field.get('valid');
+						}
+
+						return !valid;
+					}
+				);
+
+				return valid;
+			},
+
+			processPageValidation: function(pageNode, result) {
 				var instance = this;
 
 				var hasErrors = false;
@@ -66,87 +71,38 @@ AUI.add(
 				instance.eachField(
 					function(field) {
 						if (pageNode.contains(field.get('container'))) {
-							hasErrors = field.hasErrors();
-						}
+							var fieldData = Util.getFieldByKey(result, field.get('instanceId'), 'instanceId');
 
-						return hasErrors;
+							field.set('valid', fieldData.valid);
+
+							if (!fieldData.valid) {
+								hasErrors = true;
+							}
+
+							return;
+						}
 					}
 				);
 
 				return hasErrors;
 			},
 
-			processPageValidation: function(pageNode, result) {
-				var instance = this;
-
-				var fieldToFocus;
-
-				instance.eachField(
-					function(field) {
-						if (pageNode.contains(field.get('container'))) {
-							field.processValidation(result);
-
-							if (field.hasErrors()) {
-								fieldToFocus = field;
-							}
-
-							return !!fieldToFocus;
-						}
-					}
-				);
-
-				if (fieldToFocus) {
-					fieldToFocus.focus();
-				}
-			},
-
-			processValidation: function(result) {
-				var instance = this;
-
-				var fieldToFocus;
-
-				instance.eachField(
-					function(field) {
-						field.processValidation(result);
-
-						if (field.hasErrors()) {
-							fieldToFocus = field;
-						}
-
-						return !!fieldToFocus;
-					}
-				);
-
-				if (fieldToFocus) {
-					fieldToFocus.focus();
-				}
-			},
-
 			validate: function(callback) {
 				var instance = this;
 
-				if (instance.hasValidation()) {
-					var evaluator = instance.get('evaluator');
+				var hasErrors = false;
 
-					evaluator.evaluate(
-						function(result) {
-							var hasErrors = true;
-
-							if (result && Lang.isObject(result)) {
-								instance.processValidation(result);
-
-								hasErrors = instance.hasErrors();
-							}
-
-							if (callback) {
-								callback.call(instance, hasErrors, result);
-							}
+				instance.eachField(
+					function(field) {
+						if (!field.get('valid')) {
+							hasErrors = true;
 						}
-					);
-				}
-				else if (callback) {
-					callback.call(instance, false);
-				}
+
+						return hasErrors;
+					}
+				);
+
+				callback.call(instance, hasErrors);
 			},
 
 			validatePage: function(pageNode, callback) {
@@ -160,9 +116,7 @@ AUI.add(
 							var hasErrors = true;
 
 							if (result && Lang.isObject(result)) {
-								instance.processPageValidation(pageNode, result);
-
-								hasErrors = instance.pageHasErrors(pageNode);
+								hasErrors = instance.processPageValidation(pageNode, result);
 							}
 
 							if (callback) {
@@ -194,6 +148,46 @@ AUI.add(
 				var instance = this;
 
 				instance.showLoadingFeedback();
+			},
+
+			_afterFieldEvaluationEnded: function() {
+				var instance = this;
+
+				instance._checkCurrentPageValidation();
+			},
+
+			_afterFormValidationSupportPageChange: function () {
+				var instance = this;
+
+				instance._checkCurrentPageValidation();
+			},
+
+			_afterFormValidationSupportRender: function() {
+				var instance = this;
+
+				var evaluation = instance.get('evaluation');
+
+				if (evaluation) {
+					instance.eachField(function(field) {
+						var fieldResult = Util.getFieldByKey(evaluation, field.get('instanceId'), 'instanceId');
+
+						field.set('valid', fieldResult.valid);
+					});
+				}
+
+				instance.fire('validatedPage', {
+					valid: instance.isPageValid(instance.getPageNode(instance.getCurrentPage()))
+				});
+			},
+
+			_checkCurrentPageValidation: function () {
+				var instance = this;
+
+				instance.validatePage(instance.getPageNode(instance.getCurrentPage()), function(hasError) {
+					instance.fire('validatedPage', {
+						valid: instance.isPageValid(instance.getPageNode(instance.getCurrentPage()))
+					});
+				});
 			},
 
 			_valueEvaluator: function() {
