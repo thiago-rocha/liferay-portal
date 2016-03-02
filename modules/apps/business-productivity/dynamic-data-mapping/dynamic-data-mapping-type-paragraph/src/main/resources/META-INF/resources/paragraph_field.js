@@ -7,7 +7,7 @@ AUI.add(
 			{
 				ATTRS: {
 					dataType: {
-						value: ''
+						value: 'paragraph'
 					},
 
 					required: {
