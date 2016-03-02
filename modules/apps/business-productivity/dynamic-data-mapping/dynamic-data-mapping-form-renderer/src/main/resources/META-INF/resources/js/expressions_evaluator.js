@@ -33,7 +33,11 @@ AUI.add(
 
 						var form = instance.get('form');
 
-						if (enabled && form && !instance.evaluating()) {
+						if (instance._request) {
+							instance._request.stop();
+						}
+
+						if (enabled && form) {
 							instance.fire('evaluationStarted');
 
 							instance._evaluate(
@@ -76,7 +80,7 @@ AUI.add(
 
 						var form = instance.get('form');
 
-						A.io.request(
+						instance._request = A.io.request(
 							instance.get('evaluationURL'),
 							{
 								data: {
