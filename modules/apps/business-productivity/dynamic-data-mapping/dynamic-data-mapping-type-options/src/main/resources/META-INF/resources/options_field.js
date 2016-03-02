@@ -26,6 +26,10 @@ AUI.add(
 
 					type: {
 						value: 'options'
+					},
+
+					valid: {
+						getter: '_getValid'
 					}
 				},
 
@@ -173,6 +177,16 @@ AUI.add(
 						repetitions.splice(newIndex, 0, repetitions.splice(oldIndex, 1)[0]);
 
 						repetitions.forEach(A.bind('_syncRepeatableField', field));
+					},
+
+					_getValid: function() {
+						var instance = this;
+
+						var required = instance.get('required');
+
+						var value = instance.getValue();
+
+						return !required || (required && value.length > 0);
 					},
 
 					processValidation: function() {

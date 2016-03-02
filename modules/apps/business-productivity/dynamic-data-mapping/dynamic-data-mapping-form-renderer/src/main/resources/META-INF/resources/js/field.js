@@ -90,6 +90,10 @@ AUI.add(
 						value: ''
 					},
 
+					valid: {
+						value: true
+					},
+
 					value: {
 						valueFn: '_getDefaultValue'
 					}
