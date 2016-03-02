@@ -191,7 +191,11 @@ AUI.add(
 
 				var controls = instance._getPaginationControlsNode();
 
-				return controls.one('.lfr-ddm-form-pagination-next');
+				if (controls) {
+					return controls.one('.lfr-ddm-form-pagination-next');
+				}
+
+				return;
 			},
 
 			_getPaginationNodes: function() {
