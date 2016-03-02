@@ -371,9 +371,11 @@ AUI.add(
 						}
 
 						field.remove();
+
+						instance.fire('valueChanged');
 					},
 
-					_onFieldValueChange: function(field) {
+					_onFieldValueChange: function(field, event) {
 						var instance = this;
 
 						var repetitions = field.get('repetitions');
@@ -383,6 +385,8 @@ AUI.add(
 
 							newField.get('container').scrollIntoView();
 						}
+
+						instance.fire('valueChanged', event);
 					},
 
 					_renderFields: function(optionsValues) {
