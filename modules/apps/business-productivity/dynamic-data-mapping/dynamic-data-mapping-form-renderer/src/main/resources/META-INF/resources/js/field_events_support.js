@@ -69,10 +69,10 @@ AUI.add(
 			_bindEvents: function() {
 				var instance = this;
 
-				instance.bindInputEvent('change', instance._onInputChange);
+				instance.bindInputEvent(['input', 'change'], instance._onValueChange);
 			},
 
-			_onInputChange: function(event) {
+			_onValueChange: function(event) {
 				var instance = this;
 
 				instance.fire(
