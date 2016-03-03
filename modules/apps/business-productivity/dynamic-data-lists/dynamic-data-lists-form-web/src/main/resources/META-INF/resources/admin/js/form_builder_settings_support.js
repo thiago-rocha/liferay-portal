@@ -182,6 +182,8 @@ AUI.add(
 			_onModalVisibleChange: function(event) {
 				var instance = this;
 
+				instance._removeConfirmationMessage();
+
 				if (!event.newVal) {
 					var settings = JSON.stringify(instance.getSettings());
 
@@ -192,6 +194,20 @@ AUI.add(
 					}
 
 					(new A.EventHandle(instance._modalEventHandlers)).detach();
+				}
+			},
+
+			_removeConfirmationMessage: function() {
+				var instance = this;
+
+				var settingsModal = instance.getSettingsModal()._modal;
+
+				var footerNode = settingsModal.getStdModNode(A.WidgetStdMod.FOOTER);
+
+				var confirmationMessage = footerNode.one('.' + CSS_FIELD_SETTINGS_CONFIRMATION_MESSAGE);
+
+				if (confirmationMessage) {
+					confirmationMessage.remove();
 				}
 			},
 
@@ -284,7 +300,7 @@ AUI.add(
 							label: Liferay.Language.get('yes'),
 							on: {
 								click: function() {
-									instance._confirmationMessage.remove();
+									instance._removeConfirmationMessage();
 
 									instance.hideSettingsModal();
 								}
@@ -295,7 +311,7 @@ AUI.add(
 							label: Liferay.Language.get('no'),
 							on: {
 								click: function() {
-									instance._confirmationMessage.remove();
+									instance._removeConfirmationMessage();
 
 									instance._showDefaultToolbar();
 								}
@@ -306,6 +322,8 @@ AUI.add(
 				);
 
 				var footerNode = settingsModal.getStdModNode(A.WidgetStdMod.FOOTER);
+
+				instance._removeConfirmationMessage();
 
 				footerNode.prepend(instance._confirmationMessage);
 			},
