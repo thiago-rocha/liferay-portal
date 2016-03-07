@@ -42,10 +42,6 @@ AUI.add(
 			dataProviders: {
 			},
 
-			footerToolbar: {
-				setter: '_setFooterToolbar'
-			},
-
 			settingsForm: {
 				valueFn: '_valueSettingsForm'
 			}
@@ -55,6 +51,7 @@ AUI.add(
 			initializer: function() {
 				var instance = this;
 
+				instance._footerToolbar = Liferay.Language.get('save');
 
 				instance._eventHandlers.push(
 					instance.after(instance._renderFormBuilderField, instance, 'render')
@@ -135,14 +132,7 @@ AUI.add(
 			setPrimaryButtonLabel: function(label) {
 				var instance = this;
 
-				instance.set(
-					'footerToolbar',
-					[
-						{
-							label: label
-						}
-					]
-				);
+				instance._footerToolbar = label;
 			},
 
 			validate: Lang.emptyFn,
@@ -226,43 +216,17 @@ AUI.add(
 				instance._previousSettings = JSON.stringify(instance.getSettings());
 
 				instance._showDefaultToolbar();
+				instance._showDefaultToolbar(instance._footerToolbar);
 
 				var closeButton = settingsModal.toolbars.header.item(0);
 
 				closeButton.set('labelHTML', Liferay.Util.getLexiconIconTpl('times'));
 			},
 
-			_setFooterToolbar: function(toolbarItem) {
 				var instance = this;
 
-				var toolbar = [
-					{
-						cssClass: ['btn-lg btn-primary', CSS_FIELD_SETTINGS_SAVE].join(' '),
-						label: Liferay.Language.get('save'),
-						on: {
-							click: A.bind('_onClickModalSave', instance)
-						}
-					},
-					{
-						cssClass: 'btn-lg btn-link',
-						label: Liferay.Language.get('cancel'),
-						on: {
-							click: A.bind('_onClickModalClose', instance)
-						}
-					}
-				];
 
-				if (toolbarItem) {
-					toolbar.forEach(
-						function(item, index) {
-							if (toolbarItem[index]) {
-								toolbar[index] = A.merge(item, toolbarItem[index]);
-							}
-						}
-					);
-				}
 
-				return toolbar;
 			},
 
 			_showConfirmationToolbar: function() {
