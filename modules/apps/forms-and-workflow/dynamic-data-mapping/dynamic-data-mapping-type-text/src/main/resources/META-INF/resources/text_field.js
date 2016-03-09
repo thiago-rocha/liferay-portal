@@ -5,7 +5,9 @@ AUI.add(
 			{
 				position: 'left',
 				trigger: '.liferay-ddm-form-field-text .help-icon',
-				visible: false
+				triggerHideEvent: 'blur',
+				triggerShowEvent: 'focus',
+				visible: true
 			}
 		);
 
