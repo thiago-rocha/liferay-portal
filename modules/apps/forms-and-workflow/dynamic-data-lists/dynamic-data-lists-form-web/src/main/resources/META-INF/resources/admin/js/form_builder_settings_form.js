@@ -212,11 +212,11 @@ AUI.add(
 
 						var existingField;
 
-						var name = key;
+						var name = instance._getFirstFiveWords(key);
 
 						do {
 							if (counter > 0) {
-								name = key + counter;
+								name = name + counter;
 							}
 
 							existingField = builder.getField(name);
@@ -226,6 +226,29 @@ AUI.add(
 						while (existingField !== undefined && existingField !== field);
 
 						return name;
+					},
+
+					_getFirstFiveWords: function(key) {
+						var words = key.replace(/[^a-z0-9 ]/gi, '').split(' ');
+
+						var indeces = [];
+
+						var indexOfEmptyElement = words.indexOf('');
+
+						while (indexOfEmptyElement != -1) {
+							indeces.push(indexOfEmptyElement);
+							indexOfEmptyElement = words.indexOf('', indexOfEmptyElement + 1);
+						}
+
+						for (var i = (indeces.length - 1); i >= 0; i--) {
+							words.splice(indeces[i], 1);
+						}
+
+						words.splice(5);
+
+						words = words.join('');
+
+						return words;
 					},
 
 					_getModalStdModeNode: function(mode) {
