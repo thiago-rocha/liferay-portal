@@ -40,7 +40,7 @@ AUI.add(
 							instance.after('keyChange', instance._afterKeyChange),
 							instance.bindContainerEvent('click', instance._onClickCancel, '.key-value-cancel'),
 							instance.bindContainerEvent('click', instance._onClickDone, '.key-value-done'),
-							instance.bindContainerEvent('click', instance._onClickEditor, '.key-value-output'),
+							instance.bindContainerEvent('click', instance._onClickEditor, '.key-value-input'),
 							instance.bindContainerEvent('keypress', instance._onKeyPressEditorInput, '.key-value-input'),
 							instance.bindContainerEvent('valuechange', instance._onValueChangeEditorInput, '.key-value-input'),
 							instance.bindInputEvent('valuechange', instance._onValueChangeInput)
@@ -177,26 +177,27 @@ AUI.add(
 					},
 
 					_onValueChangeEditorInput: function(event) {
+console.log('_onValueChangeEditorInput');
 						var instance = this;
 
-						var input = event.target;
+						var editorInputValue = event.newVal;
 
-						var value = event.newVal;
+						instance.set('key', instance.normalizeKey(editorInputValue));
 
-						if (value.length === 0) {
-							value = input.attr('placeholder');
+						if (editorInputValue.length === 0) {
+							this._editorInputLocked = false;
 						}
-
-						event.target.attr('size', instance._getMaxInputSize(value) + 1);
+						else {
+							this._editorInputLocked = true;
+						}
 					},
 
 					_onValueChangeInput: function(event) {
+console.log('_onValueChangeInput');
 						var instance = this;
 
-						if (instance.normalizeKey(event.prevVal) === instance.get('key')) {
-							var value = instance.getValue();
-
-							instance.set('key', instance.normalizeKey(value));
+						if (!this._editorInputLocked) {
+							instance.set('key', instance.normalizeKey(event.newVal));
 						}
 					},
 
@@ -236,16 +237,24 @@ AUI.add(
 
 						var editorInput = container.one('.key-value-input');
 
-						editorInput.attr('placeholder', key);
 						editorInput.attr('size', instance._getMaxInputSize(key) + 1);
 
-						container.one('.key-value-output').html(key);
+						if (key) {
+							editorInput.html(key);
+						}
+						else {
+							editorInput.html('label');
+						}
 					},
 
 					_valueKey: function() {
 						var instance = this;
 
 						var value = instance.getLocalizedValue(instance.get('value'));
+
+						if (!value) {
+							value = 'label';
+						}
 
 						return instance.normalizeKey(value);
 					}
