@@ -84,14 +84,10 @@ AUI.add(
 				instance.showLoadingFeedback();
 			},
 
-			_afterVisibleChange: function() {
+			_afterVisibleChange: function(event) {
 				var instance = this;
 
-				var value = instance.getValue();
-
-				instance.render();
-
-				instance.setValue(value);
+				instance.get('container').toggle(event.newVal);
 			},
 
 			_valueVisible: function() {
