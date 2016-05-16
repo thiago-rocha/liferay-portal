@@ -11,6 +11,12 @@ AUI.add(
 
 		var SELECTOR_REPEAT_BUTTONS = '.lfr-ddm-repeatable-add-button, .lfr-ddm-repeatable-delete-button';
 
+		var TPL_PAGES_BREADCRUMB = '<ul class="breadcrumb lfr-ddm-breadcrumb"></ul>';
+
+		var TPL_PAGES_BREADCRUMB_ELEMENT = '<li class="lfr-ddm-breadcrumb-element">' +
+				'<a href="#" title="{title}">{label}</a>' +
+			'</li>';
+
 		var TPL_LAYOUTS_NAVBAR = '<nav class="navbar navbar-default">' +
 				'<div class="collapse navbar-collapse">' +
 					'<ul class="nav navbar-nav">' +
@@ -19,6 +25,15 @@ AUI.add(
 					'</ul>' +
 				'</div>' +
 			'</nav>';
+
+		var TPL_NAV_NESTED = '<ul class="lfr-ddm-nav-nested nav nav-nested"></ul>';
+
+		var TPL_NAV_NESTED_ELEMENT = '<li class="lfr-ddm-nav-element">' +
+				'<input class="lfr-ddm-nav-element-radio" name="lfr-ddm-page" type="radio" />' +
+				'<a href="#" class="collapsed collapse-icon lfr-ddm-nav-element-label" data-toggle="collapse">{pageTitle}{showChildrenIcon}</a>' +
+			'</li>';
+
+		var TPL_NAV_NESTED_ELEMENT_SHOW_CHILDREN_ICON = '<span class="collapse-icon-closed"><span class="icon-caret-right"></span></span>';
 
 		var TPL_LOADER = '<div class="loading-animation"></div>';
 
@@ -1283,6 +1298,10 @@ AUI.add(
 
 					selectedLayout: {
 						value: null
+					},
+
+					selectedLayoutPath: {
+						value: [{label: 'All Pages', layoutId: 0}]
 					}
 				},
 
@@ -1294,36 +1313,9 @@ AUI.add(
 
 						var container = instance.get('container');
 
+						instance._linkToPageLayoutsMap = {};
+
 						container.delegate('click', instance._handleControlButtonsClick, '.btn', instance);
-					},
-
-					getInitialLayouts: function(privateLayout, callback) {
-						var instance = this;
-
-						A.io.request(
-							themeDisplay.getPathMain() + '/portal/get_layouts',
-							{
-								after: {
-									success: function() {
-										var	response = JSON.parse(this.get('responseData'));
-
-										if (response && response.layouts) {
-											callback.call(instance, response);
-										}
-									}
-								},
-								data: {
-									cmd: 'get',
-									end: instance.get('delta'),
-									expandParentLayouts: true,
-									groupId: themeDisplay.getScopeGroupId(),
-									p_auth: Liferay.authToken,
-									paginate: true,
-									privateLayout: privateLayout,
-									start: 0
-								}
-							}
-						);
 					},
 
 					getParsedValue: function(value) {
@@ -1382,33 +1374,48 @@ AUI.add(
 						selectButtonNode.attr('disabled', instance.get('readOnly'));
 					},
 
-					_createTreeView: function(node, layouts, privateLayout) {
+					_addLinkToPageElement: function(layout, container, selected) {
 						var instance = this;
 
-						return new Liferay.LayoutsTree(
-							{
-								boundingBox: node,
-								incomplete: true,
-								layouts: layouts,
-								maxChildren: instance.get('delta'),
-								on: {
-									radioNodeCheckedChange: A.bind(instance._onRadioNodeCheckedChange, instance, privateLayout)
-								},
-								plugins: [
-									{
-										fn: A.Plugin.LayoutsTreeRadio
+						var navElementNode;
+
+						if (layout.children.total > 0) {
+							navElementNode = A.Node.create(
+								Lang.sub(
+									TPL_NAV_NESTED_ELEMENT, {
+										pageTitle: layout.name,
+										showChildrenIcon: TPL_NAV_NESTED_ELEMENT_SHOW_CHILDREN_ICON
 									}
-								],
-								root: {
-									defaultParentLayoutId: 0,
-									expand: true,
-									groupId: themeDisplay.getScopeGroupId(),
-									label: 'Root Node',
-									privateLayout: privateLayout
-								},
-								urls: []
-							}
-						).render();
+								)
+							);
+						}
+						else {
+							navElementNode = A.Node.create(
+								Lang.sub(
+									TPL_NAV_NESTED_ELEMENT, {
+										pageTitle: layout.name,
+										showChildrenIcon: ''
+									}
+								)
+							);
+						}
+
+						if (selected) {
+							navElementNode.one('.lfr-ddm-nav-element-radio').set('checked', true);
+						}
+
+						navElementNode.setData('groupId', layout.groupId);
+						navElementNode.setData('layoutId', layout.layoutId);
+						navElementNode.setData('privateLayout', layout.privateLayout);
+
+						if (layout.hasChildren) {
+							navElementNode.setData('nodeType', 'root');
+						}
+						else {
+							navElementNode.setData('nodeType', 'leaf');
+						}
+
+						container.append(navElementNode);
 					},
 
 					_getModalConfig: function() {
@@ -1416,7 +1423,6 @@ AUI.add(
 
 						return {
 							dialog:	{
-								destroyOnHide: true,
 								height: 600,
 								modal: true,
 								on: {
@@ -1462,7 +1468,7 @@ AUI.add(
 					_handleCancelButtonClick: function(event) {
 						var instance = this;
 
-						instance.modal.destroy();
+						instance._modal.hide();
 					},
 
 					_handleChooseButtonClick: function(event) {
@@ -1472,7 +1478,7 @@ AUI.add(
 
 						instance.setValue(selectedLayout);
 
-						instance.modal.destroy();
+						instance._modal.hide();
 					},
 
 					_handleClearButtonClick: function(event) {
@@ -1502,26 +1508,134 @@ AUI.add(
 						event.container.one('.active').removeClass('active');
 						currentTarget.addClass('active');
 
-						instance._renderTreeView(currentTarget.test('.private'));
+						instance._renderLinkToPageList(currentTarget.test('.private'));
+					},
+
+					_handleNavElementClick: function(event) {
+						var instance = this;
+
+						var currentTarget = event.currentTarget;
+
+						var layoutId = event.currentTarget.getData('layoutId');
+
+						var groupId = event.currentTarget.getData('groupId');
+
+						var privateLayout = event.currentTarget.getData('privateLayout');
+
+						var layoutName = event.currentTarget.text();
+
+						if (event.target.hasClass('lfr-ddm-nav-element-label')) {
+							event.preventDefault();
+
+							if (currentTarget.getData('nodeType') === 'root') {
+								instance._addBreadcrumbElement(layoutName, layoutId, groupId, privateLayout);
+								instance._selectedLayoutPathPush({label: layoutName, layoutId: layoutId});
+								instance._requestLinkToPageLayouts(layoutId, groupId, privateLayout, instance._handleRequestLinkToPageLayouts);
+							}
+						}
+						else if (event.target.hasClass('lfr-ddm-nav-element-radio')) {
+							instance.set(
+								'selectedLayout',
+								{
+									groupId: groupId,
+									label: layoutName,
+									layoutId: layoutId,
+									privateLayout: privateLayout
+								}
+							);
+						}
+					},
+
+					_selectedLayoutPathPush: function(element) {
+						var instance = this;
+
+						var selectedLayoutPath = instance.get('selectedLayoutPath');
+
+						selectedLayoutPath.push(element);
+
+						instance.set('selectedLayoutPath', selectedLayoutPath);
+					},
+
+					_handleBreadcrumbElementClick: function(event) {
+						var instance = this;
+
+						event.preventDefault();
+
+						var currentTargetLayoutId = event.currentTarget.getData('layoutId');
+
+						var breadcrumbElementNodes = instance._modal.bodyNode.one('.lfr-ddm-breadcrumb').all('.lfr-ddm-breadcrumb-element');
+
+						var foundClickedElement = false;
+
+						do {
+							var lastBreadcrumbElement = breadcrumbElementNodes.last();
+
+							var lastBreadcrumbElementIndex = breadcrumbElementNodes.size() - 1;
+
+							if (lastBreadcrumbElement.getData('layoutId') !== currentTargetLayoutId) {
+								lastBreadcrumbElement.remove();
+								breadcrumbElementNodes.splice(lastBreadcrumbElementIndex);
+							}
+							else {
+								foundClickedElement = true;
+
+								var groupId = event.currentTarget.getData('groupId');
+
+								var privateLayout = event.currentTarget.getData('privateLayout');
+
+								instance._requestLinkToPageLayouts(currentTargetLayoutId, groupId, privateLayout, instance._handleRequestLinkToPageLayouts);
+							}
+						} while (!foundClickedElement);
+					},
+
+					_handleRequestLinkToPageLayouts: function(layouts) {
+						var instance = this;
+
+						var bodyNode = instance._modal.bodyNode;
+
+						var navNode = bodyNode.one('.lfr-ddm-nav-nested');
+
+						var total = layouts.layouts.length;
+
+						var loader = bodyNode.one('.loading-animation');
+
+						if (loader) {
+							loader.remove();
+						}
+
+						navNode.empty();
+
+						var selectedLayout = instance.get('selectedLayout');
+
+						for (var index = 0; index < total; index++) {
+							var layout = layouts.layouts[index];
+
+							var selected = false;
+
+							if (selectedLayout && layout.layoutId === selectedLayout.layoutId) {
+								selected = true;
+							}
+
+							instance._addLinkToPageElement(layout, navNode, selected);
+						}
+
+						instance._syncModalHeight();
 					},
 
 					_handleSelectButtonClick: function() {
 						var instance = this;
 
-						var modal = instance._openLinkToPageModal();
-
 						var value = instance.getValue();
 
 						var privateLayout = !!(value && value.privateLayout);
 
-						var navbar = instance._renderNavbar(privateLayout);
+						instance._openLinkToPageModal();
 
-						navbar.insertBefore(navbar, modal.bodyNode);
+						instance._renderNavbar(privateLayout);
 
-						instance.modal = modal;
-						instance.navbar = navbar;
+						instance._navbar.insertBefore(instance._navbar, instance._modal.bodyNode);
 
-						instance._renderTreeView(privateLayout);
+						instance._renderLinkToPageList(privateLayout);
 					},
 
 					_onRadioNodeCheckedChange: function(privateLayout, event) {
@@ -1545,72 +1659,164 @@ AUI.add(
 					_openLinkToPageModal: function() {
 						var instance = this;
 
-						var config = instance._getModalConfig();
+						if (!instance._modal) {
+							var config = instance._getModalConfig();
 
-						var modal = Liferay.Util.Window.getWindow(config);
+							instance._modal = Liferay.Util.Window.getWindow(config);
 
-						return modal.render();
+							instance._modal.render();
+						}
+
+						instance._modal.show();
 					},
 
 					_renderNavbar: function(privateLayout) {
 						var instance = this;
 
-						var navbar = A.Node.create(
+						if (!instance._navbar) {
+							var navbar = A.Node.create(
+								Lang.sub(
+									TPL_LAYOUTS_NAVBAR,
+									{
+										privateLayoutClass: privateLayout ? 'active' : '',
+										publicLayoutClass: privateLayout ? '' : 'active'
+									}
+								)
+							);
+
+							navbar.delegate('click', instance._handleNavbarClick, 'li', instance);
+
+							instance._navbar = navbar;
+						}
+					},
+
+					_renderLinkToPageList: function(privateLayout) {
+						var instance = this;
+
+						instance._modal.bodyNode.append(A.Node.create(TPL_LOADER));
+
+						instance._renderPagesBreadcrumb(privateLayout);
+						instance._renderPagesNavbar();
+
+						instance._requestLinkToPageLayouts(instance._getLastSelectedLayoutPath().layoutId,
+							themeDisplay.getScopeGroupId(), privateLayout, instance._handleRequestLinkToPageLayouts);
+					},
+
+					_getLastSelectedLayoutPath: function() {
+						var instance = this;
+
+						var selectedLayoutPath = instance.get('selectedLayoutPath');
+
+						var selectedLayoutPathLastIndex = selectedLayoutPath.length - 1;
+
+						return selectedLayoutPath[selectedLayoutPathLastIndex];
+					},
+
+					_renderPagesBreadcrumb: function(privateLayout) {
+						var instance = this;
+
+						var bodyNode = instance._modal.bodyNode;
+
+						var groupId = themeDisplay.getScopeGroupId();
+
+						if (!bodyNode.one('.lfr-ddm-breadcrumb')) {
+							var breadcrumbNode = A.Node.create(TPL_PAGES_BREADCRUMB);
+
+							bodyNode.append(breadcrumbNode);
+
+							var selectedLayoutPath = instance.get('selectedLayoutPath');
+
+							instance._addBreadcrumbElement(selectedLayoutPath[0].label, selectedLayoutPath[0].layoutId);
+
+							breadcrumbNode.delegate('click', instance._handleBreadcrumbElementClick, '.lfr-ddm-breadcrumb-element', instance);
+						}
+
+						bodyNode.one('.lfr-ddm-breadcrumb-element').setData('groupId', groupId);
+						bodyNode.one('.lfr-ddm-breadcrumb-element').setData('privateLayout', privateLayout);
+					},
+
+					_addBreadcrumbElement: function(label, layoutId, groupId, privateLayout) {
+						var instance = this;
+
+						var breadcrumbNode = instance._modal.bodyNode.one('.lfr-ddm-breadcrumb');
+
+						var breadcrumbElementNode;
+
+						 breadcrumbElementNode = A.Node.create(
 							Lang.sub(
-								TPL_LAYOUTS_NAVBAR,
-								{
-									privateLayoutClass: privateLayout ? 'active' : '',
-									publicLayoutClass: privateLayout ? '' : 'active'
+								TPL_PAGES_BREADCRUMB_ELEMENT, {
+									title: label,
+									label: label
 								}
 							)
 						);
 
-						navbar.delegate('click', instance._handleNavbarClick, 'li', instance);
+						breadcrumbElementNode.setData('groupId', groupId);
+						breadcrumbElementNode.setData('layoutId', layoutId);
+						breadcrumbElementNode.setData('privateLayout', privateLayout);
 
-						return navbar;
+						breadcrumbNode.append(breadcrumbElementNode);
 					},
 
-					_renderTreeView: function(privateLayout) {
+					_renderPagesNavbar: function() {
 						var instance = this;
 
-						var modal = instance.modal;
+						var bodyNode = instance._modal.bodyNode;
 
-						var bodyNode = modal.bodyNode;
+						if (!bodyNode.one('.lfr-ddm-nav-nested')) {
+							var navNode = A.Node.create(TPL_NAV_NESTED);
 
-						var loader = A.Node.create(TPL_LOADER);
+							bodyNode.append(navNode);
 
-						if (instance.treeView) {
-							instance.treeView.destroy();
+							navNode.delegate('click', instance._handleNavElementClick, '.lfr-ddm-nav-element', instance);
 						}
+					},
 
-						var treeViewNode = A.Node.create('<div></div>');
+					_requestLinkToPageLayouts: function(parentLayoutId, groupId, privateLayout, callback) {
+						var instance = this;
 
-						bodyNode.empty();
-						bodyNode.append(loader);
-						bodyNode.append(treeViewNode);
+						var key = parentLayoutId + '-' + groupId + '-' + privateLayout;
 
-						instance._syncModalHeight();
+						if (instance._linkToPageLayoutsMap[key]) {
+							callback.call(instance, instance._linkToPageLayoutsMap[key]);
+						}
+						else {
+							A.io.request(
+								themeDisplay.getPathMain() + '/portal/get_layouts',
+								{
+									after: {
+										success: function() {
+											var	response = JSON.parse(this.get('responseData'));
 
-						instance.getInitialLayouts(
-							privateLayout,
-							function(layouts) {
-								loader.remove();
-
-								instance.treeView = instance._createTreeView(treeViewNode, layouts, privateLayout);
-
-								instance._syncModalHeight();
-							}
-						);
+											if (response && response.layouts) {
+												instance._linkToPageLayoutsMap[key] = response;
+												callback.call(instance, response);
+											}
+										}
+									},
+									data: {
+										cmd: 'get',
+										end: instance.get('delta'),
+										expandParentLayouts: false,
+										groupId: groupId,
+										p_auth: Liferay.authToken,
+										parentLayoutId: parentLayoutId,
+										paginate: true,
+										start: 0
+									}
+								}
+							);
+						}
 					},
 
 					_syncModalHeight: function() {
 						var instance = this;
 
-						var bodyNode = instance.modal.bodyNode;
+						var bodyNode = instance._modal.bodyNode;
 
-						instance.modal.fillHeight(bodyNode);
+						instance._modal.fillHeight(bodyNode);
 
-						bodyNode.set('offsetHeight', Lang.toInt(bodyNode.get('offsetHeight')) - Lang.toInt(instance.navbar.get('offsetHeight')));
+						bodyNode.set('offsetHeight', Lang.toInt(bodyNode.get('offsetHeight')) - Lang.toInt(instance._navbar.get('offsetHeight')));
 					}
 				}
 			}
