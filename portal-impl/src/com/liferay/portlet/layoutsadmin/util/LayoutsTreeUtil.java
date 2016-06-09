@@ -76,7 +76,7 @@ public class LayoutsTreeUtil {
 
 		long parentLayoutId = includedLayout.getParentLayoutId();
 
-		long includedLayoutIndex = LayoutLocalServiceUtil.countLayouts(
+		long includedLayoutIndex = LayoutServiceUtil.getLayoutsCount(
 			groupId, privateLayout, parentLayoutId,
 			includedLayout.getCreateDate());
 
