@@ -626,6 +626,13 @@ public class LayoutServiceUtil {
 				   .getLayoutsCount(groupId, privateLayout, parentLayoutId);
 	}
 
+	public static int getLayoutsCount(long groupId, boolean privateLayout,
+		long parentLayoutId, java.util.Date lastCreateDate) {
+		return getService()
+				   .getLayoutsCount(groupId, privateLayout, parentLayoutId,
+			lastCreateDate);
+	}
+
 	/**
 	* @deprecated As of 7.0.0, replaced by {@link
 	com.liferay.exportimport.kernel.service.ExportImportService#exportLayoutsAsFile(
