@@ -417,6 +417,7 @@ public class LayoutLocalServiceImpl extends LayoutLocalServiceBaseImpl {
 			friendlyURLMap, serviceContext);
 	}
 
+
 	/**
 	 * Deletes the layout, its child layouts, and its associated resources.
 	 *
