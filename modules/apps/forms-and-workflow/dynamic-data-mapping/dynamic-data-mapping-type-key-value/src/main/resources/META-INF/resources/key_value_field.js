@@ -60,7 +60,7 @@ AUI.add(
 								editing: instance.get('editing'),
 								key: instance.get('key'),
 								strings: instance.get('strings'),
-								tooltip: instance.getLocalizedValue(instance.get('tooltip'))
+								tooltip: instance.get('tooltip')
 							}
 						);
 					},
