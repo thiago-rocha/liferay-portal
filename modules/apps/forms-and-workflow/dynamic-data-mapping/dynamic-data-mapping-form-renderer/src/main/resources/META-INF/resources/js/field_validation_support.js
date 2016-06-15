@@ -16,7 +16,7 @@ AUI.add(
 			},
 
 			evaluator: {
-				valueFn: '_valueEvaluator'
+				getter: '_getEvaluator'
 			},
 
 			strings: {
@@ -35,24 +35,17 @@ AUI.add(
 			initializer: function() {
 				var instance = this;
 
-				var evaluator = instance.get('evaluator');
+				instance._bindValidationEvaluatorEvents();
 
 				instance._eventHandlers.push(
-					evaluator.after('evaluationEnded', A.bind('_afterValidationEvaluationEnded', instance)),
 					instance.after('parentChange', instance._afterParentChange)
 				);
 			},
 
-			hasValidation: function() {
+			hasErrors: function() {
 				var instance = this;
 
-				var required = instance.get('required');
-
-				var validation = instance.get('validation');
-
-				var expression = validation.expression;
-
-				return required || (!!expression && expression !== 'TRUE');
+				return !!instance.get('errorMessage');
 			},
 
 			processEvaluation: function(result) {
@@ -102,12 +95,13 @@ AUI.add(
 			validate: function(callback) {
 				var instance = this;
 
-				if (instance.hasValidation() && !instance.get('readOnly')) {
+				if (!instance.get('readOnly')) {
 					var evaluator = instance.get('evaluator');
 
 					instance.showLoadingFeedback();
 
 					evaluator.evaluate(
+						instance,
 						function(result) {
 							if (callback) {
 								var hasErrors = instance.hasErrors();
@@ -131,26 +125,47 @@ AUI.add(
 
 				var evaluator = instance.get('evaluator');
 
-				evaluator.set('form', event.newVal);
+				if (evaluator) {
+					instance._bindValidationEvaluatorEvents();
+
+					evaluator.set('form', event.newVal);
+				}
 			},
 
 			_afterValidationEvaluationEnded: function(event) {
 				var instance = this;
 
-				instance.hideFeedback();
+				if (event.trigger === instance) {
+					instance.hideFeedback();
 
-				instance.processEvaluation(event.result);
+					instance.processEvaluation(event.result);
+				}
 			},
 
-			_valueEvaluator: function() {
+			_bindValidationEvaluatorEvents: function() {
 				var instance = this;
 
-				return new Renderer.ExpressionsEvaluator(
-					{
-						enabled: instance.get('enableEvaluations'),
-						form: instance.getRoot()
-					}
-				);
+				var evaluator = instance.get('evaluator');
+
+				if (evaluator) {
+					instance._eventHandlers.push(
+						evaluator.after('evaluationEnded', A.bind('_afterValidationEvaluationEnded', instance))
+					);
+				}
+			},
+
+			_getEvaluator: function() {
+				var instance = this;
+
+				var evaluator;
+
+				var root = instance.getRoot();
+
+				if (root) {
+					evaluator = root.get('evaluator');
+				}
+
+				return evaluator;
 			}
 		};
 
