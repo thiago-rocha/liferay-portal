@@ -27,7 +27,7 @@ AUI.add(
 					},
 
 					type: {
-						value: 'key-value'
+						value: 'key_value'
 					}
 				},
 
