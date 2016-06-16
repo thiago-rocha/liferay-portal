@@ -59,8 +59,7 @@ AUI.add(
 							{
 								editing: instance.get('editing'),
 								key: instance.get('key'),
-								strings: instance.get('strings'),
-								tooltip: instance.get('tooltip')
+								strings: instance.get('strings')
 							}
 						);
 					},
