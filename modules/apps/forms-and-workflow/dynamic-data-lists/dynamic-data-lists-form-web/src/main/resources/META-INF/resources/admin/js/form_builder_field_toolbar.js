@@ -51,26 +51,31 @@ AUI.add(
 
 		Liferay.DDL.FormBuilderFieldToolbar.ITEM_ADD_NESTED = {
 			handler: 'addNestedField',
-			iconClass: 'glyphicon glyphicon-plus'
+			iconClass: 'glyphicon glyphicon-plus',
+			label: 'Add Nested'
 		};
 
 		Liferay.DDL.FormBuilderFieldToolbar.ITEM_EDIT = {
 			handler: 'editField',
-			iconClass: 'pencil'
+			iconClass: 'pencil',
+			label: 'Edit'
 		};
 
 		Liferay.DDL.FormBuilderFieldToolbar.ITEM_MOVE = {
 			buttonClass: 'layout-builder-move-cut-button layout-builder-move-cut-col-button',
-			iconClass: 'move'
+			iconClass: 'move',
+			label: 'Move'
 		};
 
 		Liferay.DDL.FormBuilderFieldToolbar.ITEM_REMOVE = {
 			handler: 'removeField',
-			iconClass: 'trash'
+			iconClass: 'trash',
+			label: 'Remove'
 		};
 
 		Liferay.DDL.FormBuilderFieldToolbar.ITEM_CLOSE = {
-			iconClass: 'times'
+			iconClass: 'times',
+			label: 'Close'
 		};
 	},
 	'',

@@ -17,12 +17,13 @@
 								'liferay-ddl-form-builder-field-list',
 								'liferay-ddl-form-builder-settings-modal',
 								'liferay-ddl-form-builder-field-support',
-								'liferay-ddl-form-builder-field-toolbar',
+								'liferay-ddl-form-builder-field-options-toolbar',
 								'liferay-ddl-form-builder-field-types-modal',
 								'liferay-ddl-form-builder-layout-builder-support',
 								'liferay-ddl-form-builder-layout-deserializer',
 								'liferay-ddl-form-builder-layout-visitor',
 								'liferay-ddl-form-builder-pages-manager',
+								'liferay-ddl-form-builder-sidebar',
 								'liferay-ddl-form-builder-util',
 								'liferay-ddm-form-field-types',
 								'liferay-ddm-form-renderer'
@@ -41,10 +42,14 @@
 								'aui-form-builder-field-list'
 							]
 						},
-						'liferay-ddl-form-builder-field-toolbar': {
-							path: 'form_builder_field_toolbar.js',
+						'liferay-ddl-form-builder-field-options-toolbar': {
+							path: 'form_builder_field_options_toolbar.js',
+							requires: ['liferay-ddl-form-builder-field-options-toolbar-soy']
+						},
+						'liferay-ddl-form-builder-field-options-toolbar-soy': {
+							path: 'field-options-toolbar.soy.js',
 							requires: [
-								'aui-form-builder-field-toolbar'
+								'soyutils'
 							]
 						},
 						'liferay-ddl-form-builder-field-types-modal': {
@@ -127,6 +132,10 @@
 								'liferay-ddl-form-builder-settings-retriever'
 							]
 						},
+						'liferay-ddl-form-builder-sidebar': {
+							path: 'form_builder_sidebar.js',
+							requires: ['aui-tabview', 'liferay-ddl-form-field-options-toolbar', 'liferay-ddl-form-sidebar-soy']
+						},
 						'liferay-ddl-form-builder-util': {
 							path: 'form_builder_util.js',
 							requires: [
@@ -142,6 +151,12 @@
 								'liferay-ddl-form-builder-layout-serializer',
 								'liferay-portlet-base',
 								'liferay-util-window'
+							]
+						},
+						'liferay-ddl-form-sidebar-soy': {
+							path: 'sidebar.soy.js',
+							requires: [
+								'soyutils'
 							]
 						}
 					},
