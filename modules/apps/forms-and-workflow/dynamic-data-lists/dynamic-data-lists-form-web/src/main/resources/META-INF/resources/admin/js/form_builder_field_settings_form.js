@@ -3,15 +3,11 @@ AUI.add(
 	function(A) {
 		var Lang = A.Lang;
 
-		var CSS_FIELD_SETTINGS_SAVE = A.getClassName('lfr', 'ddl', 'field', 'settings', 'save');
-
 		var TPL_OPTION = '<option {status} value="{value}">{label}</option>';
 
 		var TPL_SETTINGS_FORM = '<form action="javascript:;"></form>';
 
 		var TPL_SETTINGS_TOGGLER = '<button class="btn settings-toggler" type="button"><span class="settings-toggle-label"></span><span class="settings-toggle-icon"></span></button>';
-
-		var TPL_SUBMIT_BUTTON = '<button class="hide" type="submit" />';
 
 		var RendererUtil = Liferay.DDM.Renderer.Util;
 
@@ -37,9 +33,12 @@ AUI.add(
 					initializer: function() {
 						var instance = this;
 
+						var evaluator = instance.get('evaluator');
+
 						instance._initDataProvider();
 
 						instance._eventHandlers.push(
+							evaluator.after('evaluationEnded', A.bind('_saveSettings', instance)),
 							instance.after('render', instance._afterSettingsFormRender),
 							instance.on('*:addOption', instance._afterAddOption),
 							instance.on('*:removeField', instance.alignModal)
@@ -61,36 +60,11 @@ AUI.add(
 						);
 					},
 
-					// getSubmitButton: function() {
-					// 	var instance = this;
-
-					// 	var footerNode = instance._getModalStdModeNode(A.WidgetStdMod.FOOTER);
-
-					// 	return footerNode.one('.' + CSS_FIELD_SETTINGS_SAVE);
-					// },
-
 					submit: function(callback) {
 						var instance = this;
 
 						instance.validateSettings(
 							function(hasErrors) {
-								if (!hasErrors) {
-									var settingsForm = instance.get('field');
-
-									var settingsModal = settingsForm.getSettingsModal();
-
-									settingsForm.saveSettings(instance);
-
-									// settingsModal.fire(
-									// 	'save',
-									// 	{
-									// 		field: settingsForm
-									// 	}
-									// );
-
-									// settingsModal.hide();
-								}
-
 								if (callback) {
 									callback.apply(instance, arguments);
 								}
@@ -183,11 +157,6 @@ AUI.add(
 						var instance = this;
 
 						var container = instance.get('container');
-
-						container.append(TPL_SUBMIT_BUTTON);
-
-						instance._createModeToggler();
-						instance._syncModeToggler();
 
 						var formName = A.guid();
 
@@ -337,6 +306,14 @@ AUI.add(
 						event.preventDefault();
 
 						instance.submit();
+					},
+
+					_saveSettings: function() {
+						var instance = this;
+
+						var field = instance.get('field');
+
+						field.saveSettings(instance);
 					},
 
 					_syncModeToggler: function() {
