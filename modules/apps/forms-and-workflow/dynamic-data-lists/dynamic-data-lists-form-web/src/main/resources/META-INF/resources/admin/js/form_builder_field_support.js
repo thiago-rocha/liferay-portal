@@ -80,16 +80,6 @@ AUI.add(
 				return settings;
 			},
 
-			getSettingsModal: function() {
-				var instance = this;
-
-				var builder = instance.get('builder');
-
-				var settingsModal = builder._fieldSettingsModal;
-
-				return settingsModal;
-			},
-
 			isAdding: function() {
 				var instance = this;
 
@@ -189,8 +179,6 @@ AUI.add(
 			_updateSettingsFormValues: function(settingsForm) {
 				var instance = this;
 
-				var context = instance.get('context');
-
 				settingsForm.get('fields').forEach(
 					function(item, index) {
 						var name = item.get('fieldName');
@@ -198,6 +186,8 @@ AUI.add(
 						if (name === 'name') {
 							name = 'fieldName';
 						}
+
+						var context = instance.get('context');
 
 						if (context.hasOwnProperty(name)) {
 							item.set('errorMessage', '');
