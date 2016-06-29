@@ -23,6 +23,7 @@
 								'liferay-ddl-form-builder-layout-deserializer',
 								'liferay-ddl-form-builder-layout-visitor',
 								'liferay-ddl-form-builder-pages-manager',
+								'liferay-ddl-form-builder-sidebar',
 								'liferay-ddl-form-builder-util',
 								'liferay-ddm-form-field-types',
 								'liferay-ddm-form-renderer'
@@ -126,6 +127,10 @@
 								'liferay-ddl-form-builder-field-settings-form',
 								'liferay-ddl-form-builder-settings-retriever'
 							]
+						},
+						'liferay-ddl-form-builder-sidebar': {
+							path: 'form_builder_sidebar.js',
+							requires: ['aui-tabview']
 						},
 						'liferay-ddl-form-builder-util': {
 							path: 'form_builder_util.js',
