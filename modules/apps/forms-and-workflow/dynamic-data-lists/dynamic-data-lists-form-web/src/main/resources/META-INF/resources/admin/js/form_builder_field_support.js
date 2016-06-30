@@ -207,6 +207,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['liferay-ddl-form-builder-settings-form', 'liferay-ddl-form-builder-settings-retriever', 'liferay-ddl-form-builder-util']
+		requires: ['liferay-ddl-form-builder-field-settings-form', 'liferay-ddl-form-builder-settings-retriever', 'liferay-ddl-form-builder-util']
 	}
 );

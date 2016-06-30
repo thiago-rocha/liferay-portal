@@ -1,5 +1,5 @@
 AUI.add(
-	'liferay-ddl-form-builder-settings-form',
+	'liferay-ddl-form-builder-field-settings-form',
 	function(A) {
 		var Lang = A.Lang;
 
@@ -25,7 +25,7 @@ AUI.add(
 
 				EXTENDS: Liferay.DDM.Renderer.Form,
 
-				NAME: 'liferay-ddl-form-builder-settings-form',
+				NAME: 'liferay-ddl-form-builder-field-settings-form',
 
 				prototype: {
 					initializer: function() {
@@ -34,22 +34,10 @@ AUI.add(
 						instance._initDataProvider();
 
 						instance._eventHandlers.push(
-							instance.after('render', instance._afterSettingsFormRender),
-							instance.on('*:addField', instance.alignModal),
-							instance.on('*:removeField', instance.alignModal)
+							instance.after('render', instance._afterSettingsFormRender)
 						);
 
 						instance._fieldEventHandlers = [];
-					},
-
-					alignModal: function() {
-						var instance = this;
-
-						var field = instance.get('field');
-
-						var settingsModal = field.getSettingsModal();
-
-						settingsModal.align();
 					},
 
 					getEvaluationPayload: function() {
@@ -65,13 +53,13 @@ AUI.add(
 						);
 					},
 
-					getSubmitButton: function() {
-						var instance = this;
+					// getSubmitButton: function() {
+					// 	var instance = this;
 
-						var footerNode = instance._getModalStdModeNode(A.WidgetStdMod.FOOTER);
+					// 	var footerNode = instance._getModalStdModeNode(A.WidgetStdMod.FOOTER);
 
-						return footerNode.one('.' + CSS_FIELD_SETTINGS_SAVE);
-					},
+					// 	return footerNode.one('.' + CSS_FIELD_SETTINGS_SAVE);
+					// },
 
 					submit: function(callback) {
 						var instance = this;
@@ -79,20 +67,20 @@ AUI.add(
 						instance.validateSettings(
 							function(hasErrors) {
 								if (!hasErrors) {
-									var field = instance.get('field');
+									var settingsForm = instance.get('field');
 
-									var settingsModal = field.getSettingsModal();
+									var settingsModal = settingsForm.getSettingsModal();
 
-									field.saveSettings(instance);
+									settingsForm.saveSettings(instance);
 
-									settingsModal.fire(
-										'save',
-										{
-											field: field
-										}
-									);
+									// settingsModal.fire(
+									// 	'save',
+									// 	{
+									// 		field: settingsForm
+									// 	}
+									// );
 
-									settingsModal.hide();
+									// settingsModal.hide();
 								}
 
 								if (callback) {
@@ -271,8 +259,6 @@ AUI.add(
 						var advancedSettingsNode = instance.getPageNode(2);
 
 						advancedSettingsNode.toggleClass('active');
-
-						instance.alignModal();
 
 						instance._syncModeToggler();
 					},
