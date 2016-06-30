@@ -3,6 +3,7 @@
 @import "form-builder-field-toolbar";
 @import "form-builder-layout-builder-move";
 @import "form-builder-modal";
+@import "form_builder_field_settings";
 @import "sidebar";
 
 $horizontal-spacing: 35px;
@@ -149,57 +150,6 @@ $horizontal-spacing: 35px;
 			display: none
 		}
 
-		.key-value-editor {
-			&.active {
-				.key-value-cancel,
-				.key-value-done,
-				.key-value-input {
-					display: inline-block;
-				}
-
-				.key-value-output {
-					display: none;
-				}
-			}
-
-			.key-value-cancel,
-			.key-value-done,
-			.key-value-input {
-				display: none;
-			}
-
-			.key-value-cancel,
-			.key-value-done {
-				font-weight: bold;
-				margin-left: 25px;
-				text-transform: uppercase;
-			}
-
-			.key-value-label {
-				color: #C4CFD6;
-				margin-right: 5px;
-			}
-
-			.key-value-cancel,
-			.key-value-done,
-			.key-value-input,
-			.key-value-label,
-			.key-value-output {
-				font-size: 11px;
-			}
-
-			.key-value-input {
-				border-width: 0;
-				margin: 0;
-				outline: none;
-			}
-
-			.key-value-input,
-			.key-value-output {
-				color: #869CAD;
-			}
-		}
-
 		.liferay-ddm-form-field-checkbox,
 		.lfr-ddm-form-field-validation {
 			margin-bottom: 20px;
@@ -296,7 +246,7 @@ $horizontal-spacing: 35px;
 			.lfr-ddm-form-page {
 				&.active,
 				&.basic {
-					padding: 25px $horizontal-spacing;
+					padding: 0 $horizontal-spacing;
 				}
 
 				&.active.advanced {
@@ -306,26 +256,8 @@ $horizontal-spacing: 35px;
 				&.advanced {
 					background-color: #F5F8FA;
 					display: none;
-					padding: 20px $horizontal-spacing;
+					padding: 0 $horizontal-spacing 20px $horizontal-spacing;
 				}
-			}
-		}
-
-		.settings-toggler {
-			background-color: #F5F8FA;
-			color: #879CB5;
-			font-weight: 500;
-			padding: 18px $horizontal-spacing;
-			position: static;
-			text-align: left;
-			width: 100%;
-
-			.settings-toggle-label {
-				float: left;
-			}
-
-			.settings-toggle-icon {
-				float: right;
 			}
 		}
 	}
@@ -725,7 +657,13 @@ $horizontal-spacing: 35px;
 		border-radius: 0;
 		border-width: 0;
 		box-shadow: none;
+		cursor: pointer;
 		margin: 0;
+		transition: background-color 0.5s;
+
+		&:hover {
+			background-color: #EFEFEF;
+		}
 	}
 
 	.form-builder-field-list-add-button {

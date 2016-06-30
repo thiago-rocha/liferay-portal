@@ -1,0 +1,75 @@
+#settings {
+	.settings-toggler {
+		background-color: #F5F8FA;
+		color: #879CB5;
+		font-weight: 500;
+		padding: 18px 0;
+		position: static;
+		text-align: left;
+		width: 100%;
+
+		.settings-toggle-label {
+			float: left;
+		}
+
+		.settings-toggle-icon {
+			float: right;
+		}
+	}
+
+	.lfr-ddm-form-page {
+		padding-bottom: 0;
+		padding-top: 0;
+	}
+
+	.key-value-editor {
+		&.active {
+			.key-value-cancel,
+			.key-value-done,
+			.key-value-input {
+				display: inline-block;
+			}
+
+			.key-value-output {
+				display: none;
+			}
+		}
+
+		.key-value-cancel,
+		.key-value-done,
+		.key-value-input {
+			display: none;
+		}
+
+		.key-value-cancel,
+		.key-value-done {
+			font-weight: bold;
+			margin-left: 25px;
+			text-transform: uppercase;
+		}
+
+		.key-value-label {
+			color: #C4CFD6;
+			margin-right: 5px;
+		}
+
+		.key-value-cancel,
+		.key-value-done,
+		.key-value-input,
+		.key-value-label,
+		.key-value-output {
+			font-size: 11px;
+		}
+
+		.key-value-input {
+			border-width: 0;
+			margin: 0;
+			outline: none;
+		}
+
+		.key-value-input,
+		.key-value-output {
+			color: #869CAD;
+		}
+	}
+}
