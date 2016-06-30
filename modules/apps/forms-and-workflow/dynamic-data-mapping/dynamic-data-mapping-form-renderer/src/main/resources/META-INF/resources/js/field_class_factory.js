@@ -106,17 +106,11 @@ AUI.add(
 					var context = instance.get('context');
 
 					if (!Util.compare(value, context[name])) {
-						console.log(
-							'[', instance.get('fieldName'), ']',
-							'attribute', name, 'changes context - ',
-							'prev', context[name],
-							'new', value);
-
 						instance.set('context.' + name, value);
 					}
 
 					return value;
-				};
+				}
 			}
 		};
 
