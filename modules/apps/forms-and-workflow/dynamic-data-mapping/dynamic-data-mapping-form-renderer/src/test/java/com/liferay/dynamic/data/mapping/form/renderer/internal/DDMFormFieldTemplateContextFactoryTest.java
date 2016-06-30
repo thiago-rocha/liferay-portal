@@ -235,8 +235,7 @@ public class DDMFormFieldTemplateContextFactoryTest {
 			"ddm.text",
 			MapUtil.getString(fieldTemplateContext, "templateNamespace"));
 		Assert.assertEquals(
-			"This is a tip.",
-			MapUtil.getString(fieldTemplateContext, "tip"));
+			"This is a tip.", MapUtil.getString(fieldTemplateContext, "tip"));
 		Assert.assertEquals(
 			true, MapUtil.getBoolean(fieldTemplateContext, "valid"));
 		Assert.assertEquals(
