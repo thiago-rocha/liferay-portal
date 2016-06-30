@@ -33,6 +33,7 @@ AUI.add(
 					},
 
 					dataProviders: {
+						value: []
 					},
 
 					definition: {
@@ -186,20 +187,6 @@ AUI.add(
 						field.destroy();
 					},
 
-					// editField: function(field) {
-					// 	var instance = this;
-
-					// 	var fieldType = instance.findTypeOfField(field);
-
-					// 	instance.showFieldSettingsPanel(
-					// 		field,
-					// 		Lang.sub(
-					// 			Liferay.Language.get('edit-x'),
-					// 			[fieldType.get('label')]
-					// 		)
-					// 	);
-					// },
-
 					editField: function(field) {
 						var instance = this;
 
@@ -224,21 +211,43 @@ AUI.add(
 						return instance._sidebar;
 					},
 
+					getRulesBuilder: function() {
+						var instance = this;
+
+						if (!instance._rulesBuilder) {
+							var rulesBuilderContainer = window.sidebar.getFieldRules();
+
+							var rulesBuilder = new Liferay.DDL.FormBuilderRulesBuilder({
+								boundingBox: rulesBuilderContainer
+							});
+
+							rulesBuilder.on('saveRule', A.bind(instance._onSaveRule, instance));
+
+							instance._rulesBuilder = rulesBuilder;
+						}
+
+						return instance._rulesBuilder;
+					},
+
 					showFieldSettingsPanel: function(field) {
 						var instance = this;
 
 						var settingsPanel = instance.getFieldSettingPanel();
 
+						var rulesBuilder = instance.getRulesBuilder();
+
 						field.loadSettingsForm().then(
 							function(settingsForm) {
-								instance._sidebar.getFieldSettings().setHTML(settingsForm.get('container'));
+								settingsPanel.getFieldSettings().setHTML(settingsForm.get('container'));
 
+								rulesBuilder.set('rules', []); // trocar [] pelo array de regras real
+								rulesBuilder.render();
 								settingsForm.render();
 
 								var settings = field.getSettings(settingsForm);
 
-								instance._sidebar.set('title', settings.label || 'Untitled');
-								instance._sidebar.set('description', settings.type);
+								settingsPanel.set('title', settings.label || 'Untitled');
+								settingsPanel.set('description', settings.type);
 							}
 						);
 
@@ -287,23 +296,6 @@ AUI.add(
 
 					_insertField: function(field) {
 						var instance = this;
-
-				        // if (this._newFieldContainer) {
-				        //     if (A.instanceOf(this._newFieldContainer.get('value'), A.FormBuilderFieldList)) {
-				        //         this._newFieldContainer.get('value').addField(field);
-				        //         this._newFieldContainer.set('removable', false);
-				        //     }
-				        //     else {
-				        //         this._addNestedField(
-				        //             this._newFieldContainer,
-				        //             field,
-				        //             this._newFieldContainer.get('nestedFields').length
-				        //         );
-				        //     }
-				        //     this._newFieldContainer = null;
-				        // }
-
-				        console.log(instance);
 
 						instance.appendChild(field);
 

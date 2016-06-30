@@ -112,7 +112,7 @@ AUI.add(
 						var ddmDataProviderInstanceId = ddmDataProviderInstanceIdField.get('value');
 
 						ddmDataProviderInstanceIdField.getInputNode().html(
-							instance.get('dataProviders').map(
+							Liferay.DDL.RulesHelper.dataProviders.map(
 								function(item) {
 									var status = '';
 

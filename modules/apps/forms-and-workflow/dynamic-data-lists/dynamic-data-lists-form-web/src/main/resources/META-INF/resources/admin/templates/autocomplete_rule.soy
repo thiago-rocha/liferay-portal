@@ -1,0 +1,20 @@
+{namespace ddl}
+
+/**
+ * Prints the DDL rule container.
+ *
+ * @param description
+ * @param options
+ * @param selectPlaceholder
+ */
+{template .autocomplete_rule autoescape="deprecated-contextual"}
+	<p>{$description}</p>
+	<select>
+		{if length($options) > 0}
+			<option value="" selected disabled style="display: none;">{$selectPlaceholder}</option>
+			{foreach $option in $options}
+				<option value="{$option.id}">{$option.name}</option>
+			{/foreach}
+		{/if}
+	</select>
+{/template}

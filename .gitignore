@@ -206,3 +206,17 @@ cobertura.ser
 !/.gradle/caches/modules-2/files-2.1
 /.gradle/caches/modules-2/files-2.1/**/*-sources.jar
 /.gradle/caches/modules-2/files-2.1/com.liferay.portal/*/*-SNAPSHOT
+.gradle/caches/modules-2/files-2.1/com.liferay.webjars/com.liferay.webjars.alloy-ui/3.0.3-deprecated.37/c148bc05c527fbbaf23fbcf88e5f53a4159845a2/com.liferay.webjars.alloy-ui-3.0.3-deprecated.37.pom
+.gradle/caches/modules-2/files-2.1/com.liferay.webjars/com.liferay.webjars.alloy-ui/3.0.3-deprecated.37/c499d21b7c38bdc66a3e1c35fe4ddbb34bdf9387/com.liferay.webjars.alloy-ui-3.0.3-deprecated.37.jar
+.gradle/caches/modules-2/files-2.1/com.liferay/com.liferay.ant.bnd/2.0.27/1396e53ccb5b0db56aa0bdf999b12a486740b80e/com.liferay.ant.bnd-2.0.27.jar
+.gradle/caches/modules-2/files-2.1/com.liferay/com.liferay.ant.bnd/2.0.27/c28936c64666e8f6268cff058d51d32c173c6136/com.liferay.ant.bnd-2.0.27.pom
+.gradle/caches/modules-2/files-2.1/com.liferay/com.liferay.gradle.plugins.lang.merger/1.0.3/bf50f7eaab17b32f8c8ae6d845c047fd703a3f19/com.liferay.gradle.plugins.lang.merger-1.0.3.pom
+.gradle/caches/modules-2/files-2.1/com.liferay/com.liferay.gradle.plugins.lang.merger/1.0.3/e66eb137178af9df9c148c2d76e1c3aa2d5495ac/com.liferay.gradle.plugins.lang.merger-1.0.3.jar
+.gradle/caches/modules-2/files-2.1/com.liferay/com.liferay.gradle.plugins.test.integration/1.0.7/51759a4efd0cc57a6cd79aa51736a2a03acc7511/com.liferay.gradle.plugins.test.integration-1.0.7.pom
+.gradle/caches/modules-2/files-2.1/com.liferay/com.liferay.gradle.plugins.test.integration/1.0.7/a7f50a70f9240b66e1a0485a5ba7d5031a5da861/com.liferay.gradle.plugins.test.integration-1.0.7.jar
+.gradle/caches/modules-2/files-2.1/com.liferay/com.liferay.gradle.plugins/1.0.368/744f40ad7f8436650adc88871162f5c3c769386d/com.liferay.gradle.plugins-1.0.368.jar
+.gradle/caches/modules-2/files-2.1/com.liferay/com.liferay.gradle.plugins/1.0.368/764b3c9b66466c45646e1236d34c4b8ac0b37ed3/com.liferay.gradle.plugins-1.0.368.pom
+.gradle/caches/modules-2/files-2.1/com.liferay/com.liferay.gradle.plugins/1.0.369/6cd91446bb228cf78b318d54780c1cb2f2891019/com.liferay.gradle.plugins-1.0.369.jar
+.gradle/caches/modules-2/files-2.1/com.liferay/com.liferay.gradle.plugins/1.0.369/afd4d38244e6f2e7588a8c2b6e8d6fc717c65dbf/com.liferay.gradle.plugins-1.0.369.pom
+.gradle/caches/modules-2/files-2.1/org.dm.gradle/gradle-bundle-plugin/0.8.5/be32ac59720f927ba1ee911216f5e5bda1a78e49/gradle-bundle-plugin-0.8.5.jar
+.gradle/caches/modules-2/files-2.1/org.dm.gradle/gradle-bundle-plugin/0.8.5/ca0599245bdfec62d3b7c351788a2e365ba5a12/gradle-bundle-plugin-0.8.5.pom

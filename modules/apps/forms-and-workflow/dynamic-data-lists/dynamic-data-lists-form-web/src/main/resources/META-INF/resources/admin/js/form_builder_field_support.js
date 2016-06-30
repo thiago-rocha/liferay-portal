@@ -30,9 +30,6 @@ AUI.add(
 				}
 			},
 
-			dataProviders: {
-			},
-
 			getFieldTypeSettingFormContextURL: {
 				value: ''
 			},
@@ -138,7 +135,6 @@ AUI.add(
 				return new Liferay.DDL.FormBuilderSettingsForm(
 					{
 						context: context,
-						dataProviders: instance.get('dataProviders'),
 						evaluatorURL: instance.get('evaluatorURL'),
 						field: instance,
 						portletNamespace: instance.get('portletNamespace'),

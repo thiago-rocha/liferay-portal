@@ -202,11 +202,12 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 							function() {
 								Liferay.DDM.Renderer.FieldTypes.register(fieldTypes);
 
+								Liferay.namespace('DDL.RulesHelper')['dataProviders'] = <%= ddlFormAdminDisplayContext.getSerializedDDMDataProviders() %>;
+
 								Liferay.component(
 									'formPortlet',
 									new Liferay.DDL.Portlet(
 										{
-											dataProviders: <%= ddlFormAdminDisplayContext.getSerializedDDMDataProviders() %>,
 											definition: <%= ddlFormAdminDisplayContext.getSerializedDDMForm() %>,
 											description: '<%= HtmlUtil.escapeJS(description) %>',
 											editForm: event.form,

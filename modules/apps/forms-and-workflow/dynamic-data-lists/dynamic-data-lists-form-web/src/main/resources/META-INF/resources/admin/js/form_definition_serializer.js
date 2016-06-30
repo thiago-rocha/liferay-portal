@@ -15,6 +15,9 @@ AUI.add(
 
 					fieldTypesDefinitions: {
 						value: {}
+					},
+					rules: {
+						value: []
 					}
 				},
 
@@ -32,7 +35,8 @@ AUI.add(
 							{
 								availableLanguageIds: ['en_US'],
 								defaultLanguageId: 'en_US',
-								fields: instance.get('fields')
+								fields: instance.get('fields'),
+								rules: instance.get('rules')
 							}
 						);
 
