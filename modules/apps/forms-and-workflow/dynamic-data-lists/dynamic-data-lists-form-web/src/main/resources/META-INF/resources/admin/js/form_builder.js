@@ -278,9 +278,32 @@ AUI.add(
 					_afterFieldSettingsModalSave: function(event) {
 						var instance = this;
 
+						var field = event.field;
+
 						FormBuilder.superclass._afterFieldSettingsModalSave.apply(instance, arguments);
 
-						var field = event.field;
+						instance._insertField(field);
+					},
+
+					_insertField: function(field) {
+						var instance = this;
+
+				        // if (this._newFieldContainer) {
+				        //     if (A.instanceOf(this._newFieldContainer.get('value'), A.FormBuilderFieldList)) {
+				        //         this._newFieldContainer.get('value').addField(field);
+				        //         this._newFieldContainer.set('removable', false);
+				        //     }
+				        //     else {
+				        //         this._addNestedField(
+				        //             this._newFieldContainer,
+				        //             field,
+				        //             this._newFieldContainer.get('nestedFields').length
+				        //         );
+				        //     }
+				        //     this._newFieldContainer = null;
+				        // }
+
+				        console.log(instance);
 
 						instance.appendChild(field);
 
@@ -343,6 +366,8 @@ AUI.add(
 						instance.hideFieldsPanel();
 
 						instance.showFieldSettingsPanel(field);
+
+						instance._insertField(field);
 					},
 
 					_getPageManagerInstance: function(config) {

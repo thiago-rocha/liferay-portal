@@ -75,6 +75,8 @@ AUI.add(
 					);
 
 					visitor.visit();
+
+					// form.hasErrors()
 				}
 				else {
 					var strings = instance.get('strings');
