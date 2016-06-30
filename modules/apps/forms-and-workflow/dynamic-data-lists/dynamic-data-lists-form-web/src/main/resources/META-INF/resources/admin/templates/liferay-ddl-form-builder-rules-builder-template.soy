@@ -1,0 +1,40 @@
+{namespace ddl}
+
+/**
+ * Prints the DDL form rules builder.
+ *
+ * @param addRule
+ */
+{template .rules  autoescape="deprecated-contextual"}
+	<div class="form-builder-rules-builder-container">
+		<div class="form-builder-rules-builder-rule-list">
+		</div>
+		<div class="form-builder-rules-builder-add-rule-container">
+			<a class="btn form-builder-rules-builder-add-rule" href="javascript:;">
+			<span class="form-builder-rules-builder-add-rule-button-icon">+</span>
+			<label class="form-builder-rules-builder-add-rule-button-label">{$addRule}</label>
+			</a>
+		</div>
+	</div>
+{/template}
+
+/**
+ * Prints the DDL form rules builder.
+ *
+ * @param rules
+ * @param emptyList
+ */
+{template .rule_list  autoescape="deprecated-contextual"}
+	{foreach $rule in $rules}
+		<div class="card card-horizontal card-rule">
+			<div class="card-row card-row-padded">
+				<div class="card-col-content card-col-gutters">
+					<h4>{$rule.title}<h4>
+					<p>{$rule.description}</p>
+				</div>
+			</div>
+		</di>
+		{ifempty}
+			{$emptyList}
+	{/foreach}
+{/template}

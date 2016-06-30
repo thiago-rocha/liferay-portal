@@ -14,6 +14,7 @@
 							requires: [
 								'aui-form-builder',
 								'aui-form-builder-pages',
+								'liferay-ddl-form-builder-autocomplete-rule',
 								'liferay-ddl-form-builder-field-list',
 								'liferay-ddl-form-builder-settings-modal',
 								'liferay-ddl-form-builder-field-support',
@@ -23,6 +24,8 @@
 								'liferay-ddl-form-builder-layout-deserializer',
 								'liferay-ddl-form-builder-layout-visitor',
 								'liferay-ddl-form-builder-pages-manager',
+								'liferay-ddl-form-builder-rule',
+								'liferay-ddl-form-builder-rules-builder',
 								'liferay-ddl-form-builder-sidebar',
 								'liferay-ddl-form-builder-util',
 								'liferay-ddm-form-field-types',
@@ -126,6 +129,36 @@
 							requires: [
 								'liferay-ddl-form-builder-field-settings-form',
 								'liferay-ddl-form-builder-settings-retriever'
+							]
+						},
+						'liferay-ddl-form-builder-rule' : {
+							path: 'form_builder_rules_builder.js',
+							requires: ['liferay-ddl-form-builder-rule-template']
+						},
+						'liferay-ddl-form-builder-rule-template': {
+							path: '../templates/liferay-ddl-form-builder-rule-container-template.soy.js',
+							requires: [
+								'soyutils'
+							]
+						},
+						'liferay-ddl-form-builder-autocomplete-rule' : {
+							path: 'form_builder_autocomplete_rule.js',
+							requires: ['liferay-ddl-form-builder-autocomplete-rule-template']
+						},
+						'liferay-ddl-form-builder-autocomplete-rule-template': {
+							path: '../templates/liferay-ddl-form-builder-autocomplete-rule-template.soy.js',
+							requires: [
+								'soyutils'
+							]
+						},
+						'liferay-ddl-form-builder-rules-builder': {
+							path: 'form_builder_rules_builder.js',
+							requires: ['aui-popover', 'liferay-ddl-form-builder-rules-builder-template']
+						},
+						'liferay-ddl-form-builder-rules-builder-template': {
+							path: '../templates/liferay-ddl-form-builder-rules-builder-template.soy.js',
+							requires: [
+								'soyutils'
 							]
 						},
 						'liferay-ddl-form-builder-sidebar': {

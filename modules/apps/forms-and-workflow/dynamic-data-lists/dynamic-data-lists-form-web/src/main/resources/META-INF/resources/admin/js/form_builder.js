@@ -219,6 +219,10 @@ AUI.add(
 							window.sidebar = instance._sidebar = new Liferay.DDL.FormBuilderSidebar({
 								render: '#senna_surface1-default'
 							});
+
+							instance._rulesBuilder = new Liferay.DDL.FormBuilderRulesBuilder({
+								boundingBox: window.sidebar.getFieldRules()
+							}).render();
 						}
 
 						return instance._sidebar;
@@ -231,14 +235,15 @@ AUI.add(
 
 						field.loadSettingsForm().then(
 							function(settingsForm) {
-								instance._sidebar.getFieldSettings().setHTML(settingsForm.get('container'));
+								settingsPanel.getFieldSettings().setHTML(settingsForm.get('container'));
 
+								instance._rulesBuilder.set('rules', []); // trocar [] pelo array de regras real
 								settingsForm.render();
 
 								var settings = field.getSettings(settingsForm);
 
-								instance._sidebar.set('title', settings.label || 'Untitled');
-								instance._sidebar.set('description', settings.type);
+								settingsPanel.set('title', settings.label || 'Untitled');
+								settingsPanel.set('description', settings.type);
 							}
 						);
 

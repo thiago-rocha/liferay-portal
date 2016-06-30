@@ -1,0 +1,22 @@
+{namespace ddl}
+
+/**
+ * Prints the DDL rule container.
+ *
+ * @param ruleTemplate
+ * @param strings
+ * @param title
+ * @param type
+ */
+{template .rule_container  autoescape="deprecated-contextual"}
+	<div class="form-builder-rule-container">
+		<h4>{$title}<h4>
+		<div class="form-builder-{$type}-rule">{$ruleTemplate}</div>
+		<button class="btn btn-lg ddl-button btn-primary btn-default form-builder-rule-save" type="button">
+			<span class="form-builder-rule-save-label">{$strings.save}</span>
+		</button>
+		<a class="btn btn-lg btn-cancel btn-default btn-link form-builder-rule-save" href="" >
+			<span class="lfr-btn-label">{$strings.cancel}</span>
+		</a>
+	</div>
+{/template}
