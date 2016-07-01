@@ -92,8 +92,6 @@ AUI.add(
 							hasErrors = instance.hasErrors();
 						}
 
-						console.log('validate errors', hasErrors);
-
 						if (callback) {
 							callback.call(instance, hasErrors, result);
 						}

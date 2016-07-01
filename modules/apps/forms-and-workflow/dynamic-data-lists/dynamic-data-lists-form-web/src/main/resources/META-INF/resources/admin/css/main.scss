@@ -182,7 +182,7 @@
 	}
 }
 
-.lfr-ddl-field-settings-modal,
+.form-builder-sidebar,
 .portlet-forms {
 	.form-control {
 		font-size: 14px;
@@ -460,7 +460,7 @@
 }
 
 .portlet-forms,
-.lfr-ddl-field-settings-modal {
+.form-builder-sidebar {
 	.help-block {
 		font-size: 14px;
 	}
@@ -511,7 +511,13 @@
 		border-radius: 0;
 		border-width: 0;
 		box-shadow: none;
+		cursor: pointer;
 		margin: 0;
+		transition: background-color 0.5s;
+
+		&:hover {
+			background-color: #EFEFEF;
+		}
 	}
 
 	.form-builder-field-list-add-button {

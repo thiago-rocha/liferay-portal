@@ -31,7 +31,11 @@ AUI.add(
 					initializer: function() {
 						var instance = this;
 
+						var evaluator = instance.get('evaluator');
+
 						instance._initDataProvider();
+
+						evaluator.after('evaluationEnded', A.bind('_saveSettings', instance));
 
 						instance._eventHandlers.push(
 							instance.after('render', instance._afterSettingsFormRender)
@@ -53,41 +57,26 @@ AUI.add(
 						);
 					},
 
-					// getSubmitButton: function() {
-					// 	var instance = this;
-
-					// 	var footerNode = instance._getModalStdModeNode(A.WidgetStdMod.FOOTER);
-
-					// 	return footerNode.one('.' + CSS_FIELD_SETTINGS_SAVE);
-					// },
-
 					submit: function(callback) {
 						var instance = this;
 
 						instance.validateSettings(
 							function(hasErrors) {
-								if (!hasErrors) {
-									var settingsForm = instance.get('field');
-
-									var settingsModal = settingsForm.getSettingsModal();
-
-									settingsForm.saveSettings(instance);
-
-									// settingsModal.fire(
-									// 	'save',
-									// 	{
-									// 		field: settingsForm
-									// 	}
-									// );
-
-									// settingsModal.hide();
-								}
-
 								if (callback) {
 									callback.apply(instance, arguments);
 								}
 							}
 						);
+					},
+
+					_saveSettings: function() {
+						var instance = this;
+
+						var settingsForm = instance.get('field');
+
+						var settingsModal = settingsForm.getSettingsModal();
+
+						settingsForm.saveSettings(instance);
 					},
 
 					validateSettings: function(callback) {
