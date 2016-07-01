@@ -53,8 +53,8 @@ import com.liferay.portal.kernel.util.StringPool;
 						@DDMFormLayoutColumn(
 							size = 12,
 							value = {
-								"repeatable", "showLabel", "validation",
-								"visibilityExpression"
+								"readOnly", "repeatable", "showLabel",
+								"validation", "visibilityExpression", "visible"
 							}
 						)
 					}
@@ -66,7 +66,7 @@ import com.liferay.portal.kernel.util.StringPool;
 public interface DefaultDDMFormFieldTypeSettings
 	extends DDMFormFieldTypeSettings {
 
-	@DDMFormField(visibilityExpression = "FALSE")
+	@DDMFormField(visible = false)
 	public String fieldNamespace();
 
 	@DDMFormField(
@@ -74,8 +74,9 @@ public interface DefaultDDMFormFieldTypeSettings
 		optionLabels = {
 			"%not-indexable", "%indexable-keyword", "%indexable-text"
 		},
-		optionValues = {StringPool.BLANK, "keyword", "text"}, type = "select",
-		visibilityExpression = "FALSE"
+		optionValues = {StringPool.BLANK, "keyword", "text"},
+		predefinedValue = "keyword", type = "select",
+		visible = false
 	)
 	public String indexType();
 
@@ -85,11 +86,11 @@ public interface DefaultDDMFormFieldTypeSettings
 			"placeholder=%enter-a-field-label",
 			"tooltip=%enter-a-descriptive-field-label-that-guides-users-to-enter-the-information-you-want"
 		},
-		required = true, type = "key-value"
+		required = true, type = "key_value"
 	)
 	public LocalizedValue label();
 
-	@DDMFormField(label = "%localizable", visibilityExpression = "FALSE")
+	@DDMFormField(label = "%localizable", visible = false)
 	public boolean localizable();
 
 	@DDMFormField(
@@ -102,7 +103,7 @@ public interface DefaultDDMFormFieldTypeSettings
 	)
 	public LocalizedValue predefinedValue();
 
-	@DDMFormField(label = "%read-only", visibilityExpression = "FALSE")
+	@DDMFormField(label = "%read-only", properties = {"showAsSwitcher=true"})
 	public boolean readOnly();
 
 	@DDMFormField(label = "%repeatable", properties = {"showAsSwitcher=true"})
@@ -113,7 +114,11 @@ public interface DefaultDDMFormFieldTypeSettings
 	)
 	public boolean required();
 
-	@DDMFormField(label = "%show-label", properties = {"showAsSwitcher=true"})
+	@DDMFormField(
+		label = "%show-label",
+		predefinedValue = "true",
+		properties = {"showAsSwitcher=true"}
+	)
 	public boolean showLabel();
 
 	@DDMFormField(
@@ -129,6 +134,7 @@ public interface DefaultDDMFormFieldTypeSettings
 	@DDMFormField(
 		dataType = "ddm-validation", label = "%validation", type = "validation"
 	)
+	@Deprecated
 	public DDMFormFieldValidation validation();
 
 	@DDMFormField(
@@ -138,6 +144,10 @@ public interface DefaultDDMFormFieldTypeSettings
 			"tooltip=%write-a-conditional-expression-to-control-whether-this-field-is-displayed"
 		}
 	)
+	@Deprecated
 	public String visibilityExpression();
+
+	@DDMFormField(label = "%visible", properties = {"showAsSwitcher=true"})
+	public boolean visible();
 
 }

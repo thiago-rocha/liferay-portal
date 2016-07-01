@@ -1,6 +1,10 @@
 AUI.add(
 	'liferay-ddm-form-field-text',
 	function(A) {
+		var Renderer = Liferay.DDM.Renderer;
+
+		var Util = Renderer.Util;
+
 		new A.TooltipDelegate(
 			{
 				position: 'left',
@@ -18,12 +22,9 @@ AUI.add(
 						value: 'singleline'
 					},
 
-					placeholder: {
-						value: ''
-					},
-
-					tooltip: {
-						value: ''
+					options: {
+						repaint: false,
+						value: []
 					},
 
 					type: {
@@ -36,23 +37,81 @@ AUI.add(
 				NAME: 'liferay-ddm-form-field-text',
 
 				prototype: {
-					getTemplateContext: function() {
+					initializer: function() {
 						var instance = this;
 
-						return A.merge(
-							TextField.superclass.getTemplateContext.apply(instance, arguments),
-							{
-								displayStyle: instance.get('displayStyle'),
-								placeholder: instance.getLocalizedValue(instance.get('placeholder')),
-								tooltip: instance.getLocalizedValue(instance.get('tooltip'))
-							}
+						instance._eventHandlers.push(
+							instance.after('optionsChange', instance._afterOptionsChange)
 						);
+
+						instance.bindInputEvent('focus', instance._onFocusInput);
+					},
+
+					getChangeEventName: function() {
+						return 'input';
+					},
+
+					getAutoComplete: function() {
+						var instance = this;
+
+						var autoComplete = instance._autoComplete;
+
+						var inputNode = instance.getInputNode();
+
+						if (autoComplete) {
+							autoComplete.set('inputNode', inputNode);
+						}
+						else {
+							autoComplete = new A.AutoComplete(
+								{
+									after: {
+										select: A.bind(instance.evaluate, instance)
+									},
+									inputNode: inputNode,
+									maxResults: 20,
+									render: true,
+									resultFilters: ['charMatch'],
+									resultHighlighter: 'charMatch',
+									resultTextLocator: 'label'
+								}
+							);
+
+							instance._autoComplete = autoComplete;
+						}
+
+						return autoComplete;
 					},
 
 					render: function() {
 						var instance = this;
 
 						TextField.superclass.render.apply(instance, arguments);
+
+						var autoComplete = instance.getAutoComplete();
+
+						autoComplete.set('source', instance.get('options'));
+
+						return instance;
+					},
+
+					_afterOptionsChange: function(event) {
+						var instance = this;
+
+						var autoComplete = instance.getAutoComplete();
+
+						if (!Util.compare(event.newVal, event.prevVal)) {
+							autoComplete.set('source', event.newVal);
+
+							autoComplete.fire('query', {
+								query: instance.getValue(),
+								inputValue: instance.getValue(),
+								src: A.AutoCompleteBase.UI_SRC
+							})
+						}
+					},
+
+					_onFocusInput: function() {
+						var instance = this;
 
 						if (instance.get('displayStyle') === 'multiline') {
 							var textAreaNode = instance.getInputNode();
@@ -64,8 +123,6 @@ AUI.add(
 
 							textAreaNode.autosize._uiAutoSize();
 						}
-
-						return instance;
 					},
 
 					_renderErrorMessage: function() {
@@ -108,6 +165,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-autosize-deprecated', 'aui-tooltip', 'liferay-ddm-form-renderer-field']
+		requires: ['aui-autosize-deprecated', 'aui-tooltip', 'autocomplete', 'autocomplete-highlighters', 'autocomplete-highlighters-accentfold', 'liferay-ddm-form-renderer-field']
 	}
 );

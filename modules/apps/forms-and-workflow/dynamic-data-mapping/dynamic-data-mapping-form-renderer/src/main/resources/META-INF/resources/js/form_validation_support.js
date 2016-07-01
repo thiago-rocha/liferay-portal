@@ -9,31 +9,9 @@ AUI.add(
 		};
 
 		FormValidationSupport.ATTRS = {
-			evaluation: {
-				value: null
-			},
-
-			evaluatorURL: {
-				value: ''
-			},
-
-			evaluator: {
-				valueFn: '_valueEvaluator'
-			}
 		};
 
 		FormValidationSupport.prototype = {
-			initializer: function() {
-				var instance = this;
-
-				var evaluator = instance.get('evaluator');
-
-				instance._eventHandlers.push(
-					evaluator.after('evaluationEnded', A.bind('_afterEvaluationEnded', instance)),
-					evaluator.after('evaluationStarted', A.bind('_afterEvaluationStarted', instance))
-				);
-			},
-
 			hasErrors: function() {
 				var instance = this;
 
@@ -43,27 +21,15 @@ AUI.add(
 					function(field) {
 						hasErrors = field.hasErrors();
 
+						if (hasErrors) {
+							console.log(field.get('name'), field.getValue());
+						}
+
 						return hasErrors;
 					}
 				);
 
 				return hasErrors;
-			},
-
-			hasValidation: function() {
-				var instance = this;
-
-				var hasValidation = false;
-
-				instance.eachField(
-					function(field) {
-						hasValidation = field.hasValidation();
-
-						return hasValidation;
-					}
-				);
-
-				return hasValidation;
 			},
 
 			pageHasErrors: function(pageNode) {
@@ -84,128 +50,76 @@ AUI.add(
 				return hasErrors;
 			},
 
-			processPageValidation: function(pageNode, result) {
+			processPageValidation: function(pageNode) {
 				var instance = this;
-
-				var fieldToFocus;
 
 				instance.eachField(
 					function(field) {
-						if (pageNode.contains(field.get('container'))) {
-							field.processValidation(result);
+						var container = field.get('container');
 
-							if (field.hasErrors() && !fieldToFocus) {
-								fieldToFocus = field;
-							}
+						if (field.hasErrors() && pageNode.contains(container)) {
+							field.showErrorMessage();
 						}
 					}
 				);
-
-				if (fieldToFocus) {
-					fieldToFocus.focus();
-				}
 			},
 
-			processValidation: function(result) {
+			processValidation: function() {
 				var instance = this;
-
-				var fieldToFocus;
 
 				instance.eachField(
 					function(field) {
-						field.processValidation(result);
-
-						if (field.hasErrors() && !fieldToFocus) {
-							fieldToFocus = field;
+						if (field.hasErrors()) {
+							field.showErrorMessage();
 						}
 					}
 				);
-
-				if (fieldToFocus) {
-					fieldToFocus.focus();
-				}
 			},
 
 			validate: function(callback) {
 				var instance = this;
 
-				if (instance.hasValidation()) {
-					var evaluator = instance.get('evaluator');
+				var evaluator = instance.get('evaluator');
 
-					evaluator.evaluate(
-						function(result) {
-							var hasErrors = true;
+				evaluator.evaluate(
+					instance,
+					function(result) {
+						var hasErrors = true;
 
-							if (result && Lang.isObject(result)) {
-								instance.processValidation(result);
+						if (result && Lang.isObject(result)) {
+							instance.processValidation();
 
-								hasErrors = instance.hasErrors();
-							}
-
-							if (callback) {
-								callback.call(instance, hasErrors, result);
-							}
+							hasErrors = instance.hasErrors();
 						}
-					);
-				}
-				else if (callback) {
-					callback.call(instance, false);
-				}
+
+						if (callback) {
+							callback.call(instance, hasErrors, result);
+						}
+					}
+				);
 			},
 
 			validatePage: function(pageNode, callback) {
 				var instance = this;
 
-				if (instance.hasValidation()) {
-					var evaluator = instance.get('evaluator');
+				var evaluator = instance.get('evaluator');
 
-					evaluator.evaluate(
-						function(result) {
-							var hasErrors = true;
+				evaluator.evaluate(
+					instance,
+					function(result) {
+						var hasErrors = true;
 
-							if (result && Lang.isObject(result)) {
-								instance.processPageValidation(pageNode, result);
+						if (result && Lang.isObject(result)) {
+							instance.processPageValidation(pageNode, result);
 
-								hasErrors = instance.pageHasErrors(pageNode);
-							}
-
-							if (callback) {
-								callback.call(instance, hasErrors, result);
-							}
+							hasErrors = instance.pageHasErrors(pageNode);
 						}
-					);
-				}
-				else if (callback) {
-					callback.call(instance, false);
-				}
-			},
 
-			_afterEvaluationEnded: function(event) {
-				var instance = this;
+						console.log('validatePage errors', hasErrors);
 
-				var result = event.result;
-
-				instance.hideFeedback();
-
-				if (!result || !Lang.isObject(result)) {
-					var strings = instance.get('strings');
-
-					instance.showAlert(strings.requestErrorMessage);
-				}
-			},
-
-			_afterEvaluationStarted: function() {
-				var instance = this;
-
-				instance.showLoadingFeedback();
-			},
-
-			_valueEvaluator: function() {
-				var instance = this;
-
-				return new Renderer.ExpressionsEvaluator(
-					{
-						form: instance
+						if (callback) {
+							callback.call(instance, hasErrors, result);
+						}
 					}
 				);
 			}

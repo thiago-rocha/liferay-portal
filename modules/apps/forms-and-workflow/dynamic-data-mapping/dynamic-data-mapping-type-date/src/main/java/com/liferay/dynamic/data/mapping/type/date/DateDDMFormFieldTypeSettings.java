@@ -29,6 +29,7 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
  */
 @DDMForm
 @DDMFormLayout(
+	paginationMode = com.liferay.dynamic.data.mapping.model.DDMFormLayout.SETTINGS_MODE,
 	value = {
 		@DDMFormLayoutPage(
 			title = "basic",
@@ -36,8 +37,7 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 				@DDMFormLayoutRow(
 					{
 						@DDMFormLayoutColumn(
-							size = 12,
-							value = {"label", "tip", "required"}
+							size = 12, value = {"label", "tip", "required"}
 						)
 					}
 				)
@@ -52,18 +52,17 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 							size = 12,
 							value = {
 								"predefinedValue", "visibilityExpression",
-								"validation", "fieldNamespace", "indexType",
-								"localizable", "readOnly", "dataType", "type",
-								"name", "showLabel", "repeatable"
+								"visible", "validation", "fieldNamespace",
+								"indexType", "localizable", "readOnly",
+								"dataType", "type", "name", "showLabel",
+								"repeatable"
 							}
 						)
 					}
 				)
 			}
 		)
-	},
-	paginationMode =
-		com.liferay.dynamic.data.mapping.model.DDMFormLayout.SETTINGS_MODE
+	}
 )
 public interface DateDDMFormFieldTypeSettings
 	extends DefaultDDMFormFieldTypeSettings {
@@ -75,9 +74,9 @@ public interface DateDDMFormFieldTypeSettings
 	public LocalizedValue predefinedValue();
 
 	@DDMFormField(
-		dataType = "ddm-validation", type = "validation",
-		visibilityExpression = "FALSE"
+		dataType = "ddm-validation", type = "validation", visible = false
 	)
+	@Deprecated
 	@Override
 	public DDMFormFieldValidation validation();
 

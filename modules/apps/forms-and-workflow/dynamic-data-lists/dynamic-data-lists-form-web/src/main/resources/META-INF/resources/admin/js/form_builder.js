@@ -9,6 +9,8 @@ AUI.add(
 
 		var Lang = A.Lang;
 
+		var CSS_FIELD = A.getClassName('form', 'builder', 'field');
+
 		var CSS_FORM_BUILDER_TABS = A.getClassName('form', 'builder', 'tabs');
 
 		var CSS_PAGE_HEADER = A.getClassName('form', 'builder', 'pages', 'header');
@@ -47,6 +49,11 @@ AUI.add(
 					fieldTypes: {
 						setter: '_setFieldTypes',
 						valueFn: '_valueFieldTypes'
+					},
+
+					getFieldTypeSettingFormContextURL: {
+						validator: Lang.isString,
+						value: ''
 					},
 
 					layouts: {
@@ -97,7 +104,14 @@ AUI.add(
 
 						var boundingBox = instance.get('boundingBox');
 
-						var settingsModal = instance.getFieldSettingModal();
+						var settingsModal = instance.getFieldSettingPanel();
+
+						boundingBox.delegate('click', function(event) {
+							var field = event.currentTarget.getData('field-instance');
+
+							instance.editField(field);
+
+						}, '.' + CSS_FIELD, this);
 
 						instance._eventHandlers = [
 							boundingBox.delegate('click', instance._onClickPaginationItem, '.pagination li a'),
@@ -158,6 +172,7 @@ AUI.add(
 									builder: instance,
 									dataProviders: instance.get('dataProviders'),
 									evaluatorURL: instance.get('evaluatorURL'),
+									getFieldTypeSettingFormContextURL: instance.get('getFieldTypeSettingFormContextURL'),
 									portletNamespace: instance.get('portletNamespace'),
 									readOnly: true
 								}
@@ -171,18 +186,24 @@ AUI.add(
 						field.destroy();
 					},
 
+					// editField: function(field) {
+					// 	var instance = this;
+
+					// 	var fieldType = instance.findTypeOfField(field);
+
+					// 	instance.showFieldSettingsPanel(
+					// 		field,
+					// 		Lang.sub(
+					// 			Liferay.Language.get('edit-x'),
+					// 			[fieldType.get('label')]
+					// 		)
+					// 	);
+					// },
+
 					editField: function(field) {
 						var instance = this;
 
-						var fieldType = instance.findTypeOfField(field);
-
-						instance.showFieldSettingsPanel(
-							field,
-							Lang.sub(
-								Liferay.Language.get('edit-x'),
-								[fieldType.get('label')]
-							)
-						);
+						instance.showFieldSettingsPanel(field);
 					},
 
 					findTypeOfField: function(field) {
@@ -191,26 +212,37 @@ AUI.add(
 						return FieldTypes.get(field.get('type'));
 					},
 
-					getFieldSettingModal: function() {
+					getFieldSettingPanel: function() {
 						var instance = this;
 
-						if (!instance._fieldSettingsModal) {
-							instance._fieldSettingsModal = new Liferay.DDL.FormBuilderFieldSettingsModal(
-								{
-									portletNamespace: instance.get('portletNamespace')
-								}
-							);
+						if (!instance._sidebar) {
+							instance._sidebar = new Liferay.DDL.FormBuilderSidebar({
+								render: '#senna_surface1-default'
+							});
 						}
 
-						return instance._fieldSettingsModal;
+						return instance._sidebar;
 					},
 
-					showFieldSettingsPanel: function(field, typeName) {
+					showFieldSettingsPanel: function(field) {
 						var instance = this;
 
-						var settingsModal = instance.getFieldSettingModal();
+						var settingsPanel = instance.getFieldSettingPanel();
 
-						settingsModal.show(field, typeName);
+						field.loadSettingsForm().then(
+							function(settingsForm) {
+								instance._sidebar.getFieldSettings().setHTML(settingsForm.get('container'));
+
+								settingsForm.render();
+
+								var settings = field.getSettings(settingsForm);
+
+								instance._sidebar.set('title', settings.label || 'Untitled');
+								instance._sidebar.set('description', settings.type);
+							}
+						);
+
+						instance._sidebar.open();
 					},
 
 					_addFieldsChangeListener: function(layouts) {
@@ -246,9 +278,36 @@ AUI.add(
 					_afterFieldSettingsModalSave: function(event) {
 						var instance = this;
 
+						var field = event.field;
+
 						FormBuilder.superclass._afterFieldSettingsModalSave.apply(instance, arguments);
 
-						var field = event.field;
+						instance._insertField(field);
+					},
+
+					_insertField: function(field) {
+						var instance = this;
+
+				        if (instance._newFieldContainer) {
+				            if (A.instanceOf(instance._newFieldContainer.get('value'), A.FormBuilderFieldList)) {
+				                instance._newFieldContainer.get('value').addField(field);
+				                instance._newFieldContainer.set('removable', false);
+				            }
+				            else {
+				                instance._addNestedField(
+				                    instance._newFieldContainer,
+				                    field,
+				                    instance._newFieldContainer.get('nestedFields').length
+				                );
+				            }
+				            instance._newFieldContainer = null;
+				        }
+				        else {
+				            instance._handleEditEvent(field);
+				        }
+
+				        instance._handleCreateEvent(field);
+				        instance.disableUniqueFieldType(field);
 
 						instance.appendChild(field);
 
@@ -310,13 +369,9 @@ AUI.add(
 
 						instance.hideFieldsPanel();
 
-						instance.showFieldSettingsPanel(
-							field,
-							Lang.sub(
-								Liferay.Language.get('add-x'),
-								[fieldType.get('label')]
-							)
-						);
+						instance.showFieldSettingsPanel(field);
+
+						instance._insertField(field);
 					},
 
 					_getPageManagerInstance: function(config) {
@@ -414,9 +469,15 @@ AUI.add(
 					_renderField: function(field) {
 						var instance = this;
 
+						var activeLayout = instance.getActiveLayout();
+
 						field.set('builder', instance);
 
 						field.render();
+
+						var row = instance.getFieldRow(field);
+
+						activeLayout.normalizeColsHeight(new A.NodeList(row));
 					},
 
 					_renderFields: function() {
@@ -632,6 +693,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-form-builder', 'aui-form-builder-pages', 'aui-popover', 'liferay-ddl-form-builder-field-settings-modal', 'liferay-ddl-form-builder-field-support', 'liferay-ddl-form-builder-field-type', 'liferay-ddl-form-builder-field-types-modal', 'liferay-ddl-form-builder-layout-deserializer', 'liferay-ddl-form-builder-layout-visitor', 'liferay-ddl-form-builder-pages-manager', 'liferay-ddl-form-builder-util', 'liferay-ddm-form-field-types', 'liferay-ddm-form-renderer']
+		requires: ['aui-form-builder', 'aui-form-builder-pages', 'aui-popover', 'liferay-ddl-form-builder-field-settings-modal', 'liferay-ddl-form-builder-field-support', 'liferay-ddl-form-builder-field-type', 'liferay-ddl-form-builder-field-types-modal', 'liferay-ddl-form-builder-layout-deserializer', 'liferay-ddl-form-builder-layout-visitor', 'liferay-ddl-form-builder-pages-manager', 'liferay-ddl-form-builder-sidebar', 'liferay-ddl-form-builder-util', 'liferay-ddm-form-field-types', 'liferay-ddm-form-renderer']
 	}
 );

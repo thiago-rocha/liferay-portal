@@ -17,6 +17,8 @@ package com.liferay.dynamic.data.mapping.util;
 import com.liferay.dynamic.data.mapping.annotations.DDMForm;
 import com.liferay.dynamic.data.mapping.annotations.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldOptions;
+import com.liferay.dynamic.data.mapping.model.DDMFormFieldRule;
+import com.liferay.dynamic.data.mapping.model.DDMFormFieldRuleType;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
 import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -73,15 +75,13 @@ public class DDMFormFieldFactoryHelper {
 
 		ddmFormField.setDataType(getDDMFormFieldDataType());
 		ddmFormField.setDDMFormFieldOptions(getDDMFormFieldOptions());
-		ddmFormField.setDDMFormFieldValidation(getDDMFormFieldValidation());
+		ddmFormField.setDDMFormFieldRules(getDDMFormFieldRules());
 		ddmFormField.setLabel(getDDMFormFieldLabel());
 		ddmFormField.setLocalizable(isDDMFormFieldLocalizable());
 		ddmFormField.setPredefinedValue(getDDMFormFieldPredefinedValue());
 		ddmFormField.setRepeatable(isDDMFormFieldRepeatable());
 		ddmFormField.setRequired(isDDMFormFieldRequired());
 		ddmFormField.setTip(getDDMFormFieldTip());
-		ddmFormField.setVisibilityExpression(
-			getDDMFormFieldVisibilityExpression());
 
 		return ddmFormField;
 	}
@@ -246,6 +246,63 @@ public class DDMFormFieldFactoryHelper {
 		return localizedValue;
 	}
 
+	protected List<DDMFormFieldRule> getDDMFormFieldRules() {
+		List<DDMFormFieldRule> ddmFormFieldRules = new ArrayList<>();
+
+		for (com.liferay.dynamic.data.mapping.annotations.DDMFormFieldRule
+				ruleAnnotation : _ddmFormField.rules()) {
+
+			ddmFormFieldRules.add(
+				new DDMFormFieldRule(
+					ruleAnnotation.errorMessage(), ruleAnnotation.expression(),
+					ruleAnnotation.type()));
+		}
+
+		// Validation expression
+
+		if (Validator.isNotNull(_ddmFormField.validationExpression())) {
+			ddmFormFieldRules.add(
+				new DDMFormFieldRule(
+					getValidationErrorMessage(),
+					_ddmFormField.validationExpression(),
+					DDMFormFieldRuleType.VALIDATION));
+		}
+
+		// Visibility expression
+
+		if (!isDDMFormFieldVisible()) {
+			ddmFormFieldRules.add(
+				new DDMFormFieldRule("FALSE", DDMFormFieldRuleType.VISIBILITY));
+		}
+		else if (Validator.isNotNull(getDDMFormFieldVisibilityExpression())) {
+			ddmFormFieldRules.add(
+				new DDMFormFieldRule(
+					getDDMFormFieldVisibilityExpression(),
+					DDMFormFieldRuleType.VISIBILITY));
+		}
+
+		return ddmFormFieldRules;
+	}
+
+	protected  String getValidationErrorMessage() {
+		if (Validator.isNull(_ddmFormField.validationErrorMessage())) {
+			return StringPool.BLANK;
+		}
+
+		String validationErrorMessage =
+			_ddmFormField.validationErrorMessage();
+
+		if (isLocalizableValue(validationErrorMessage)) {
+			String languageKey = extractLanguageKey(
+				validationErrorMessage);
+
+			validationErrorMessage = getLocalizedValue(
+				_defaultLocale, languageKey);
+		}
+
+		return validationErrorMessage;
+	}
+
 	protected LocalizedValue getDDMFormFieldTip() {
 		return createLocalizedValue(_ddmFormField.tip());
 	}
@@ -266,38 +323,8 @@ public class DDMFormFieldFactoryHelper {
 		return "text";
 	}
 
-	protected DDMFormFieldValidation getDDMFormFieldValidation() {
-		DDMFormFieldValidation ddmFormFieldValidation =
-			new DDMFormFieldValidation();
-
-		if (Validator.isNotNull(_ddmFormField.validationExpression())) {
-			ddmFormFieldValidation.setExpression(
-				_ddmFormField.validationExpression());
-		}
-
-		if (Validator.isNotNull(_ddmFormField.validationErrorMessage())) {
-			String validationErrorMessage =
-				_ddmFormField.validationErrorMessage();
-
-			if (isLocalizableValue(validationErrorMessage)) {
-				String languageKey = extractLanguageKey(validationErrorMessage);
-
-				validationErrorMessage = getLocalizedValue(
-					_defaultLocale, languageKey);
-			}
-
-			ddmFormFieldValidation.setErrorMessage(validationErrorMessage);
-		}
-
-		return ddmFormFieldValidation;
-	}
-
 	protected String getDDMFormFieldVisibilityExpression() {
-		if (Validator.isNotNull(_ddmFormField.visibilityExpression())) {
-			return _ddmFormField.visibilityExpression();
-		}
-
-		return StringUtil.toUpperCase(StringPool.TRUE);
+		return _ddmFormField.visibilityExpression();
 	}
 
 	protected String getLocalizedValue(Locale locale, String value) {
@@ -394,6 +421,10 @@ public class DDMFormFieldFactoryHelper {
 
 	protected boolean isDDMFormFieldRequired() {
 		return _ddmFormField.required();
+	}
+
+	protected boolean isDDMFormFieldVisible() {
+		return _ddmFormField.visible();
 	}
 
 	protected boolean isLocalizableValue(String value) {

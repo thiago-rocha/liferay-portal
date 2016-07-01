@@ -29,6 +29,7 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
  */
 @DDMForm
 @DDMFormLayout(
+	paginationMode = com.liferay.dynamic.data.mapping.model.DDMFormLayout.SETTINGS_MODE,
 	value = {
 		@DDMFormLayoutPage(
 			title = "basic",
@@ -53,19 +54,18 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 						@DDMFormLayoutColumn(
 							size = 12,
 							value = {
-								"visibilityExpression", "predefinedValue",
-								"validation", "fieldNamespace", "indexType",
-								"localizable", "readOnly", "dataType", "type",
-								"name", "showLabel", "repeatable"
+								"visibilityExpression", "visible",
+								"predefinedValue", "validation",
+								"fieldNamespace", "indexType", "localizable",
+								"readOnly", "dataType", "type", "name",
+								"showLabel", "repeatable"
 							}
 						)
 					}
 				)
 			}
 		)
-	},
-	paginationMode =
-		com.liferay.dynamic.data.mapping.model.DDMFormLayout.SETTINGS_MODE
+	}
 )
 public interface CheckboxDDMFormFieldTypeSettings
 	extends DefaultDDMFormFieldTypeSettings {
@@ -77,7 +77,7 @@ public interface CheckboxDDMFormFieldTypeSettings
 	@Override
 	public LocalizedValue predefinedValue();
 
-	@DDMFormField(visibilityExpression = "FALSE")
+	@DDMFormField(visible = false)
 	@Override
 	public boolean repeatable();
 
@@ -87,7 +87,8 @@ public interface CheckboxDDMFormFieldTypeSettings
 	)
 	public boolean showAsSwitcher();
 
-	@DDMFormField(visibilityExpression = "FALSE")
+	@DDMFormField(visible = false)
+	@Deprecated
 	@Override
 	public DDMFormFieldValidation validation();
 

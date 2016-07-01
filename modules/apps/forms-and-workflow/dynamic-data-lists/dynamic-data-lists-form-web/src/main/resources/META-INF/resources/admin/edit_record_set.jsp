@@ -43,6 +43,8 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 	<portlet:param name="mvcPath" value="/admin/edit_record_set.jsp" />
 </portlet:actionURL>
 
+<div class="sidebar-container"></div>
+
 <div class="hide portlet-forms" id="<portlet:namespace />formContainer">
 	<aui:form action="<%= (recordSet == null) ? addRecordSetURL : updateRecordSetURL %>" cssClass="ddl-form-builder-form" method="post" name="editForm">
 		<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
@@ -173,6 +175,8 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 
 		<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" id="publishRecordSet" var="publishRecordSetURL" />
 
+		<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" id="getFieldSettingsDDMFormContext" var="getFieldSettingsDDMFormContext" />
+
 		<aui:script>
 			var initHandler = Liferay.after(
 				'form:registered',
@@ -207,6 +211,8 @@ renderResponse.setTitle((recordSet == null) ? LanguageUtil.get(request, "new-for
 											description: '<%= HtmlUtil.escapeJS(description) %>',
 											editForm: event.form,
 											evaluatorURL: '<%= ddlFormAdminDisplayContext.getDDMFormEvaluatorServletURL() %>',
+											fieldTypesDefinitions: <%= ddlFormAdminDisplayContext.getDDMFormFieldTypesDefinitionsMap() %>,
+											getFieldTypeSettingFormContextURL: '<%= getFieldSettingsDDMFormContext.toString() %>',
 											layout: <%= ddlFormAdminDisplayContext.getSerializedDDMFormLayout() %>,
 											name: '<%= HtmlUtil.escapeJS(name) %>',
 											namespace: '<portlet:namespace />',

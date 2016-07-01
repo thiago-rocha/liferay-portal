@@ -33,8 +33,7 @@ import com.liferay.dynamic.data.mapping.annotations.DDMFormLayoutRow;
 				@DDMFormLayoutRow(
 					{
 						@DDMFormLayoutColumn(
-							size = 12,
-							value = {"dataType", "name", "type"}
+							size = 12, value = {"dataType", "name", "type"}
 						)
 					}
 				)
@@ -44,15 +43,13 @@ import com.liferay.dynamic.data.mapping.annotations.DDMFormLayoutRow;
 )
 public interface DDMFormFieldTypeSettings {
 
-	@DDMFormField(required = true, visibilityExpression = "FALSE")
+	@DDMFormField(required = true, visible = false)
 	public String dataType();
 
-	@DDMFormField(
-		label = "%name", required = true, visibilityExpression = "FALSE"
-	)
+	@DDMFormField(label = "%name", required = true, visible = false)
 	public String name();
 
-	@DDMFormField(required = true, visibilityExpression = "FALSE")
+	@DDMFormField(required = true, visible = false)
 	public String type();
 
 }

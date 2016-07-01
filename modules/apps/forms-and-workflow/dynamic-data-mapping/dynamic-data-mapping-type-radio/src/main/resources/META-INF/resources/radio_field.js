@@ -23,23 +23,6 @@ AUI.add(
 				NAME: 'liferay-ddm-form-field-radio',
 
 				prototype: {
-					getContextValue: function() {
-						var instance = this;
-
-						var value = RadioField.superclass.getContextValue.apply(instance, arguments);
-
-						if (!Array.isArray(value)) {
-							try {
-								value = JSON.parse(value);
-							}
-							catch (e) {
-								value = [value];
-							}
-						}
-
-						return value[0];
-					},
-
 					getInputNode: function() {
 						var instance = this;
 
@@ -54,23 +37,6 @@ AUI.add(
 						return inputNode;
 					},
 
-					getOptions: function() {
-						var instance = this;
-
-						var value = instance.getContextValue();
-
-						return A.map(
-							instance.get('options'),
-							function(item) {
-								return {
-									label: item.label[instance.get('locale')],
-									status: value === item.value ? 'checked' : '',
-									value: item.value
-								};
-							}
-						);
-					},
-
 					getTemplateContext: function() {
 						var instance = this;
 
@@ -78,7 +44,7 @@ AUI.add(
 							RadioField.superclass.getTemplateContext.apply(instance, arguments),
 							{
 								inline: instance.get('inline'),
-								options: instance.getOptions()
+								options: instance.get('options')
 							}
 						);
 					},
@@ -114,14 +80,6 @@ AUI.add(
 
 						if (radioToCheck) {
 							radioToCheck.attr('checked', true);
-
-							instance.fire(
-								'valueChanged',
-								{
-									field: instance,
-									value: value
-								}
-							);
 						}
 					},
 

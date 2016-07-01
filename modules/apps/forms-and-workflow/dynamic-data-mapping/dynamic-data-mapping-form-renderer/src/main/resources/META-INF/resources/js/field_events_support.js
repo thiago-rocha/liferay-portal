@@ -14,10 +14,10 @@ AUI.add(
 
 				instance._domEvents = [];
 
-				instance._bindEvents();
+				instance._bindDefaultEvents();
 			},
 
-			bindContainerEvent: function(eventName, callback, selector) {
+			bindContainerEvent: function(eventName, callback, selector, volatile) {
 				var instance = this;
 
 				var container = instance.get('container');
@@ -35,17 +35,22 @@ AUI.add(
 						callback: callback,
 						handler: handler,
 						name: eventName,
-						selector: selector
+						selector: selector,
+						volatile: volatile
 					}
 				);
 
 				return handler;
 			},
 
-			bindInputEvent: function(eventName, callback) {
+			bindInputEvent: function(eventName, callback, volatile) {
 				var instance = this;
 
-				return instance.bindContainerEvent(eventName, callback, instance.getInputSelector);
+				return instance.bindContainerEvent(eventName, callback, instance.getInputSelector, volatile);
+			},
+
+			getChangeEventName: function() {
+				return 'change';
 			},
 
 			_afterEventsRender: function() {
@@ -62,15 +67,19 @@ AUI.add(
 
 					event.handler.detach();
 
-					instance.bindContainerEvent(event.name, event.callback, event.selector);
+					if (!event.volatile) {
+						instance.bindContainerEvent(event.name, event.callback, event.selector);
+					}
 				}
+
+				instance._bindDefaultEvents();
 			},
 
-			_bindEvents: function() {
+			_bindDefaultEvents: function() {
 				var instance = this;
 
-				instance.bindInputEvent('blur', instance._onInputBlur);
-				instance.bindInputEvent(['input', 'change'], instance._onValueChange);
+				instance.bindInputEvent('blur', instance._onInputBlur, true);
+				instance.bindInputEvent(instance.getChangeEventName(), instance._onValueChange, true);
 			},
 
 			_onInputBlur: function(event) {
@@ -88,14 +97,16 @@ AUI.add(
 			_onValueChange: function(event) {
 				var instance = this;
 
-				instance.fire(
-					'valueChanged',
-					{
-						domEvent: event,
-						field: instance,
-						value: instance.getValue()
-					}
-				);
+				if (instance.get('rendered')) {
+					instance.fire(
+						'valueChanged',
+						{
+							domEvent: event,
+							field: instance,
+							value: instance.getValue()
+						}
+					);
+				}
 			}
 		};
 

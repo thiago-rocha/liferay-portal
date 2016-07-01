@@ -29,6 +29,7 @@ import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
  */
 @DDMForm
 @DDMFormLayout(
+	paginationMode = com.liferay.dynamic.data.mapping.model.DDMFormLayout.SETTINGS_MODE,
 	value = {
 		@DDMFormLayoutPage(
 			title = "basic",
@@ -55,18 +56,17 @@ import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
 							size = 12,
 							value = {
 								"predefinedValue", "visibilityExpression",
-								"validation", "fieldNamespace", "indexType",
-								"localizable", "readOnly", "dataType", "type",
-								"name", "showLabel", "repeatable", "multiple"
+								"visible", "validation", "fieldNamespace",
+								"indexType", "localizable", "readOnly",
+								"dataType", "type", "name", "showLabel",
+								"repeatable", "multiple"
 							}
 						)
 					}
 				)
 			}
 		)
-	},
-	paginationMode =
-		com.liferay.dynamic.data.mapping.model.DDMFormLayout.SETTINGS_MODE
+	}
 )
 public interface SelectDDMFormFieldTypeSettings
 	extends DefaultDDMFormFieldTypeSettings {
@@ -77,12 +77,14 @@ public interface SelectDDMFormFieldTypeSettings
 		optionValues = {"manual", "data-provider"}, predefinedValue = "manual",
 		type = "radio"
 	)
+	@Deprecated
 	public String dataSourceType();
 
 	@DDMFormField(
 		label = "%choose-a-data-provider", type = "select",
 		visibilityExpression = "equals(dataSourceType, \"data-provider\")"
 	)
+	@Deprecated
 	public long ddmDataProviderInstanceId();
 
 	@DDMFormField(label = "%multiple", properties = {"showAsSwitcher=true"})
@@ -95,7 +97,8 @@ public interface SelectDDMFormFieldTypeSettings
 	)
 	public DDMFormFieldOptions options();
 
-	@DDMFormField(visibilityExpression = "FALSE")
+	@DDMFormField(visible = false)
+	@Deprecated
 	@Override
 	public DDMFormFieldValidation validation();
 

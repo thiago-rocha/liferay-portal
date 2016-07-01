@@ -1,0 +1,37 @@
+.form-builder-sidebar {
+	$width: 500px;
+
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	transition: all 0.5s;
+
+	&.form-builder-sidebar.sidenav-menu-slider {
+		left: initial;
+		right: 0;
+
+		&.open {
+			width: $width;
+		}
+	}
+
+	.sidebar-content {
+		height: 100%;
+		position: absolute;
+		right: 0;
+		width: $width;
+	}
+
+	.sidebar-header {
+		margin-top: 64px;
+	}
+
+	.sidebar-body {
+		bottom: 0;
+		position: absolute;
+		top: 209px;
+		width: $width;
+	}
+
+	.navbar {
+		width: $width;
+	}
+}
