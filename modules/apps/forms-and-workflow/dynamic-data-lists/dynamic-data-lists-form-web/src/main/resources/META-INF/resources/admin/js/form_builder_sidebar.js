@@ -1,6 +1,7 @@
 AUI.add(
 	'liferay-ddl-form-builder-sidebar',
 	function(A) {
+		var AObject = A.Object;
 
 		var CSS_PREFIX = 'form-builder-sidebar';
 
@@ -30,7 +31,7 @@ AUI.add(
 					},
 
 					description: {
-						value: ''
+						value: 'No description'
 					},
 
 					skin: {
@@ -38,7 +39,7 @@ AUI.add(
 					},
 
 					title: {
-						value: ''
+						value: 'Untitle'
 					}
 				},
 
@@ -59,6 +60,8 @@ AUI.add(
 							instance.after('render', instance._afterRender)
 						];
 
+						instance.getTemplate();
+
 						instance._eventHandlers = eventHandlers;
 					},
 
@@ -78,6 +81,27 @@ AUI.add(
 							'click',
 							A.bind('_afterClickCloseButton', instance)
 						);
+					},
+
+					getTemplate: function() {
+						var instance = this;
+
+						var renderer = instance.getTemplateRenderer();
+
+						return renderer(instance.getTemplateContext());
+					},
+
+					getTemplateRenderer: function() {
+						return AObject.getValue(window, 'ddm.sidebar'.split('.'));
+					},
+
+					getTemplateContext: function() {
+						var instance = this;
+
+						return {
+							title: instance.get('title'),
+							description: instance.get('title')
+						}
 					},
 
 					destructor: function() {
@@ -131,8 +155,6 @@ AUI.add(
 					_createBodyContent: function() {
 						var instance = this;
 
-						instance.get('contentBox').one('.sidebar-header').insert('<div class="toolbar"></div>', 'after');
-
 						instance.tabView = new A.TabView(
 							{
 								children: [
@@ -158,15 +180,9 @@ AUI.add(
 					_createHeader: function() {
 						var instance = this;
 
-						var header = A.Lang.sub(
-							TPL_HEADER,
-							{
-								description: instance.get('description'),
-								title: instance.get('title')
-							}
-						);
+						var headerTemplate = instance.getTemplate();
 
-						instance.get('contentBox').append(header);
+						instance.get('contentBox').append(headerTemplate);
 					},
 
 					_syncHeaderInfo: function() {
@@ -183,6 +199,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-tabview']
+		requires: ['aui-tabview', 'liferay-ddm-form-sidebar-soy']
 	}
 );

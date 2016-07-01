@@ -130,7 +130,7 @@
 						},
 						'liferay-ddl-form-builder-sidebar': {
 							path: 'form_builder_sidebar.js',
-							requires: ['aui-tabview']
+							requires: ['aui-tabview', 'liferay-ddm-form-sidebar-soy']
 						},
 						'liferay-ddl-form-builder-util': {
 							path: 'form_builder_util.js',
@@ -147,6 +147,12 @@
 								'liferay-ddl-form-builder-layout-serializer',
 								'liferay-portlet-base',
 								'liferay-util-window'
+							]
+						},
+						'liferay-ddm-form-sidebar-soy': {
+							path: 'sidebar.soy.js',
+							requires: [
+								'soyutils'
 							]
 						}
 					},

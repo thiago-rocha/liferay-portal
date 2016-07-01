@@ -1,0 +1,33 @@
+{namespace ddm}
+
+/**
+ * Prints the DDM form checkbox field.
+ *  @param title
+ *  @param description
+ */
+{template .sidebar autoescape="deprecated-contextual"}
+    {call ddm.sidebar_header data="all" /}
+{/template}
+
+/**
+ * Prints the DDM form checkbox field.
+ *  @param title
+ *  @param description
+ */
+{template .sidebar_header autoescape="deprecated-contextual"}
+    <div class="sidebar-header">
+        <ul class="sidebar-header-actions">
+            <li>
+                <a href="#">...</a>
+            </li>
+            <li>
+                <a href="#" class="form-builder-sidebar-close">X</a>
+            </li>
+        </ul>
+        
+        <h4 class="form-builder-sidebar-title">{$title}</h4>
+        <h5 class="form-builder-sidebar-description">{$description}</h5>
+    </div>
+
+    <div class="toolbar"></div>
+{/template}
