@@ -68,10 +68,10 @@ AUI.add(
 										select: A.bind(instance.evaluate, instance)
 									},
 									inputNode: inputNode,
-									maxResults: 20,
+									maxResults: 10,
 									render: true,
-									resultFilters: ['charMatch'],
-									resultHighlighter: 'charMatch',
+									resultFilters: ['charMatch', 'subWordMatch'],
+									resultHighlighter: 'subWordMatch',
 									resultTextLocator: 'label'
 								}
 							);
@@ -165,6 +165,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-autosize-deprecated', 'aui-tooltip', 'autocomplete', 'autocomplete-highlighters', 'autocomplete-highlighters-accentfold', 'liferay-ddm-form-renderer-field']
+		requires: ['aui-autosize-deprecated', 'aui-tooltip', 'autocomplete', 'autocomplete-filters', 'autocomplete-highlighters', 'autocomplete-highlighters-accentfold', 'liferay-ddm-form-renderer-field']
 	}
 );
