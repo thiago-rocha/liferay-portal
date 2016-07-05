@@ -254,13 +254,13 @@ AUI.add(
 					_valueGenerationLocked: function() {
 						var instance = this;
 
-						return instance.get('key') !== instance.normalizeKey(instance.getContextValue());
+						return instance.get('key') !== instance.normalizeKey(instance.get('value'));
 					},
 
 					_valueKey: function() {
 						var instance = this;
 
-						return instance.normalizeKey(instance.getContextValue());
+						return instance.normalizeKey(instance.get('value'));
 					}
 				}
 			}
