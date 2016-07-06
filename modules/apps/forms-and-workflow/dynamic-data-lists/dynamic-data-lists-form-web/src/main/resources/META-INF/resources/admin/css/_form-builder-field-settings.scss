@@ -25,11 +25,15 @@
 
 	.settings-toggler {
 		background-color: transparent;
+		bottom: 0;
 		font-weight: 500;
 		padding: 18px 0;
-		position: static;
+		position: absolute;
 		text-align: left;
-		width: 100%;
+
+		&.active {
+			position: static;
+		}
 
 		.settings-toggle-label {
 			float: left;
@@ -37,6 +41,7 @@
 
 		.settings-toggle-icon {
 			float: right;
+			margin-left: 11px;
 		}
 	}
 

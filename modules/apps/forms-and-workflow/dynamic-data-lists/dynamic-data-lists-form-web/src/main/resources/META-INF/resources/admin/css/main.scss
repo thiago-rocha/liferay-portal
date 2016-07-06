@@ -184,7 +184,7 @@
 	}
 }
 
-.lfr-ddl-field-settings-modal,
+.form-builder-sidebar,
 .portlet-forms {
 	.form-control {
 		font-size: 14px;
@@ -202,6 +202,10 @@
 
 	.icon-asterisk {
 		margin-left: 4px;
+	}
+
+	.lfr-ddm-form-field-validation .row {
+		margin: 0;
 	}
 
 	.liferay-ddm-form-field-editor .form-control-feedback {
