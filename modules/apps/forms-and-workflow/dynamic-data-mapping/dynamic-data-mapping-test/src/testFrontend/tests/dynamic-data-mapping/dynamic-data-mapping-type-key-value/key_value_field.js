@@ -8,7 +8,9 @@ var createField = function(config) {
 	return new Liferay.DDM.Field.KeyValue(
 		A.merge(
 			{
-				name: 'keyValueField'
+				context: {
+					name: 'keyValueField'
+				}
 			},
 			config || {}
 		)
@@ -37,8 +39,7 @@ describe(
 					function(A) {
 						Liferay.DDM.Renderer.FieldTypes.register(
 							{
-								'name': 'key-value',
-								'settings': {},
+								'name': 'key_value',
 								'templateNamespace': 'ddm.key_value'
 							}
 						);
