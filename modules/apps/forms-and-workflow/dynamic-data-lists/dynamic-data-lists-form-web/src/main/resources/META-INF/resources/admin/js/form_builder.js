@@ -3,6 +3,12 @@ AUI.add(
 	function(A) {
 		var AArray = A.Array;
 
+		var CSS_BTN_LG = A.getClassName('btn', 'lg');
+
+		var CSS_BTN_LINK = A.getClassName('btn', 'link');
+
+		var CSS_BTN_PRIMARY = A.getClassName('btn', 'primary');
+
 		var FieldTypes = Liferay.DDM.Renderer.FieldTypes;
 
 		var FormBuilderUtil = Liferay.DDL.FormBuilderUtil;
@@ -125,6 +131,84 @@ AUI.add(
 						visitor.visit();
 
 						(new A.EventHandle(instance._eventHandlers)).detach();
+					},
+
+					cancelFieldEdition: function(field) {
+						var instance = this;
+
+						var fieldSettingsPanel = instance.getFieldSettingsPanel();
+
+						var currentSettings = fieldSettingsPanel.getFieldSettings();
+
+						var fieldContext = fieldSettingsPanel._previousSettings;
+
+						var settingsForm = fieldSettingsPanel.settingsForm;
+
+						if (JSON.stringify(fieldContext) != JSON.stringify(currentSettings)) {
+							instance.confirmCancelFieldChangesDiolog(
+								function() {
+									instance.confirmCancelFieldChanges(field, fieldContext, settingsForm);
+								}
+							);
+						}
+						else {
+							fieldSettingsPanel.close();
+						}
+					},
+
+					confirmCancelFieldChanges: function(field, fieldContext, settingsForm) {
+						var instance = this;
+
+						field.set('context', fieldContext);
+
+						instance._renderField(field);
+
+						field.updateSettingsFormValues(settingsForm);
+
+						settingsForm.render();
+					},
+
+					confirmCancelFieldChangesDiolog: function(afterConfirm) {
+						var instance = this;
+
+						Liferay.Util.openWindow(
+							{
+								dialog: {
+									bodyContent: '<p>' + Liferay.Language.get('are-you-sure-you-want-to-cancel') + '</p>',
+									destroyOnHide: true,
+									draggable: false,
+									height: 210,
+									resizable: false,
+									toolbars: {
+										footer: [
+											{
+												cssClass: [CSS_BTN_LG, CSS_BTN_PRIMARY].join(' '),
+												labelHTML: Liferay.Language.get('yes-cancel'),
+												on: {
+													click: function(event) {
+														afterConfirm();
+
+														Liferay.Util.getWindow('cancelFieldChangesDialog').hide();
+													}
+												}
+											},
+											{
+												cssClass: [CSS_BTN_LG, CSS_BTN_LINK].join(' '),
+												labelHTML: Liferay.Language.get('dismiss'),
+												on: {
+													click: function() {
+														Liferay.Util.getWindow('cancelFieldChangesDialog').hide();
+													}
+												}
+											}
+										]
+									},
+									width: false
+								},
+								id: 'cancelFieldChangesDialog',
+								title: Liferay.Language.get('cancel-field-changes')
+							}
+						);
 					},
 
 					contains: function(field) {
