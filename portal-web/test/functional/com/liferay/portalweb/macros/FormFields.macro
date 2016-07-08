@@ -38,7 +38,7 @@
 	<command name="editFieldName">
 		<var name="key_fieldValue" value="${fieldValue}" />
 
-		<execute function="Type" locator1="FormFields#FIELD_NAME_EDIT" value1="${fieldValue}" />
+		<execute function="Type#clickAtType" locator1="FormFields#FIELD_NAME_EDIT" value1="${fieldValue}" />
 	</command>
 
 	<command name="editOptionsRow">
