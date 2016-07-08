@@ -46,7 +46,7 @@
 
 		<execute function="Type" locator1="FormFields#OPTIONS_OPTION_VALUE_FIELD" value1="${optionValue}" />
 
-		<execute function="AssertElementPresent" locator1="FormFields#OPTIONS_OPTION_NAME_FIELD" value1="Field Name:${optionName}" />
+		<execute function="AssertElementPresent" locator1="FormFields#OPTIONS_OPTION_NAME_FIELD_EDIT" value1="${optionName}" />
 	</command>
 
 	<command name="editOptionsRowNameField">
@@ -54,7 +54,7 @@
 
 		<execute function="Type" locator1="FormFields#OPTIONS_OPTION_NAME_FIELD_EDIT" value1="${optionValue}" />
 
-		<execute function="AssertTextEquals" locator1="FormFields#OPTIONS_OPTION_NAME_FIELD" value1="Field Name:${optionValue}" />
+		<execute function="AssertTextEquals" locator1="FormFields#OPTIONS_OPTION_NAME_FIELD_EDIT" value1="${optionValue}" />
 	</command>
 
 	<command name="editParagraphBody">
