@@ -51,50 +51,50 @@ AUI.add(
 							sortableList.after('drag:start', A.bind('_afterSortableListDragStart', instance))
 						);
 
-						instance._createMainField();
+						instance._createMainOption();
 					},
 
-					addField: function() {
+					addOption: function() {
 						var instance = this;
 
-						var lastField = instance.getLastField();
+						var lastOption = instance.getLastOption();
 
-						var repeatedField = lastField.repeat();
+						var repeatedOption = lastOption.repeat();
 
-						instance._bindFieldUI(repeatedField);
-						instance._renderFieldUI(repeatedField);
-						instance._syncFieldUI(repeatedField);
-						instance._syncFieldUI(lastField);
+						instance._bindOptionUI(repeatedOption);
+						instance._renderOptionUI(repeatedOption);
+						instance._syncOptionUI(repeatedOption);
+						instance._syncOptionUI(lastOption);
 
-						instance.fire('addField');
+						instance.fire('addOption');
 
-						return repeatedField;
+						return repeatedOption;
 					},
 
 					clearValidationStatus: function() {
 						var instance = this;
 
-						instance.eachRepetition(
-							function(field) {
-								field.clearValidationStatus();
+						instance.eachOption(
+							function(option) {
+								option.clearValidationStatus();
 							}
 						);
 
 						OptionsField.superclass.clearValidationStatus.apply(instance, arguments);
 					},
 
-					eachRepetition: function(fn) {
+					eachOption: function(fn) {
 						var instance = this;
 
-						var field = instance._mainField;
+						var option = instance._mainOption;
 
-						field.get('repetitions').forEach(fn, instance);
+						option.get('repetitions').forEach(fn, instance);
 					},
 
-					getLastField: function() {
+					getLastOption: function() {
 						var instance = this;
 
-						var repetitions = instance._mainField.get('repetitions');
+						var repetitions = instance._mainOption.get('repetitions');
 
 						return repetitions[repetitions.length - 1];
 					},
@@ -104,7 +104,7 @@ AUI.add(
 
 						var values = [];
 
-						instance.eachRepetition(
+						instance.eachOption(
 							function(item) {
 								var key = item.get('key');
 
@@ -128,9 +128,9 @@ AUI.add(
 						var hasErrors = false;
 
 						if (instance.get('visible')) {
-							instance.eachRepetition(
-								function(field) {
-									if (field.hasErrors()) {
+							instance.eachOption(
+								function(option) {
+									if (option.hasErrors()) {
 										hasErrors = true;
 									}
 								}
@@ -143,21 +143,21 @@ AUI.add(
 					hideErrorMessage: function() {
 						var instance = this;
 
-						instance.eachRepetition(
-							function(field) {
-								field.hideErrorMessage();
+						instance.eachOption(
+							function(option) {
+								option.hideErrorMessage();
 							}
 						);
 					},
 
-					moveField: function(field, oldIndex, newIndex) {
+					moveOption: function(option, oldIndex, newIndex) {
 						var instance = this;
 
-						var repetitions = field.get('repetitions');
+						var repetitions = option.get('repetitions');
 
 						repetitions.splice(newIndex, 0, repetitions.splice(oldIndex, 1)[0]);
 
-						repetitions.forEach(A.bind('_syncRepeatableField', field));
+						repetitions.forEach(A.bind('_syncRepeatableField', option));
 					},
 
 					processValidation: function() {
@@ -170,7 +170,7 @@ AUI.add(
 
 							instance.showValidationStatus();
 
-							instance._mainField.focus();
+							instance._mainOption.focus();
 						}
 						else {
 							OptionsField.superclass.processValidation.apply(instance, arguments);
@@ -182,7 +182,7 @@ AUI.add(
 
 						OptionsField.superclass.render.apply(instance, arguments);
 
-						instance._clearRepetitions();
+						instance._clearOptions();
 						instance._renderFields(instance.get('value'));
 
 						return instance;
@@ -197,9 +197,9 @@ AUI.add(
 					showErrorMessage: function(errorMessage) {
 						var instance = this;
 
-						var mainField = instance._mainField;
+						var mainOption = instance._mainOption;
 
-						mainField.showErrorMessage(errorMessage);
+						mainOption.showErrorMessage(errorMessage);
 					},
 
 					showValidationStatus: function() {
@@ -207,9 +207,9 @@ AUI.add(
 
 						var hasErrors = instance.hasErrors();
 
-						var mainField = instance._mainField;
+						var mainOption = instance._mainOption;
 
-						mainField.get('container').toggleClass('has-error', hasErrors);
+						mainOption.get('container').toggleClass('has-error', hasErrors);
 					},
 
 					updateContainer: function() {
@@ -217,18 +217,18 @@ AUI.add(
 
 						OptionsField.superclass.updateContainer.apply(instance, arguments);
 
-						instance.eachRepetition(
-							function(field) {
-								field.updateContainer();
+						instance.eachOption(
+							function(option) {
+								option.updateContainer();
 							}
 						);
 					},
 
-					_afterRender: function(field) {
+					_afterRender: function(option) {
 						var instance = this;
 
 						instance._bindListEvents();
-						instance._renderFieldUI(field);
+						instance._renderOptionUI(option);
 					},
 
 					_afterSortableListDragEnd: function(event) {
@@ -241,16 +241,16 @@ AUI.add(
 						var dragStartIndex = instance._dragStartIndex;
 
 						if (dragEndIndex !== dragStartIndex) {
-							var mainField = instance._mainField;
+							var mainOption = instance._mainOption;
 
-							var field = AArray.find(
-								mainField.get('repetitions'),
+							var option = AArray.find(
+								mainOption.get('repetitions'),
 								function(item) {
 									return item.get('container') === dragNode;
 								}
 							);
 
-							instance.moveField(field, dragStartIndex, dragEndIndex);
+							instance.moveOption(option, dragStartIndex, dragEndIndex);
 						}
 					},
 
@@ -268,13 +268,13 @@ AUI.add(
 						placeholderNode.setContent(dragNode.clone().show());
 					},
 
-					_bindFieldUI: function(field) {
+					_bindOptionUI: function(option) {
 						var instance = this;
 
-						field.after('render', A.bind('_afterRender', instance, field));
+						option.after('render', A.bind('_afterRender', instance, option));
 
-						field.bindContainerEvent('click', A.bind('_onFieldClickClose', instance, field), '.close');
-						field.bindInputEvent('valuechange', A.bind('_onFieldValueChange', instance, field));
+						option.bindContainerEvent('click', A.bind('_onOptionClickClose', instance, option), '.close');
+						option.bindInputEvent('valuechange', A.bind('_onOptionValueChange', instance, option));
 					},
 
 					_bindListEvents: function() {
@@ -293,30 +293,30 @@ AUI.add(
 						var dragNode = event.drag.get('node');
 						var dropNode = event.drop.get('node');
 
-						var lastField = instance.getLastField();
-						var lastFieldContainer = lastField.get('container');
+						var lastOption = instance.getLastOption();
+						var lastOptionContainer = lastOption.get('container');
 
-						return lastFieldContainer !== dropNode && lastFieldContainer !== dragNode;
+						return lastOptionContainer !== dropNode && lastOptionContainer !== dragNode;
 					},
 
-					_clearRepetitions: function() {
+					_clearOptions: function() {
 						var instance = this;
 
-						var mainField = instance._mainField;
+						var mainOption = instance._mainOption;
 
-						mainField.get('repetitions').forEach(
-							function(field) {
-								if (field !== mainField) {
-									field.remove();
+						instance.eachOption(
+							function(option) {
+								if (option !== mainOption) {
+									option.remove();
 								}
 							}
 						);
 
-						mainField.set('key', '');
-						mainField.set('repetitions', [mainField]);
+						mainOption.set('key', '');
+						mainOption.set('repetitions', [mainOption]);
 					},
 
-					_createMainField: function() {
+					_createMainOption: function() {
 						var instance = this;
 
 						var strings = instance.get('strings');
@@ -334,9 +334,9 @@ AUI.add(
 
 						config.context = A.clone(config);
 
-						instance._mainField = new Liferay.DDM.Field.KeyValue(config);
+						instance._mainOption = new Liferay.DDM.Field.KeyValue(config);
 
-						instance._bindFieldUI(instance._mainField);
+						instance._bindOptionUI(instance._mainOption);
 					},
 
 					_getNodeIndex: function(node) {
@@ -357,29 +357,29 @@ AUI.add(
 						return container.one('.options');
 					},
 
-					_onFieldClickClose: function(field) {
+					_onOptionClickClose: function(option) {
 						var instance = this;
 
-						if (field === instance._mainField) {
-							var repetitions = field.get('repetitions');
+						if (option === instance._mainOption) {
+							var repetitions = option.get('repetitions');
 
-							var index = repetitions.indexOf(field);
+							var index = repetitions.indexOf(option);
 
-							instance._mainField = repetitions[index + 1];
+							instance._mainOption = repetitions[index + 1];
 						}
 
-						field.remove();
+						option.remove();
 
-						instance.fire('removeField');
+						instance.fire('removeOption');
 					},
 
-					_onFieldValueChange: function(field) {
+					_onOptionValueChange: function(option) {
 						var instance = this;
 
-						var repetitions = field.get('repetitions');
+						var repetitions = option.get('repetitions');
 
-						if (field.get('repeatedIndex') === repetitions.length - 1) {
-							instance.addField();
+						if (option.get('repeatedIndex') === repetitions.length - 1) {
+							instance.addOption();
 						}
 					},
 
@@ -392,54 +392,51 @@ AUI.add(
 
 						var container = instance.get('container');
 
-						var mainField = instance._mainField;
+						var mainOption = instance._mainOption;
 
-						mainField.render(container.one('.options'));
+						mainOption.render(container.one('.options'));
 
-						instance._syncFieldUI(mainField);
-
-						var hasOptionValues = !!optionsValues.length;
-
-						if (hasOptionValues) {
-							var optionValue = optionsValues.shift();
-
-							instance._restoreField(mainField, optionValue);
-						}
+						instance._syncOptionUI(mainOption);
 
 						optionsValues.forEach(
-							function(optionValue) {
-								var newField = instance.addField();
+							function(optionValue, index) {
+								if (index === 0) {
+									instance._restoreOption(mainOption, optionValue);
+								}
+								else {
+									var newOption = instance.addOption();
 
-								instance._restoreField(newField, optionValue);
+									instance._restoreOption(newOption, optionValue);
+								}
 							}
 						);
 
-						if (hasOptionValues) {
-							instance.addField();
+						if (optionsValues.length) {
+							instance.addOption();
 						}
 					},
 
-					_renderFieldUI: function(field) {
+					_renderOptionUI: function(option) {
 						var instance = this;
 
-						var container = field.get('container');
+						var container = option.get('container');
 
 						container.append(TPL_DRAG_HANDLE + TPL_REMOVE_BUTTON);
 					},
 
-					_restoreField: function(field, contextValue) {
-						field.set('value', contextValue.label);
-						field.set('key', contextValue.value);
+					_restoreOption: function(option, contextValue) {
+						option.setValue(contextValue.label);
+						option.set('key', contextValue.value);
 					},
 
-					_syncFieldUI: function(field) {
+					_syncOptionUI: function(option) {
 						var instance = this;
 
-						var addLastFieldClass = instance.getLastField() === field;
+						var addLastOptionClass = instance.getLastOption() === option;
 
-						var container = field.get('container');
+						var container = option.get('container');
 
-						container.toggleClass('last-option', addLastFieldClass);
+						container.toggleClass('last-option', addLastOptionClass);
 
 						var sortableList = instance.get('sortableList');
 

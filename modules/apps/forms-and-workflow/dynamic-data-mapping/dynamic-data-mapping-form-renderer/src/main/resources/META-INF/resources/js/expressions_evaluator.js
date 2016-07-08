@@ -217,6 +217,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-component', 'aui-io-request', 'aui-map', 'queue']
+		requires: ['aui-component', 'aui-io-request', 'aui-map']
 	}
 );

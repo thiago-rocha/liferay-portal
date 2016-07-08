@@ -145,12 +145,6 @@ AUI.add(
 						);
 					},
 
-					_afterLabelFieldNormalizeKey: function(key) {
-						var instance = this;
-
-						return new A.Do.AlterReturn(null, instance._generateFieldName(A.Do.originalRetVal));
-					},
-
 					_afterSettingsFormRender: function() {
 						var instance = this;
 
@@ -293,6 +287,12 @@ AUI.add(
 						var nameField = instance.getField('name');
 
 						nameField.setValue(event.newVal);
+					},
+
+					_onLabelFieldNormalizeKey: function(key) {
+						var instance = this;
+
+						return new A.Do.AlterReturn(null, instance._generateFieldName(A.Do.originalRetVal));
 					},
 
 					_onNameChange: function(event) {

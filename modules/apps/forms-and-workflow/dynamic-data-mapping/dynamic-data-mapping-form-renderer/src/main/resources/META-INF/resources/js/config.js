@@ -46,8 +46,7 @@
 							requires: [
 								'aui-component',
 								'aui-io-request',
-								'aui-map',
-								'queue'
+								'aui-map'
 							]
 						},
 						'liferay-ddm-form-renderer-feedback': {
