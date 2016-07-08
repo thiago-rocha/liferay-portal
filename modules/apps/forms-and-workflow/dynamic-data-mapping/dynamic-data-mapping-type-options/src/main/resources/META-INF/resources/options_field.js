@@ -1,9 +1,11 @@
 AUI.add(
 	'liferay-ddm-form-field-options',
 	function(A) {
-		var Lang = A.Lang;
-
 		var AArray = A.Array;
+
+		var Renderer = Liferay.DDM.Renderer;
+
+		var Util = Renderer.Util;
 
 		var TPL_DRAG_HANDLE = '<div class="drag-handle icon-reorder"><span aria-hidden="true"></span></div>';
 
@@ -88,13 +90,13 @@ AUI.add(
 
 						var option = instance._mainOption;
 
-						option.get('repetitions').forEach(fn, instance);
+						option.getRepeatedSiblings().forEach(fn, instance);
 					},
 
 					getLastOption: function() {
 						var instance = this;
 
-						var repetitions = instance._mainOption.get('repetitions');
+						var repetitions = instance._mainOption.getRepeatedSiblings();
 
 						return repetitions[repetitions.length - 1];
 					},
@@ -153,7 +155,7 @@ AUI.add(
 					moveOption: function(option, oldIndex, newIndex) {
 						var instance = this;
 
-						var repetitions = option.get('repetitions');
+						var repetitions = option.getRepeatedSiblings();
 
 						repetitions.splice(newIndex, 0, repetitions.splice(oldIndex, 1)[0]);
 
@@ -167,7 +169,6 @@ AUI.add(
 
 						if (value.length === 0 && instance.get('required')) {
 							instance.showErrorMessage(Liferay.Language.get('please-add-at-least-one-option'));
-
 							instance.showValidationStatus();
 
 							instance._mainOption.focus();
@@ -182,16 +183,17 @@ AUI.add(
 
 						OptionsField.superclass.render.apply(instance, arguments);
 
-						instance._clearOptions();
-						instance._renderFields(instance.get('value'));
+						instance._renderOptions(instance.get('value'));
 
 						return instance;
 					},
 
-					setValue: function() {
+					setValue: function(value) {
 						var instance = this;
 
-						instance.render();
+						if (!Util.compare(value, instance.get('value'))) {
+							instance._renderOptions(value);
+						}
 					},
 
 					showErrorMessage: function(errorMessage) {
@@ -244,7 +246,7 @@ AUI.add(
 							var mainOption = instance._mainOption;
 
 							var option = AArray.find(
-								mainOption.get('repetitions'),
+								mainOption.getRepeatedSiblings(),
 								function(item) {
 									return item.get('container') === dragNode;
 								}
@@ -268,6 +270,16 @@ AUI.add(
 						placeholderNode.setContent(dragNode.clone().show());
 					},
 
+					_bindListEvents: function() {
+						var instance = this;
+
+						var optionsNode = instance._getOptionsNode();
+
+						instance._eventHandlers.push(
+							optionsNode.delegate('focus', A.bind('_onFocusOption', instance), '.last-option .field')
+						);
+					},
+
 					_bindOptionUI: function(option) {
 						var instance = this;
 
@@ -275,16 +287,6 @@ AUI.add(
 
 						option.bindContainerEvent('click', A.bind('_onOptionClickClose', instance, option), '.close');
 						option.bindInputEvent('valuechange', A.bind('_onOptionValueChange', instance, option));
-					},
-
-					_bindListEvents: function() {
-						var instance = this;
-
-						var options = instance._getOptionsNode();
-
-						instance._eventHandlers.push(
-							options.delegate('focus', A.bind('_onFocusOption', instance), '.last-option .field')
-						);
 					},
 
 					_canSortNode: function(event) {
@@ -304,14 +306,6 @@ AUI.add(
 
 						var mainOption = instance._mainOption;
 
-						instance.eachOption(
-							function(option) {
-								if (option !== mainOption) {
-									option.remove();
-								}
-							}
-						);
-
 						mainOption.set('key', '');
 						mainOption.set('repetitions', [mainOption]);
 					},
@@ -328,8 +322,8 @@ AUI.add(
 							repeatable: true,
 							repeatedIndex: 0,
 							showLabel: false,
-							visible: true,
-							value: ''
+							value: '',
+							visible: true
 						};
 
 						config.context = A.clone(config);
@@ -342,9 +336,9 @@ AUI.add(
 					_getNodeIndex: function(node) {
 						var instance = this;
 
-						var options = instance._getOptionsNode();
+						var optionsNode = instance._getOptionsNode();
 
-						var siblings = options.all('> .lfr-ddm-form-field-container');
+						var siblings = optionsNode.all('> .lfr-ddm-form-field-container');
 
 						return siblings.indexOf(node);
 					},
@@ -357,11 +351,15 @@ AUI.add(
 						return container.one('.options');
 					},
 
+					_onFocusOption: function(event) {
+						event.target.scrollIntoView();
+					},
+
 					_onOptionClickClose: function(option) {
 						var instance = this;
 
 						if (option === instance._mainOption) {
-							var repetitions = option.get('repetitions');
+							var repetitions = option.getRepeatedSiblings();
 
 							var index = repetitions.indexOf(option);
 
@@ -376,23 +374,21 @@ AUI.add(
 					_onOptionValueChange: function(option) {
 						var instance = this;
 
-						var repetitions = option.get('repetitions');
+						var repetitions = option.getRepeatedSiblings();
 
 						if (option.get('repeatedIndex') === repetitions.length - 1) {
 							instance.addOption();
 						}
 					},
 
-					_onFocusOption: function(event) {
-						event.target.scrollIntoView();
-					},
-
-					_renderFields: function(optionsValues) {
+					_renderOptions: function(optionsValues) {
 						var instance = this;
 
 						var container = instance.get('container');
 
 						var mainOption = instance._mainOption;
+
+						instance._clearOptions();
 
 						mainOption.render(container.one('.options'));
 

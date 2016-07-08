@@ -107,7 +107,11 @@ AUI.add(
 
 				container.insert(field.get('container'), 'after');
 
-				repetitions.forEach(A.bind('_syncRepeatableField', instance));
+				if (repetitions.length > index + 1) {
+					for (var i = index + 1; i < repetitions.length; i++) {
+						instance._syncRepeatableField(repetitions[i]);
+					}
+				}
 
 				return field;
 			},
