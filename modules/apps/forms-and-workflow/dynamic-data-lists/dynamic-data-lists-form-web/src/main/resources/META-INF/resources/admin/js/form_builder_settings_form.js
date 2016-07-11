@@ -145,6 +145,12 @@ AUI.add(
 						);
 					},
 
+					_afterLabelFieldNormalizeKey: function(key) {
+						var instance = this;
+
+						return new A.Do.AlterReturn(null, instance._generateFieldName(A.Do.originalRetVal));
+					},
+
 					_afterSettingsFormRender: function() {
 						var instance = this;
 
@@ -173,10 +179,10 @@ AUI.add(
 
 						instance._fieldEventHandlers.push(
 							labelField.on('keyChange', A.bind('_onLabelFieldKeyChange', instance)),
-							labelField.on(A.bind('_onLabelFieldNormalizeKey', instance), labelField, 'normalizeKey')
+							labelField.after(A.bind('_afterLabelFieldNormalizeKey', instance), labelField, 'normalizeKey')
 						);
 
-						labelField.set('key', nameField.getValue());
+						labelField.set('key', labelField.normalizeKey(nameField.getValue()));
 						labelField.focus();
 					},
 
@@ -287,12 +293,6 @@ AUI.add(
 						var nameField = instance.getField('name');
 
 						nameField.setValue(event.newVal);
-					},
-
-					_onLabelFieldNormalizeKey: function(key) {
-						var instance = this;
-
-						return new A.Do.AlterReturn(null, instance._generateFieldName(A.Do.originalRetVal));
 					},
 
 					_onNameChange: function(event) {
