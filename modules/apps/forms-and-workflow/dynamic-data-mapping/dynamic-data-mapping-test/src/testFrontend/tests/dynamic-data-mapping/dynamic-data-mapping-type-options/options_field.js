@@ -82,7 +82,7 @@ describe(
 			}
 		);
 
-		it.only(
+		it(
 			'should keep values after re-rendering',
 			function(done) {
 				var value = [
