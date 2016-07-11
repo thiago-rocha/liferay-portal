@@ -66,6 +66,10 @@ AUI.add(
 					portletNamespace: {
 					},
 
+					recordSetId: {
+						value: 0
+					},
+
 					strings: {
 						value: {
 							addColumn: Liferay.Language.get('add-column'),

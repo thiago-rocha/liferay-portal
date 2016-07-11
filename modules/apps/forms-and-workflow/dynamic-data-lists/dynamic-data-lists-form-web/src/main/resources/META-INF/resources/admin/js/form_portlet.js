@@ -51,6 +51,7 @@ AUI.add(
 					},
 
 					recordSetId: {
+						value: 0
 					}
 				},
 
@@ -477,7 +478,8 @@ AUI.add(
 								evaluatorURL: instance.get('evaluatorURL'),
 								getFieldTypeSettingFormContextURL: instance.get('getFieldTypeSettingFormContextURL'),
 								pagesJSON: layout.pages,
-								portletNamespace: instance.get('namespace')
+								portletNamespace: instance.get('namespace'),
+								recordSetId: instance.get('recordSetId')
 							}
 						);
 					}

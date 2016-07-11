@@ -135,10 +135,13 @@ AUI.add(
 			_createSettingsForm: function(context) {
 				var instance = this;
 
+				var builder = instance.get('builder');
+
 				return new Liferay.DDL.FormBuilderSettingsForm(
 					{
 						context: context,
 						dataProviders: instance.get('dataProviders'),
+						editMode: builder.get('recordSetId') === 0 || instance.isNew(),
 						evaluatorURL: instance.get('evaluatorURL'),
 						field: instance,
 						portletNamespace: instance.get('portletNamespace'),

@@ -14,6 +14,10 @@ AUI.add(
 						valueFn: '_valueKey'
 					},
 
+					keyInputEnabled: {
+						value: true
+					},
+
 					maxKeyInputSize: {
 						value: 50
 					},
@@ -45,6 +49,7 @@ AUI.add(
 
 						instance._eventHandlers.push(
 							instance.after('keyChange', instance._afterKeyChange),
+							instance.after('keyInputEnabledChange', instance._afterKeyInputEnabledChange),
 							instance.bindContainerEvent('valuechange', instance._onValueChangeKeyInput, '.key-value-input'),
 							instance.bindInputEvent('valuechange', instance._onValueChangeInput)
 						);
@@ -59,6 +64,7 @@ AUI.add(
 							KeyValueField.superclass.getTemplateContext.apply(instance, arguments),
 							{
 								key: key,
+								keyInputEnabled: instance.get('keyInputEnabled'),
 								keyInputSize: instance._getKeyInputSize(key),
 								strings: instance.get('strings')
 							}
@@ -120,6 +126,12 @@ AUI.add(
 						instance._uiSetKey(event.newVal);
 					},
 
+					_afterKeyInputEnabledChange: function() {
+						var instance = this;
+
+						instance._uiSetKey(instance.get('key'));
+					},
+
 					_getKeyInputSize: function(str) {
 						var instance = this;
 
@@ -176,6 +188,13 @@ AUI.add(
 
 						keyInput.attr('size', instance._getKeyInputSize(key));
 						keyInput.val(key);
+
+						if (instance.get('keyInputEnabled')) {
+							keyInput.removeAttribute('readonly');
+						}
+						else {
+							keyInput.attr('readonly', 'true');
+						}
 					},
 
 					_valueGenerationLocked: function() {

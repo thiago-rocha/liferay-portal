@@ -16,6 +16,10 @@ AUI.add(
 		var FormBuilderSettingsForm = A.Component.create(
 			{
 				ATTRS: {
+					editMode: {
+						value: false
+					},
+
 					dataProviders: {
 					},
 
@@ -183,6 +187,8 @@ AUI.add(
 						);
 
 						labelField.set('key', labelField.normalizeKey(nameField.getValue()));
+						labelField.set('keyInputEnabled', instance.get('editMode'));
+
 						labelField.focus();
 					},
 
