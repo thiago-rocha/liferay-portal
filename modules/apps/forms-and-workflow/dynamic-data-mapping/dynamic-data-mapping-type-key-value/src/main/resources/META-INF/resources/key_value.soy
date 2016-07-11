@@ -50,7 +50,7 @@
 
 		<div class="active key-value-editor">
 			<label class="control-label key-value-label">{$strings.keyLabel}:</label>
-			<input class="key-value-input" {if $keyInputEnabled}readonly{/if} size="{$keyInputSize}" tabindex="-1" type="text" value='{$key}' />
+			<input class="key-value-input" {if not $keyInputEnabled}readonly{/if} size="{$keyInputSize}" tabindex="-1" type="text" value='{$key}' />
 		</div>
 	</div>
 {/template}
