@@ -13,6 +13,8 @@ AUI.add(
 
 		var TPL_SUBMIT_BUTTON = '<button class="hide" type="submit" />';
 
+		var RendererUtil = Liferay.DDM.Renderer.Util;
+
 		var FormBuilderSettingsForm = A.Component.create(
 			{
 				ATTRS: {
@@ -39,7 +41,7 @@ AUI.add(
 
 						instance._eventHandlers.push(
 							instance.after('render', instance._afterSettingsFormRender),
-							instance.on('*:addField', instance.alignModal),
+							instance.on('*:addOption', instance._afterAddOption),
 							instance.on('*:removeField', instance.alignModal)
 						);
 
@@ -118,6 +120,38 @@ AUI.add(
 								}
 							}
 						);
+					},
+
+					_afterAddOption: function(event) {
+						var instance = this;
+
+						var optionsField = event.target;
+
+						var field = instance.get('field');
+
+						var builder = field.get('builder');
+
+						var definition = builder.get('definition');
+
+						var searchResults = RendererUtil.searchFieldsByKey(definition, field.get('fieldName'), 'fieldName');
+
+						if (searchResults.length) {
+							var definitionOptions = searchResults[0].options;
+
+							optionsField.eachOption(
+								function(option) {
+									var existingOption = definitionOptions.find(
+										function(definitionOption) {
+											return definitionOption.value === option.get('key');
+										}
+									);
+
+									option.set('keyInputEnabled', !existingOption);
+								}
+							);
+						}
+
+						instance.alignModal();
 					},
 
 					_afterDDMDataProviderInstanceIdFieldRender: function(event) {
@@ -354,6 +388,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['liferay-ddm-form-renderer', 'liferay-form']
+		requires: ['liferay-ddm-form-renderer', 'liferay-ddm-form-renderer-util', 'liferay-form']
 	}
 );

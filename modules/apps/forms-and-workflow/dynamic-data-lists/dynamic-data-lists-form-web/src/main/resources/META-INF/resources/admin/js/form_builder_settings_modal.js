@@ -280,7 +280,7 @@ AUI.add(
 
 						var label = Liferay.Language.get('save');
 
-						if (field.isNew()) {
+						if (field.isAdding()) {
 							label = Liferay.Language.get('add');
 						}
 

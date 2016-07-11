@@ -11,6 +11,8 @@ AUI.add(
 
 		var CSS_FORM_GROUP = A.getClassName('form', 'group');
 
+		var RendererUtil = Liferay.DDM.Renderer.Util;
+
 		var FormBuilderSettingsSupport = function() {
 		};
 
@@ -91,12 +93,24 @@ AUI.add(
 				return settingsModal;
 			},
 
-			isNew: function() {
+			isAdding: function() {
 				var instance = this;
 
 				var builder = instance.get('builder');
 
 				return !builder.contains(instance);
+			},
+
+			isNew: function() {
+				var instance = this;
+
+				var builder = instance.get('builder');
+
+				var definition = builder.get('definition');
+
+				var searchResults = RendererUtil.searchFieldsByKey(definition, instance.get('fieldName'), 'fieldName');
+
+				return searchResults.length === 0;
 			},
 
 			loadSettingsForm: function() {
@@ -210,6 +224,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['liferay-ddl-form-builder-settings-form', 'liferay-ddl-form-builder-settings-retriever', 'liferay-ddl-form-builder-util']
+		requires: ['liferay-ddl-form-builder-settings-form', 'liferay-ddl-form-builder-settings-retriever', 'liferay-ddl-form-builder-util', 'liferay-ddm-form-renderer-util']
 	}
 );
