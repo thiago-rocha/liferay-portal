@@ -202,6 +202,8 @@ AUI.add(
 						var context = instance.get('context');
 
 						if (context.hasOwnProperty(name)) {
+							item.set('errorMessage', '');
+							item.set('valid', true);
 							item.set('value', context[name]);
 						}
 					}
