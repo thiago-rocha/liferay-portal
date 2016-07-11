@@ -280,6 +280,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-tabview', 'liferay-ddl-form-builder-field-options-toolbar', 'liferay-ddl-form-sidebar-soy']
+		requires: ['aui-tabview', 'liferay-ddl-form-builder-field-options-toolbar', 'liferay-ddl-form-builder-sidebar-template']
 	}
 );

@@ -101,6 +101,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['liferay-ddl-form-builder-field-options-toolbar-soy']
+		requires: ['liferay-ddl-form-builder-field-options-toolbar-template']
 	}
 );
