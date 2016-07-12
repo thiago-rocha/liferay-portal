@@ -151,22 +151,55 @@ AUI.add(
 					},
 
 					_afterSettingsFormRender: function() {
+                        var instance = this;
+
+                        var container = instance.get('container');
+
+                        var labelField = instance.getField('label');
+                        var nameField = instance.getField('name');
+
+                        (new A.EventHandle(instance._fieldEventHandlers)).detach();
+
+                        instance._fieldEventHandlers.push(
+                            labelField.on('keyChange', A.bind('_onLabelFieldKeyChange', instance)),
+                            labelField.after(A.bind('_afterLabelFieldNormalizeKey', instance), labelField, 'normalizeKey')
+                        );
+
+                        labelField.set('key', labelField.normalizeKey(nameField.getValue()));
+                        labelField.set('keyInputEnabled', instance.get('editMode'));
+
+                        instance._createAutocompleteButton();
+						instance._createAutocompleteContainer();
+                    },
+
+					_createAutocompleteButton: function() {
 						var instance = this;
 
-						var container = instance.get('container');
+						var advancedSettingsNode = instance.getPageNode(2);
 
-						var labelField = instance.getField('label');
-						var nameField = instance.getField('name');
+						advancedSettingsNode.append(instance._getAutocompleteButtonTemplate());
 
-						(new A.EventHandle(instance._fieldEventHandlers)).detach();
+						advancedSettingsNode.one('.autocomplete-button').on('click', A.bind('_onClickAutocompleteButton', instance));
+					},
 
-						instance._fieldEventHandlers.push(
-							labelField.on('keyChange', A.bind('_onLabelFieldKeyChange', instance)),
-							labelField.after(A.bind('_afterLabelFieldNormalizeKey', instance), labelField, 'normalizeKey')
-						);
+					_createAutocompleteContainer: function() {
+						var instance = this;
 
-						labelField.set('key', labelField.normalizeKey(nameField.getValue()));
-						labelField.set('keyInputEnabled', instance.get('editMode'));
+						var sidebarBody = A.one('.sidebar-body');
+
+						var dataSourceTypeContainer = instance.getField('dataSourceType').get('container');
+
+						var ddmDataProviderInstanceIdContainer = instance.getField('ddmDataProviderInstanceId').get('container');
+
+						var optionsContainer = instance.getField('options').get('container');
+
+						sidebarBody.append(instance._getAutocompleteContainerTemplate());
+
+						sidebarBody.one('.autocomplete-body').append(dataSourceTypeContainer);
+						sidebarBody.one('.autocomplete-body').append(ddmDataProviderInstanceIdContainer);
+						sidebarBody.one('.autocomplete-body').append(optionsContainer);
+
+						sidebarBody.one('.autocomplete-header-back').on('click', A.bind('_onClickAutocompleteHeaderBack', instance));
 					},
 
 					_createModeToggler: function() {
@@ -216,6 +249,26 @@ AUI.add(
 						return name;
 					},
 
+					_getAutocompleteButtonTemplate: function() {
+						var instance = this;
+
+						var autocompleteButtonContainer;
+
+						autocompleteButtonContainer = ddl.autocomplete.button();
+
+						return autocompleteButtonContainer;
+					},
+
+					_getAutocompleteContainerTemplate: function() {
+						var instance = this;
+
+						var autocompleteContainer;
+
+						autocompleteContainer = ddl.autocomplete.container({backButton: Liferay.Util.getLexiconIconTpl('angle-left', 'icon-monospaced')});
+
+						return autocompleteContainer;
+					},
+
 					_getModalStdModeNode: function(mode) {
 						var instance = this;
 
@@ -256,6 +309,30 @@ AUI.add(
 								ddmDataProviderInstanceIdField.after('render', A.bind('_afterDDMDataProviderInstanceIdFieldRender', instance))
 							);
 						}
+					},
+
+					_onClickAutocompleteButton: function() {
+						var instance = this;
+
+						var dataSourceType = instance.getField('dataSourceType');
+						var ddmDataProviderInstanceId = instance.getField('ddmDataProviderInstanceId');
+						var options = instance.getField('options');
+
+						instance.get('container').hide();
+
+						A.one('.sidebar-body').one('.autocomplete-container').show();
+					},
+
+					_onClickAutocompleteHeaderBack: function() {
+						var instance = this;
+
+						var dataSourceType = instance.getField('dataSourceType');
+						var ddmDataProviderInstanceId = instance.getField('ddmDataProviderInstanceId');
+						var options = instance.getField('options');
+
+						instance.get('container').show();
+
+						A.one('.sidebar-body').one('.autocomplete-container').hide();
 					},
 
 					_onClickModeToggler: function(event) {
