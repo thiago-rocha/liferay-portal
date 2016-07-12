@@ -19,61 +19,41 @@ AUI.add(
 
 				instance.eachField(
 					function(field) {
-						hasErrors = field.hasErrors();
+						if (field.hasErrors()) {
+							hasErrors = true;
 
-						if (hasErrors) {
-							console.log(field.get('name'), field.getValue());
+							field.showErrorMessage();
 						}
-
-						return hasErrors;
+						else {
+							field.hideErrorMessage();
+						}
 					}
 				);
 
 				return hasErrors;
 			},
 
-			pageHasErrors: function(pageNode) {
+			hasPageErrors: function(pageNode) {
 				var instance = this;
 
-				var hasErrors = false;
-
-				instance.eachField(
-					function(field) {
-						if (pageNode.contains(field.get('container'))) {
-							hasErrors = field.hasErrors();
-						}
-
-						return hasErrors;
-					}
-				);
-
-				return hasErrors;
-			},
-
-			processPageValidation: function(pageNode) {
-				var instance = this;
+				var hasPageErrors = false;
 
 				instance.eachField(
 					function(field) {
 						var container = field.get('container');
 
-						if (field.hasErrors() && pageNode.contains(container)) {
+						if (pageNode.contains(container) && field.hasErrors()) {
+							hasPageErrors = true;
+
 							field.showErrorMessage();
+						}
+						else {
+							field.hideErrorMessage();
 						}
 					}
 				);
-			},
 
-			processValidation: function() {
-				var instance = this;
-
-				instance.eachField(
-					function(field) {
-						if (field.hasErrors()) {
-							field.showErrorMessage();
-						}
-					}
-				);
+				return hasPageErrors;
 			},
 
 			validate: function(callback) {
@@ -87,12 +67,8 @@ AUI.add(
 						var hasErrors = true;
 
 						if (result && Lang.isObject(result)) {
-							instance.processValidation();
-
 							hasErrors = instance.hasErrors();
 						}
-
-						console.log('validate errors', hasErrors);
 
 						if (callback) {
 							callback.call(instance, hasErrors, result);
@@ -109,18 +85,14 @@ AUI.add(
 				evaluator.evaluate(
 					instance,
 					function(result) {
-						var hasErrors = true;
+						var hasPageErrors = true;
 
 						if (result && Lang.isObject(result)) {
-							instance.processPageValidation(pageNode, result);
-
-							hasErrors = instance.pageHasErrors(pageNode);
+							hasPageErrors = instance.hasPageErrors(pageNode, result);
 						}
 
-						console.log('validatePage errors', hasErrors);
-
 						if (callback) {
-							callback.call(instance, hasErrors, result);
+							callback.call(instance, hasPageErrors, result);
 						}
 					}
 				);

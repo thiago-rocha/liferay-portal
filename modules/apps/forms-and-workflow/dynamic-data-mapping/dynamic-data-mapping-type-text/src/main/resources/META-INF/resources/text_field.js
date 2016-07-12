@@ -47,6 +47,16 @@ AUI.add(
 						instance.bindInputEvent('focus', instance._onFocusInput);
 					},
 
+					bindInputEvent: function(eventName, callback, volatile) {
+						var instance = this;
+
+						if (eventName === instance.getChangeEventName()) {
+							callback = A.debounce(callback, 300, instance);
+						}
+
+						return TextField.superclass.bindInputEvent.apply(instance, [eventName, callback, volatile]);
+					},
+
 					getChangeEventName: function() {
 						return 'input';
 					},
@@ -94,6 +104,18 @@ AUI.add(
 						return instance;
 					},
 
+					showErrorMessage: function() {
+						var instance = this;
+
+						TextField.superclass.showErrorMessage.apply(instance, arguments);
+
+						var container = instance.get('container');
+
+						var inputGroup = container.one('.input-group-container');
+
+						inputGroup.insert(container.one('.help-block'), 'after');
+					},
+
 					_afterOptionsChange: function(event) {
 						var instance = this;
 
@@ -102,11 +124,14 @@ AUI.add(
 						if (!Util.compare(event.newVal, event.prevVal)) {
 							autoComplete.set('source', event.newVal);
 
-							autoComplete.fire('query', {
-								query: instance.getValue(),
-								inputValue: instance.getValue(),
-								src: A.AutoCompleteBase.UI_SRC
-							})
+							autoComplete.fire(
+								'query',
+								{
+									inputValue: instance.getValue(),
+									query: instance.getValue(),
+									src: A.AutoCompleteBase.UI_SRC
+								}
+							);
 						}
 					},
 
@@ -122,39 +147,6 @@ AUI.add(
 							}
 
 							textAreaNode.autosize._uiAutoSize();
-						}
-					},
-
-					_renderErrorMessage: function() {
-						var instance = this;
-
-						TextField.superclass._renderErrorMessage.apply(instance, arguments);
-
-						var container = instance.get('container');
-
-						var inputGroup = container.one('.input-group-container');
-
-						inputGroup.insert(container.one('.help-block'), 'after');
-					},
-
-					_showFeedback: function() {
-						var instance = this;
-
-						TextField.superclass._showFeedback.apply(instance, arguments);
-
-						var container = instance.get('container');
-
-						var feedBack = container.one('.form-control-feedback');
-
-						var inputGroupAddOn = container.one('.input-group-addon');
-
-						if (inputGroupAddOn) {
-							feedBack.appendTo(inputGroupAddOn);
-						}
-						else {
-							var inputGroupContainer = container.one('.input-group-container');
-
-							inputGroupContainer.placeAfter(feedBack);
 						}
 					}
 				}

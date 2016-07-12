@@ -18,6 +18,16 @@ AUI.add(
 		};
 
 		FieldFeedbackSupport.prototype = {
+			initializer: function() {
+				var instance = this;
+
+				instance._errorMessageNode = instance._createErrorMessageNode();
+
+				instance._eventHandlers.push(
+					instance.after('errorMessageChange', instance._afterErrorMessageChange)
+				);
+			},
+
 			clearValidationStatus: function() {
 				var instance = this;
 
@@ -33,7 +43,9 @@ AUI.add(
 
 				var container = instance.get('container');
 
-				container.all('.help-block').remove();
+				instance._errorMessageNode.hide();
+
+				instance.clearValidationStatus();
 			},
 
 			hideFeedback: function() {
@@ -55,25 +67,17 @@ AUI.add(
 			showErrorMessage: function() {
 				var instance = this;
 
-				instance.hideErrorMessage();
-
 				var errorMessage = instance.get('errorMessage');
 
 				var inputNode = instance.getInputNode();
 
 				if (errorMessage && inputNode) {
-					inputNode.insert(
-						Lang.sub(
-							TPL_ERROR_MESSAGE,
-							{
-								errorMessage: errorMessage
-							}
-						),
-						'after'
-					);
-				}
+					inputNode.insert(instance._errorMessageNode, 'after');
 
-				instance.showValidationStatus();
+					instance._errorMessageNode.show();
+
+					instance.showValidationStatus();
+				}
 			},
 
 			showLoadingFeedback: function() {
@@ -94,6 +98,27 @@ AUI.add(
 				var container = instance.get('container');
 
 				container.toggleClass('has-error', instance.hasErrors());
+			},
+
+			_afterErrorMessageChange: function(event) {
+				var instance = this;
+
+				instance._errorMessageNode.html(event.newVal);
+			},
+
+			_createErrorMessageNode: function() {
+				var instance = this;
+
+				var errorMessage = instance.get('errorMessage');
+
+				return A.Node.create(
+					Lang.sub(
+						TPL_ERROR_MESSAGE,
+						{
+							errorMessage: errorMessage
+						}
+					)
+				);
 			},
 
 			_showFeedback: function(icon) {

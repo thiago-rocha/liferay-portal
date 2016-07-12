@@ -118,6 +118,18 @@ AUI.add(
 						return instance;
 					},
 
+					showErrorMesasage: function() {
+						var instance = this;
+
+						KeyValueField.superclass.showErrorMesasage.apply(instance, arguments);
+
+						var container = instance.get('container');
+
+						var editorNode = container.one('.key-value-editor');
+
+						editorNode.insert(container.one('.help-block'), 'after');
+					},
+
 					_afterKeyChange: function(event) {
 						var instance = this;
 
@@ -167,18 +179,6 @@ AUI.add(
 						var value = event.newVal;
 
 						instance.set('key', instance.normalizeKey(value));
-					},
-
-					_renderErrorMessage: function() {
-						var instance = this;
-
-						KeyValueField.superclass._renderErrorMessage.apply(instance, arguments);
-
-						var container = instance.get('container');
-
-						var editorNode = container.one('.key-value-editor');
-
-						editorNode.insert(container.one('.help-block'), 'after');
 					},
 
 					_uiSetKey: function(key) {

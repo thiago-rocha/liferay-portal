@@ -55,22 +55,28 @@ AUI.add(
 					visitor.set(
 						'fieldHandler',
 						function(fieldContext) {
-							var fieldName = Util.getFieldNameFromQualifiedName(fieldContext.name);
+							var qualifiedName = fieldContext.name;
 
-							var instanceId = Util.getInstanceIdFromQualifiedName(fieldContext.name);
+							var name = Util.getFieldNameFromQualifiedName(qualifiedName);
 
-							var field = instance.getField(fieldName, instanceId);
+							var instanceId = Util.getInstanceIdFromQualifiedName(qualifiedName);
 
-							field.set('context', fieldContext);
+							var field = instance.getField(name, instanceId);
 
 							if (field !== trigger) {
+								if (instance !== trigger) {
+									delete fieldContext.errorMessage;
+									delete fieldContext.valid;
+								}
+
 								field.setValue(fieldContext.value);
 							}
 
 							if (fieldContext.valid) {
-								field.hideErrorMessage();
-								field.showValidationStatus();
+								fieldContext.errorMessage = '';
 							}
+
+							field.set('context', fieldContext);
 						}
 					);
 

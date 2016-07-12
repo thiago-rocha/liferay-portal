@@ -53,24 +53,14 @@ AUI.add(
 						inputNode.attr('checked', DataTypeBoolean.parse(value));
 					},
 
-					_renderErrorMessage: function() {
+					showErrorMessage: function() {
 						var instance = this;
 
 						var container = instance.get('container');
 
-						CheckboxField.superclass._renderErrorMessage.apply(instance, arguments);
+						CheckboxField.superclass.showErrorMessage.apply(instance, arguments);
 
 						container.all('.help-block').appendTo(container);
-					},
-
-					_showFeedback: function() {
-						var instance = this;
-
-						var container = instance.get('container');
-
-						CheckboxField.superclass._showFeedback.apply(instance, arguments);
-
-						container.all('.form-control-feedback').appendTo(container);
 					}
 				}
 			}

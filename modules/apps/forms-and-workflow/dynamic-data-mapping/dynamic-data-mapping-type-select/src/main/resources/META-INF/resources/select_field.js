@@ -112,6 +112,18 @@ AUI.add(
 						).attr('selected', true);
 					},
 
+					showErrorMessage: function() {
+						var instance = this;
+
+						SelectField.superclass.showErrorMessage.apply(instance, arguments);
+
+						var container = instance.get('container');
+
+						var inputGroup = container.one('.input-select-wrapper');
+
+						inputGroup.insert(container.one('.help-block'), 'after');
+					},
+
 					_getDataSourceData: function(callback) {
 						var instance = this;
 
@@ -135,18 +147,6 @@ AUI.add(
 								}
 							}
 						);
-					},
-
-					_renderErrorMessage: function() {
-						var instance = this;
-
-						SelectField.superclass._renderErrorMessage.apply(instance, arguments);
-
-						var container = instance.get('container');
-
-						var inputGroup = container.one('.input-select-wrapper');
-
-						inputGroup.insert(container.one('.help-block'), 'after');
 					},
 
 					_valueDataProviderURL: function() {

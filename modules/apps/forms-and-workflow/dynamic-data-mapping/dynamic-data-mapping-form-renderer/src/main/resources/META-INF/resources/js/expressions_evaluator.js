@@ -29,10 +29,10 @@ AUI.add(
 						instance.publish(
 							{
 								'evaluate': {
-									defaultFn: A.debounce(instance._evaluate, 300, instance)
+									defaultFn: instance._evaluate
 								},
 								start: {
-									defaultFn: A.debounce(instance._fireStart, 300, instance)
+									defaultFn: instance._start
 								}
 							}
 						)
@@ -102,21 +102,6 @@ AUI.add(
 						}
 					},
 
-					_fireStart: function(event) {
-						var instance = this;
-
-						if (instance.isEvaluating()) {
-							var form = instance.get('form');
-
-							instance.fire(
-								'evaluationStarted',
-								{
-									trigger: event.trigger
-								}
-							);
-						}
-					},
-
 					isEvaluating: function() {
 						var instance = this;
 
@@ -153,7 +138,7 @@ AUI.add(
 						var cached = instance._cache.getValue(cacheKey);
 
 						if (cached) {
-							callback.call(instance, cached);
+							callback.call(instance, JSON.parse(cached));
 						}
 						else {
 							var portletNamespace = form.get('portletNamespace');
@@ -162,7 +147,6 @@ AUI.add(
 								instance.get('evaluatorURL'),
 								{
 									data: Liferay.Util.ns(portletNamespace, payload),
-									dataType: 'JSON',
 									method: 'POST',
 									on: {
 										failure: function(event) {
@@ -173,8 +157,8 @@ AUI.add(
 												callback.call(instance, {});
 											}
 										},
-										success: function() {
-											var result = this.get('responseData');
+										success: function(event, id, xhr) {
+											var result = xhr.responseText;
 
 											if (instance._cache.size() > 10) {
 												instance._cache.remove(instance._cache.keys()[0]);
@@ -182,7 +166,7 @@ AUI.add(
 
 											instance._cache.put(cacheKey, result);
 
-											callback.call(instance, result);
+											callback.call(instance, JSON.parse(result));
 										}
 									}
 								}
@@ -194,6 +178,21 @@ AUI.add(
 						var instance = this;
 
 						return enabled && !!instance.get('evaluatorURL');
+					},
+
+					_start: function(event) {
+						var instance = this;
+
+						if (instance.isEvaluating()) {
+							var form = instance.get('form');
+
+							instance.fire(
+								'evaluationStarted',
+								{
+									trigger: event.trigger
+								}
+							);
+						}
 					},
 
 					_valueEvaluatorURL: function() {

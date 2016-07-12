@@ -47,6 +47,9 @@ AUI.add(
 					fieldsMap[name] = [];
 				}
 
+				context.errorMessage = '';
+				context.valid = true;
+
 				var config = A.merge(
 					context,
 					{

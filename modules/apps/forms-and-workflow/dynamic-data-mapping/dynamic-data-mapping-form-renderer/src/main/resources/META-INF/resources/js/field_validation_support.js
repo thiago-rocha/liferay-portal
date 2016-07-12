@@ -29,7 +29,9 @@ AUI.add(
 				var instance = this;
 
 				instance._eventHandlers.push(
-					instance.after('blur', instance._afterBlur)
+					instance.after('focus', instance._afterFocus),
+					instance.after('blur', instance._afterBlur),
+					instance.after('validChange', instance._afterValidChange)
 				);
 			},
 
@@ -65,6 +67,12 @@ AUI.add(
 				}
 			},
 
+			_afterFocus: function() {
+				var instance = this;
+
+				instance.hideErrorMessage();
+			},
+
 			_afterBlur: function() {
 				var instance = this;
 
@@ -81,6 +89,17 @@ AUI.add(
 					);
 				}
 				else {
+					instance.showErrorMessage();
+				}
+			},
+
+			_afterValidChange: function(event) {
+				var instance = this;
+
+				if (event.newVal) {
+					instance.hideErrorMessage();
+				}
+				else if (!instance.hasFocus()) {
 					instance.showErrorMessage();
 				}
 			}
