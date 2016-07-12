@@ -16,6 +16,7 @@
 								'aui-form-builder-pages',
 								'liferay-ddl-form-builder-field-list',
 								'liferay-ddl-form-builder-field-options-toolbar',
+								'liferay-ddl-form-builder-field-settings-sidebar',
 								'liferay-ddl-form-builder-field-support',
 								'liferay-ddl-form-builder-field-types-modal',
 								'liferay-ddl-form-builder-layout-builder-support',
@@ -23,7 +24,6 @@
 								'liferay-ddl-form-builder-layout-visitor',
 								'liferay-ddl-form-builder-pages-manager',
 								'liferay-ddl-form-builder-settings-modal',
-								'liferay-ddl-form-builder-sidebar',
 								'liferay-ddl-form-builder-util',
 								'liferay-ddm-form-field-types',
 								'liferay-ddm-form-renderer'
@@ -58,6 +58,10 @@
 								'liferay-ddm-form-renderer',
 								'liferay-form'
 							]
+						},
+						'liferay-ddl-form-builder-field-settings-sidebar': {
+							path: 'form_builder_fields_settings_sidebar.js',
+							requires: ['aui-tabview', 'liferay-ddl-form-builder-sidebar']
 						},
 						'liferay-ddl-form-builder-field-support': {
 							path: 'form_builder_field_support.js',
