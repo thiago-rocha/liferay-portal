@@ -3,15 +3,11 @@ AUI.add(
 	function(A) {
 		var Lang = A.Lang;
 
-		var CSS_FIELD_SETTINGS_SAVE = A.getClassName('lfr', 'ddl', 'field', 'settings', 'save');
-
 		var TPL_OPTION = '<option {status} value="{value}">{label}</option>';
 
 		var TPL_SETTINGS_FORM = '<form action="javascript:;"></form>';
 
 		var TPL_SETTINGS_TOGGLER = '<button class="btn settings-toggler" type="button"><span class="settings-toggle-label"></span><span class="settings-toggle-icon"></span></button>';
-
-		var TPL_SUBMIT_BUTTON = '<button class="hide" type="submit" />';
 
 		var FormBuilderSettingsForm = A.Component.create(
 			{
@@ -36,10 +32,6 @@ AUI.add(
 						instance._initDataProvider();
 
 						evaluator.after('evaluationEnded', A.bind('_saveSettings', instance));
-
-						instance._eventHandlers.push(
-							instance.after('render', instance._afterSettingsFormRender)
-						);
 
 						instance._fieldEventHandlers = [];
 					},
@@ -67,14 +59,6 @@ AUI.add(
 								}
 							}
 						);
-					},
-
-					_saveSettings: function() {
-						var instance = this;
-
-						var field = instance.get('field');
-
-						field.saveSettings(instance);
 					},
 
 					validateSettings: function(callback) {
@@ -124,11 +108,6 @@ AUI.add(
 						var instance = this;
 
 						var container = instance.get('container');
-
-						container.append(TPL_SUBMIT_BUTTON);
-
-						instance._createModeToggler();
-						instance._syncModeToggler();
 
 						var formName = A.guid();
 
@@ -270,6 +249,14 @@ AUI.add(
 						event.preventDefault();
 
 						instance.submit();
+					},
+
+					_saveSettings: function() {
+						var instance = this;
+
+						var field = instance.get('field');
+
+						field.saveSettings(instance);
 					},
 
 					_syncModeToggler: function() {

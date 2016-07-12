@@ -134,7 +134,7 @@ if (goog.DEBUG) {
 
 
 ddm.tabbed_form = function(opt_data, opt_ignored) {
-  var output = '<div class="lfr-ddm-form-container" id="' + soy.$$escapeHtmlAttribute(opt_data.containerId) + '"><div class="lfr-ddm-form-tabs"><ul class="nav nav-tabs nav-tabs-default">';
+  var output = '<div class="lfr-ddm-form-container" id="' + soy.$$escapeHtmlAttribute(opt_data.containerId) + '"><div class="lfr-ddm-form-tabs"><ul class="nav navbar-nav">';
   var pageList136 = opt_data.pages;
   var pageListLen136 = pageList136.length;
   for (var pageIndex136 = 0; pageIndex136 < pageListLen136; pageIndex136++) {
@@ -146,7 +146,7 @@ ddm.tabbed_form = function(opt_data, opt_ignored) {
   var pageListLen150 = pageList150.length;
   for (var pageIndex150 = 0; pageIndex150 < pageListLen150; pageIndex150++) {
     var pageData150 = pageList150[pageIndex150];
-    output += ddm.required_warning_message(soy.$$augmentMap(opt_data, {showRequiredFieldsWarning: pageData150.showRequiredFieldsWarning, requiredFieldsWarningMessageHTML: opt_data.requiredFieldsWarningMessageHTML})) + '<div class="tab-pane ' + ((pageIndex150 == 0) ? 'active' : '') + '">' + ddm.form_rows(soy.$$augmentMap(opt_data, {rows: pageData150.rows})) + '</div>';
+    output += '<div class="lfr-ddm-form-page tab-pane ' + ((pageIndex150 == 0) ? 'active' : '') + '">' + ddm.required_warning_message(soy.$$augmentMap(opt_data, {showRequiredFieldsWarning: pageData150.showRequiredFieldsWarning, requiredFieldsWarningMessageHTML: opt_data.requiredFieldsWarningMessageHTML})) + ddm.form_rows(soy.$$augmentMap(opt_data, {rows: pageData150.rows})) + '</div>';
   }
   output += '</div></div></div>';
   return output;

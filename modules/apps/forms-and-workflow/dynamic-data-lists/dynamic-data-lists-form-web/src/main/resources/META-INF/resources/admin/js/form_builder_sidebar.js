@@ -11,19 +11,9 @@ AUI.add(
 
 		var CSS_CLASS_DESCRIPTION = A.getClassName(CSS_PREFIX, 'description');
 
-		var TPL_BASIC_CONTENT = '<div id="formBuilderFieldSettings"></div>';
-
-		var TPL_PANEL_NODE = '<div class="sidebar-body"></div>';
-
-		var TPL_RULES_CONTENT = '<div id="formBuilderFieldRules"></div>';
-
 		var FormBuilderSidebar = A.Component.create(
 			{
 				ATTRS: {
-					cssClass: {
-						value: 'sidebar'
-					},
-
 					description: {
 						value: 'No description'
 					},
@@ -65,8 +55,7 @@ AUI.add(
 					renderUI: function() {
 						var instance = this;
 
-						instance._createHeader();
-						instance._createBodyContent();
+						instance._renderTemplate();
 					},
 
 					bindUI: function() {
@@ -116,7 +105,7 @@ AUI.add(
 					},
 
 					getTemplateRenderer: function() {
-						return AObject.getValue(window, ['ddl', 'sidebar']);
+						return AObject.getValue(window, ['ddl', 'sidebar', 'render']);
 					},
 
 					open: function() {
@@ -149,32 +138,7 @@ AUI.add(
 						instance.get('toolbar').set('element', boundingBox.one('.dropdown'));
 					},
 
-					_createBodyContent: function() {
-						var instance = this;
-
-						instance.tabView = new A.TabView(
-							{
-								children: [
-									{
-										content: TPL_BASIC_CONTENT,
-										label: Liferay.Language.get('basic')
-									},
-									{
-										content: TPL_RULES_CONTENT,
-										label: Liferay.Language.get('rules')
-									}
-								],
-								panelNode: A.Node.create(TPL_PANEL_NODE),
-								srcNode: instance.get('contentBox').one('.toolbar'),
-								stacked: true
-							}
-						).render();
-
-						instance.tabView.get('listNode').addClass('nav navbar-nav');
-						instance.tabView.get('listNode').wrap('<nav class="navbar navbar-default"></nav>');
-					},
-
-					_createHeader: function() {
+					_renderTemplate: function() {
 						var instance = this;
 
 						var headerTemplate = instance.getTemplate();

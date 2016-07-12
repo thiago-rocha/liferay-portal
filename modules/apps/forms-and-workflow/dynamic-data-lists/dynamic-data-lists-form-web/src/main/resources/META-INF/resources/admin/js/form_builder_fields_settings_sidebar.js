@@ -43,12 +43,6 @@ AUI.add(
 
 					},
 
-					getFieldRulesNode: function() {
-						var instance = this;
-
-						return instance.get('boundingBox').one('#formBuilderFieldRules');
-					},
-
 					getFieldSettings: function() {
 						var instance = this;
 
@@ -59,12 +53,6 @@ AUI.add(
 						var settings = field.getSettings(settingsForm);
 
 						return settings;
-					},
-
-					getFieldSettingsNode: function() {
-						var instance = this;
-
-						return instance.get('boundingBox').one('#formBuilderFieldSettings');
 					},
 
 					_afterFieldChange: function() {
@@ -84,12 +72,14 @@ AUI.add(
 
 						field.loadSettingsForm().then(
 							function(settingsForm) {
-								instance.getFieldSettingsNode().setHTML(settingsForm.get('container'));
+								instance.get('boundingBox').one('.sidebar-body').setHTML(settingsForm.get('container'));
 
 								instance.set('title', field.get('context').label || 'Untitled');
 								instance.set('description', field.get('type'));
 
 								settingsForm.render();
+
+								instance.get('boundingBox').one('.nav-tabs').wrap('<nav class="navbar navbar-default navbar-no-collapse"></nav>')
 
 								instance.settingsForm = settingsForm;
 

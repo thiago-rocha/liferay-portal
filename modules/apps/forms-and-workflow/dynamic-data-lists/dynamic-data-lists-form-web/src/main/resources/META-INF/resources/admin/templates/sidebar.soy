@@ -1,31 +1,52 @@
-{namespace ddl}
+{namespace ddl.sidebar}
 
 /**
- * Prints the DDM form checkbox field.
+ * Prints the DDL sidebar.
  *  @param title
- *  @param description
+ *  @param? bodyContent
  *  @param closeButtonIcon
+ *  @param description
  *  @param toolbarButtonIcon
  *  @param toolbarTemplateContext
  */
-{template .sidebar autoescape="deprecated-contextual"}
-    {call ddl.sidebar_header data="all" /}
+{template .render autoescape="deprecated-contextual"}
+    {call ddl.sidebar.header data="all" /}
+    {call ddl.sidebar.body}
+        {param bodyContent: $bodyContent /}
+    {/call}
 {/template}
 
 /**
- * Prints the DDM form checkbox field.
- *  @param title
- *  @param description
- *  @param closeButtonIcon
+ * Prints the DDL sidebar body.
+ *  @param? bodyContent
+ */
+{template .body autoescape="deprecated-contextual"}
+    <div class="sidebar-body">{$bodyContent|noAutoescape}</div>
+{/template}
+
+/**
+ * Prints the field options.
  *  @param toolbarButtonIcon
  *  @param toolbarTemplateContext
  */
-{template .sidebar_header autoescape="deprecated-contextual"}
+{template .field_options_toolbar autoescape="deprecated-contextual"}
+    {call ddl.field_settings_toolbar data="all" /}
+{/template}
+
+/**
+ * Prints the DDL sidebar header.
+ *  @param title
+ *  @param closeButtonIcon
+ *  @param description
+ *  @param toolbarButtonIcon
+ *  @param toolbarTemplateContext
+ */
+{template .header autoescape="deprecated-contextual"}
     <div class="sidebar-header">
         <ul class="sidebar-header-actions">
             {if $toolbarTemplateContext}
             <li>
-                {call ddl.fieldOptionsToolbar data="all" /}
+                {call ddl.sidebar.field_options_toolbar data="all" /}
             </li>
             {/if}
 
@@ -37,15 +58,4 @@
         <h4 class="form-builder-sidebar-title">{$title}</h4>
         <h5 class="form-builder-sidebar-description">{$description}</h5>
     </div>
-
-    <div class="toolbar"></div>
-{/template}
-
-/**
- * Prints the DDM form checkbox field.
- *  @param toolbarTemplateContext
- *  @param toolbarButtonIcon
- */
-{template .fieldOptionsToolbar autoescape="deprecated-contextual"}
-    {call ddl.field_settings_toolbar data="all" /}
 {/template}

@@ -119,7 +119,6 @@ AUI.add(
 									settingsForm.render();
 								}
 								catch(e) {
-									console.log(e.stack);
 									throw e;
 								}
 
@@ -131,7 +130,6 @@ AUI.add(
 								instance._previousSettings = JSON.stringify(settings);
 							},
 							function(error) {
-								console.log(error.stack);
 								throw error;
 							}
 						);
