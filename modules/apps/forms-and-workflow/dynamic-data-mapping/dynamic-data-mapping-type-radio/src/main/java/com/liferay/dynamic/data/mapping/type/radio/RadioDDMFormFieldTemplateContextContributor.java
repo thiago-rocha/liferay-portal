@@ -20,6 +20,7 @@ import com.liferay.dynamic.data.mapping.model.DDMFormFieldOptions;
 import com.liferay.dynamic.data.mapping.render.DDMFormFieldRenderingContext;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +54,8 @@ public class RadioDDMFormFieldTemplateContextContributor
 			GetterUtil.getBoolean(ddmFormField.getProperty("inline")));
 		parameters.put(
 			"options", getOptions(ddmFormField, ddmFormFieldRenderingContext));
+		parameters.put(
+			"value", getValue(ddmFormField, ddmFormFieldRenderingContext));
 
 		return parameters;
 	}
@@ -70,6 +73,26 @@ public class RadioDDMFormFieldTemplateContextContributor
 				ddmFormFieldRenderingContext.getLocale());
 
 		return radioDDMFormFieldContextHelper.getOptions();
+	}
+	
+	protected List<String> getValue(
+		DDMFormField ddmFormField,
+		DDMFormFieldRenderingContext ddmFormFieldRenderingContext) {
+
+		RadioDDMFormFieldContextHelper selectDDMFormFieldContextHelper =
+			new RadioDDMFormFieldContextHelper(
+				jsonFactory,
+				getDDMFormFieldOptions(
+					ddmFormField, ddmFormFieldRenderingContext),
+				ddmFormFieldRenderingContext.getValue(),
+				ddmFormField.getPredefinedValue(),
+				ddmFormFieldRenderingContext.getLocale());
+
+		String[] valuesStringArray =
+			selectDDMFormFieldContextHelper.toStringArray(
+				ddmFormFieldRenderingContext.getValue());
+
+		return ListUtil.toList(valuesStringArray);
 	}
 	
 	protected DDMFormFieldOptions getDDMFormFieldOptions(

@@ -17,6 +17,10 @@ AUI.add(
 
 			evaluator: {
 				valueFn: '_valueEvaluator'
+			},
+
+			readOnly: {
+				value: false
 			}
 		};
 
@@ -112,6 +116,7 @@ AUI.add(
 
 				return new Renderer.ExpressionsEvaluator(
 					{
+						enabled: !instance.get('readOnly'),
 						form: instance
 					}
 				);

@@ -29,6 +29,7 @@
  * @param evaluatorURL
  * @param fieldTypes
  * @param portletNamespace
+ * @param readOnly
  * @param recordSetId
  */
 {template .form_renderer_js autoescape="deprecated-contextual"}
@@ -47,6 +48,7 @@
 							context: {$context|noAutoescape},
 							evaluatorURL: '{$evaluatorURL}',
 							portletNamespace: '{$portletNamespace}',
+							readOnly: {$readOnly},
 							recordSetId: {$recordSetId}
 						{rb}
 					).render()

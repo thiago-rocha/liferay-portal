@@ -59,43 +59,53 @@ AUI.add(
 			validate: function(callback) {
 				var instance = this;
 
-				var evaluator = instance.get('evaluator');
+				if (instance.get('readOnly')) {
+					callback.call(instance, false, null);
+				}
+				else {
+					var evaluator = instance.get('evaluator');
 
-				evaluator.evaluate(
-					instance,
-					function(result) {
-						var hasErrors = true;
+					evaluator.evaluate(
+						instance,
+						function(result) {
+							var hasErrors = true;
 
-						if (result && Lang.isObject(result)) {
-							hasErrors = instance.hasErrors();
+							if (result && Lang.isObject(result)) {
+								hasErrors = instance.hasErrors();
+							}
+
+							if (callback) {
+								callback.call(instance, hasErrors, result);
+							}
 						}
-
-						if (callback) {
-							callback.call(instance, hasErrors, result);
-						}
-					}
-				);
+					);
+				}
 			},
 
 			validatePage: function(pageNode, callback) {
 				var instance = this;
 
-				var evaluator = instance.get('evaluator');
+				if (instance.get('readOnly')) {
+					callback.call(instance, false, null);
+				}
+				else {
+					var evaluator = instance.get('evaluator');
 
-				evaluator.evaluate(
-					instance,
-					function(result) {
-						var hasPageErrors = true;
+					evaluator.evaluate(
+						instance,
+						function(result) {
+							var hasPageErrors = true;
 
-						if (result && Lang.isObject(result)) {
-							hasPageErrors = instance.hasPageErrors(pageNode, result);
+							if (result && Lang.isObject(result)) {
+								hasPageErrors = instance.hasPageErrors(pageNode, result);
+							}
+
+							if (callback) {
+								callback.call(instance, hasPageErrors, result);
+							}
 						}
-
-						if (callback) {
-							callback.call(instance, hasPageErrors, result);
-						}
-					}
-				);
+					);
+				}
 			}
 		};
 

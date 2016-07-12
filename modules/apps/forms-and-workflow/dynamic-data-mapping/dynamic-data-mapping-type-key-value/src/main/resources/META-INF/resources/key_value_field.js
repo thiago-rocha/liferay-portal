@@ -50,6 +50,7 @@ AUI.add(
 						instance._eventHandlers.push(
 							instance.after('keyChange', instance._afterKeyChange),
 							instance.after('keyInputEnabledChange', instance._afterKeyInputEnabledChange),
+							instance.bindContainerEvent('keyup', instance._onKeyUpKeyInput, '.key-value-input'),
 							instance.bindContainerEvent('valuechange', instance._onValueChangeKeyInput, '.key-value-input'),
 							instance.bindInputEvent('valuechange', instance._onValueChangeInput)
 						);
@@ -71,6 +72,12 @@ AUI.add(
 						);
 					},
 
+					isValidCharacter: function(character) {
+						var instance = this;
+
+						return A.Text.Unicode.test(character, 'L') || A.Text.Unicode.test(character, 'N');
+					},
+
 					normalizeKey: function(key) {
 						var instance = this;
 
@@ -88,7 +95,7 @@ AUI.add(
 
 								continue;
 							}
-							else if (!A.Text.Unicode.test(item, 'L') && !A.Text.Unicode.test(item, 'N')) {
+							else if (!instance.isValidCharacter(item)) {
 								continue;
 							}
 
@@ -163,6 +170,36 @@ AUI.add(
 						return size + 1;
 					},
 
+					_onKeyUpKeyInput: function(event) {
+						var instance = this;
+
+						var inputNode = event.target;
+
+						var value = inputNode.val();
+
+						var validValue = value.split('').filter(instance.isValidCharacter);
+
+						var newValue = validValue.join('');
+
+						if (newValue !== value) {
+							instance._updateInputValue(inputNode, newValue);
+						}
+					},
+
+					_updateInputValue: function(inputNode, newValue) {
+						var instance = this;
+
+						var currentValue = inputNode.val();
+
+						var selectionEnd = inputNode.get('selectionEnd');
+						var selectionStart = inputNode.get('selectionStart');
+
+						inputNode.val(newValue);
+
+						inputNode.set('selectionStart', selectionStart);
+						inputNode.set('selectionEnd', selectionEnd - (currentValue.length - newValue.length));
+					},
+
 					_onValueChangeInput: function(event) {
 						var instance = this;
 
@@ -186,8 +223,11 @@ AUI.add(
 
 						var keyInput = instance.get('container').one('.key-value-input');
 
+						if (document.activeElement !== keyInput.getDOM()) {
+							keyInput.val(key);
+						}
+
 						keyInput.attr('size', instance._getKeyInputSize(key));
-						keyInput.val(key);
 
 						if (instance.get('keyInputEnabled')) {
 							keyInput.removeAttribute('readonly');

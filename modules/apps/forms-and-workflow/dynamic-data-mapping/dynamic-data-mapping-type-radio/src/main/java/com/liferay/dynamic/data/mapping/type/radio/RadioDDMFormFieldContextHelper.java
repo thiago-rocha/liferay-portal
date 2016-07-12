@@ -19,6 +19,8 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONException;
 import com.liferay.portal.kernel.json.JSONFactory;
+import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -59,6 +61,21 @@ public class RadioDDMFormFieldContextHelper {
 		}
 
 		return options;
+	}
+	
+	protected String[] toStringArray(String value) {
+		if (Validator.isNull(value)) {
+			return GetterUtil.DEFAULT_STRING_VALUES;
+		}
+
+		try {
+			JSONArray jsonArray = _jsonFactory.createJSONArray(value);
+
+			return ArrayUtil.toStringArray(jsonArray);
+		}
+		catch (JSONException jsone) {
+			return StringUtil.split(value);
+		}
 	}
 
 	protected String toString(String value) {
