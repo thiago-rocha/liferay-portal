@@ -329,12 +329,6 @@ AUI.add(
 							for (var name in newContext) {
 								if (!Util.compare(newContext[name], oldContext[name])) {
 									if (instance.isRepaintable(name)) {
-										console.log(
-											'[', instance.get('fieldName'), ']',
-											'repainted because', name,
-											'went from', oldContext[name],
-											'to', newContext[name]);
-
 										repaint = true;
 									}
 

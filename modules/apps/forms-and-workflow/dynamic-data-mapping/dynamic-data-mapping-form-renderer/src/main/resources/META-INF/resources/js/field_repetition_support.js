@@ -97,7 +97,7 @@ AUI.add(
 
 				var field = new fieldClass(config).render();
 
-				var repetitions = instance.get('repetitions');
+				var repetitions = instance.getRepeatedSiblings();
 
 				var index = repetitions.indexOf(instance) + 1;
 

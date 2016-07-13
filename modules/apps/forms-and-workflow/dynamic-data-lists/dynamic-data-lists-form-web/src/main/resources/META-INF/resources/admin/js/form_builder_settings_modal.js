@@ -109,28 +109,29 @@ AUI.add(
 							function(settingsForm) {
 								instance.set('settingsForm', settingsForm);
 
-								footerNode.show();
+								settingsForm.render();
 
-								instance._showSettingsForm();
-								instance._toggleLoadingAnimation(false);
-								instance._showDefaultToolbar();
+								var nameField = settingsForm.getField('name');
 
-								try {
-									settingsForm.render();
-								}
-								catch(e) {
-									throw e;
-								}
+								nameField.validate(
+									function() {
+										footerNode.show();
+										instance._showSettingsForm();
+										instance._toggleLoadingAnimation(false);
+										instance._showDefaultToolbar();
 
-								instance._modal.show();
-								instance.align();
+										instance._modal.show();
+										instance.align();
+
+										var labelField = settingsForm.getField('label');
+
+										labelField.focus();
+									}
+								);
 
 								var settings = field.getSettings(settingsForm);
 
 								instance._previousSettings = JSON.stringify(settings);
-							},
-							function(error) {
-								throw error;
 							}
 						);
 					},

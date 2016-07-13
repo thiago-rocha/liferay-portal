@@ -83,7 +83,7 @@ describe(
 		);
 
 		it(
-			'should keep values after re-rendering',
+			'should keep values after re-rendering without changes',
 			function(done) {
 				var value = [
 					{
@@ -112,15 +112,73 @@ describe(
 
 				assert.equal(3, optionsField.getValue().length);
 
-				var optionsField
+				var count = 0;
 
 				optionsField.eachOption(
 					function(option, index) {
 						if (option !== optionsField.getLastOption()) {
 							assert.equal(value[index].label, option.getValue());
 						}
+
+						count++;
 					}
 				);
+
+				assert.equal(4, count);
+
+				done();
+			}
+		);
+
+		it.only(
+			'should keep values after re-rendering with changes',
+			function(done) {
+				var value = [
+					{
+						label: 'First Option',
+						value: 'FirstOption'
+					},
+					{
+						label: 'Second Option',
+						value: 'Second,Option'
+					},
+					{
+						label: 'Third Option',
+						value: 'ThirdOption'
+					}
+				];
+
+				var optionsField = this.optionsField = createField(
+					{
+						value: value
+					}
+				);
+
+				var newValue = A.clone(value);
+
+				newValue.push(
+					{
+						label: 'Fourth Option',
+						value: 'FourthOption'
+					}
+				);
+
+				optionsField.setValue(newValue);
+
+				var count = 0;
+
+				optionsField.eachOption(
+					function(option, index) {
+						if (index < newValue.length) {
+							assert.equal(newValue[index].label, option.getValue());
+							assert.equal(newValue[index].value, option.get('key'));
+						}
+
+						count++;
+					}
+				);
+
+				assert.equal(5, count, 'there should be one empty field at the end');
 
 				done();
 			}

@@ -101,7 +101,7 @@ AUI.add(
 				return !builder.contains(instance);
 			},
 
-			isNew: function() {
+			isPersisted: function() {
 				var instance = this;
 
 				var builder = instance.get('builder');
@@ -177,7 +177,7 @@ AUI.add(
 					{
 						context: context,
 						dataProviders: instance.get('dataProviders'),
-						editMode: builder.get('recordSetId') === 0 || instance.isNew(),
+						editMode: builder.get('recordSetId') === 0 || instance.isPersisted(),
 						evaluatorURL: instance.get('evaluatorURL'),
 						field: instance,
 						portletNamespace: instance.get('portletNamespace'),

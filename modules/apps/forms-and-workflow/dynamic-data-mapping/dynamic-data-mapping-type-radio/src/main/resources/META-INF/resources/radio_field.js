@@ -54,13 +54,13 @@ AUI.add(
 
 						var inputNode = instance.getInputNode();
 
-						var value = '';
+						var value = [];
 
 						if (inputNode.attr('checked')) {
-							value = inputNode.val();
+							value.push(inputNode.val());
 						}
 
-						return value;
+						return inputNode.val();
 					},
 
 					setValue: function(value) {
@@ -74,7 +74,7 @@ AUI.add(
 
 						var radioToCheck = radiosNodeList.filter(
 							function(node) {
-								return node.val() === value;
+								return node.val() === value[0];
 							}
 						).item(0);
 

@@ -88,9 +88,27 @@ AUI.add(
 					eachOption: function(fn) {
 						var instance = this;
 
-						var option = instance._mainOption;
+						var mainOption = instance._mainOption;
 
-						option.getRepeatedSiblings().forEach(fn, instance);
+						mainOption.getRepeatedSiblings().forEach(fn, instance);
+					},
+
+					empty: function() {
+						var instance = this;
+
+						var mainOption = instance._mainOption;
+
+						var options = mainOption.getRepeatedSiblings();
+
+						while (options.length > 1) {
+							var option = options[options.length - 1];
+
+							if (option !== mainOption) {
+								option.remove();
+							}
+						}
+
+						mainOption.set('key', '');
 					},
 
 					getLastOption: function() {
@@ -192,6 +210,7 @@ AUI.add(
 						var instance = this;
 
 						if (!Util.compare(value, instance.get('value'))) {
+							instance.set('value', value);
 							instance._renderOptions(value);
 						}
 					},
@@ -301,15 +320,6 @@ AUI.add(
 						return lastOptionContainer !== dropNode && lastOptionContainer !== dragNode;
 					},
 
-					_clearOptions: function() {
-						var instance = this;
-
-						var mainOption = instance._mainOption;
-
-						mainOption.set('key', '');
-						mainOption.set('repetitions', [mainOption]);
-					},
-
 					_createMainOption: function() {
 						var instance = this;
 
@@ -388,7 +398,7 @@ AUI.add(
 
 						var mainOption = instance._mainOption;
 
-						instance._clearOptions();
+						instance.empty();
 
 						mainOption.render(container.one('.options'));
 
