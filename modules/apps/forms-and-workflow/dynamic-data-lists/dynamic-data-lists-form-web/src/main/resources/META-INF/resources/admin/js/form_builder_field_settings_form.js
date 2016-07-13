@@ -124,17 +124,6 @@ AUI.add(
 
 						var container = instance.get('container');
 
-						var formName = A.guid();
-
-						container.attr('id', formName);
-						container.attr('name', formName);
-
-						Liferay.Form.register(
-							{
-								id: formName
-							}
-						);
-
 						var labelField = instance.getField('label');
 						var nameField = instance.getField('name');
 
