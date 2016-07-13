@@ -174,6 +174,7 @@ AUI.add(
 					{
 						context: context,
 						definition: JSON.parse(context.definition),
+						dataProviders: instance.get('dataProviders'),
 						editMode: builder.get('recordSetId') === 0 || instance.isPersisted(),
 						evaluatorURL: instance.get('evaluatorURL'),
 						field: instance,
