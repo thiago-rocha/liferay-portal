@@ -40,8 +40,7 @@ AUI.add(
 						instance._eventHandlers.push(
 							evaluator.after('evaluationEnded', A.bind('_saveSettings', instance)),
 							instance.after('render', instance._afterSettingsFormRender),
-							instance.on('*:addOption', instance._afterAddOption),
-							instance.on('*:removeOption', instance.alignModal)
+							instance.on('*:addOption', instance._afterAddOption)
 						);
 
 						instance._fieldEventHandlers = [];
@@ -114,8 +113,6 @@ AUI.add(
 								}
 							);
 						}
-
-						instance.alignModal();
 					},
 
 					_afterDDMDataProviderInstanceIdFieldRender: function(event) {
