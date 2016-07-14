@@ -95,26 +95,6 @@ public class RadioDDMFormFieldTemplateContextContributor
 		return ListUtil.toList(valuesStringArray);
 	}
 	
-	protected List<String> getValue(
-		DDMFormField ddmFormField,
-		DDMFormFieldRenderingContext ddmFormFieldRenderingContext) {
-
-		RadioDDMFormFieldContextHelper selectDDMFormFieldContextHelper =
-			new RadioDDMFormFieldContextHelper(
-				jsonFactory,
-				getDDMFormFieldOptions(
-					ddmFormField, ddmFormFieldRenderingContext),
-				ddmFormFieldRenderingContext.getValue(),
-				ddmFormField.getPredefinedValue(),
-				ddmFormFieldRenderingContext.getLocale());
-
-		String[] valuesStringArray =
-			selectDDMFormFieldContextHelper.toStringArray(
-				ddmFormFieldRenderingContext.getValue());
-
-		return ListUtil.toList(valuesStringArray);
-	}
-	
 	protected DDMFormFieldOptions getDDMFormFieldOptions(
 		DDMFormField ddmFormField,
 		DDMFormFieldRenderingContext ddmFormFieldRenderingContext) {
