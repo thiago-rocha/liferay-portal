@@ -156,33 +156,31 @@
 		vertical-align: bottom;
 	}
 
-	.lfr-ddm-form-container {
-		.lfr-ddm-form-field-container {
-			position: relative;
+	.lfr-ddm-form-field-container {
+		position: relative;
 
-			.lfr-form-row {
-				border-width: 0;
-				padding-bottom: 5px;
+		.lfr-form-row {
+			border-width: 0;
+			padding-bottom: 5px;
+			padding-top: 5px;
+
+			&:hover {
 				padding-top: 5px;
-
-				&:hover {
-					padding-top: 5px;
-				}
-
-				.lfr-autorow-controls {
-					bottom: 0;
-					right: 0;
-
-					.add-row {
-						margin-right: 3px;
-					}
-				}
 			}
 
-			.toggle-switch-bar .toggle-switch-handle {
-				text-transform: none;
-				word-break: break-word;
+			.lfr-autorow-controls {
+				bottom: 0;
+				right: 0;
+
+				.add-row {
+					margin-right: 3px;
+				}
 			}
+		}
+
+		.toggle-switch-bar .toggle-switch-handle {
+			text-transform: none;
+			word-break: break-word;
 		}
 	}
 }
