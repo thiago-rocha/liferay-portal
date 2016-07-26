@@ -185,16 +185,6 @@ AUI.add(
 						return name;
 					},
 
-					_getModalStdModeNode: function(mode) {
-						var instance = this;
-
-						var field = instance.get('field');
-
-						var settingsModal = field.getSettingsModal();
-
-						return settingsModal._modal.getStdModNode(mode);
-					},
-
 					_handleValidationResponse: function(hasErrors) {
 						var instance = this;
 
