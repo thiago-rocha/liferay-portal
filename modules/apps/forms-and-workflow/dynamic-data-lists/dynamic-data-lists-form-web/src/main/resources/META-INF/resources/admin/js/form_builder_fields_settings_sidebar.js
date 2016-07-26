@@ -105,7 +105,7 @@ AUI.add(
 
 								instance._configureSideBar();
 
-								field.updateSettingsFormValues(settingsForm);
+								field.setAttrs(field.getSettings(settingsForm));
 
 								instance._saveCurrentFieldContext();
 

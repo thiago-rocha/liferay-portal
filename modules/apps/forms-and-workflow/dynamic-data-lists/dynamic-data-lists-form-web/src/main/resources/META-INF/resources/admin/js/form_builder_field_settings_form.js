@@ -134,7 +134,7 @@ AUI.add(
 							labelField.after(A.bind('_afterLabelFieldNormalizeKey', instance), labelField, 'normalizeKey')
 						);
 
-						labelField.set('key', labelField.normalizeKey(nameField.getValue()));
+						labelField.set('key', nameField.getValue());
 						labelField.set('keyInputEnabled', instance.get('editMode'));
 					},
 
