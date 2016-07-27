@@ -12,6 +12,10 @@ AUI.add(
 						setter: '_setBodyContent'
 					},
 
+					builder: {
+						value: null
+					},
+
 					description: {
 						value: 'No description'
 					},
@@ -22,6 +26,10 @@ AUI.add(
 
 					title: {
 						value: 'Untitle'
+					},
+
+					toolbar: {
+						valueFn: '_createToolbar'
 					}
 				},
 
@@ -94,6 +102,18 @@ AUI.add(
 						settingsForm.getFirstPageField().focus();
 
 						boundingBox.one('.nav-tabs').wrap('<nav class="navbar navbar-default navbar-no-collapse"></nav>');
+					},
+
+					_createToolbar: function() {
+						var instance = this;
+
+						var toolbar = new Liferay.DDL.FormBuilderFieldOptionsToolbar(
+							{
+								formBuilder: instance.get('builder')
+							}
+						);
+
+						return toolbar;
 					},
 
 					_loadFieldSettingsForm: function(field) {
