@@ -35,7 +35,7 @@ AUI.add(
 						instance._initDataProvider();
 
 						instance._eventHandlers.push(
-							evaluator.after('evaluationEnded', A.bind('_saveSettings', instance)),
+							evaluator.after('evaluationStarted', A.bind('_saveSettings', instance)),
 							instance.after('render', instance._afterSettingsFormRender),
 							instance.on('*:addOption', instance._afterAddOption),
 							instance.on('*:removeOption', instance.alignModal)
@@ -220,7 +220,7 @@ AUI.add(
 
 						var nameField = instance.getField('name');
 
-						nameField.setValue(event.newVal);
+						nameField.set('value', event.newVal);
 					},
 
 					_onNameChange: function(event) {
