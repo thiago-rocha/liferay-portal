@@ -25,11 +25,11 @@ AUI.add(
 							{
 								buttonClass: 'layout-builder-move-cut-col-button',
 								handler: 'moveField',
-								label: 'Move'
+								label: 'Move Field'
 							},
 							{
 								handler: 'removeField',
-								label: 'Remove'
+								label: 'Remove Field'
 							},
 							{
 								handler: 'cancelFieldEdition',
