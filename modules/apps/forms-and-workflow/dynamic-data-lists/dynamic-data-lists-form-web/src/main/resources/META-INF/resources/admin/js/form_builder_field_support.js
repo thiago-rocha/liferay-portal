@@ -144,28 +144,6 @@ AUI.add(
 				);
 			},
 
-			updateSettingsFormValues: function(settingsForm) {
-				var instance = this;
-
-				settingsForm.get('fields').forEach(
-					function(item, index) {
-						var name = item.get('fieldName');
-
-						if (name === 'name') {
-							name = 'fieldName';
-						}
-
-						var context = instance.get('context');
-
-						if (context.hasOwnProperty(name)) {
-							item.set('errorMessage', '');
-							item.set('valid', true);
-							item.set('value', context[name]);
-						}
-					}
-				);
-			},
-
 			_createSettingsForm: function(context) {
 				var instance = this;
 

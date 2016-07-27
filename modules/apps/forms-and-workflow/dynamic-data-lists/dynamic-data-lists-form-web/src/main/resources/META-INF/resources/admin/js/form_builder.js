@@ -143,16 +143,14 @@ AUI.add(
 
 						var fieldSettingsPanel = instance.getFieldSettingsPanel();
 
-						var currentSettings = fieldSettingsPanel.getFieldSettings();
+						var currentFieldSettings = fieldSettingsPanel.getFieldSettings();
 
 						var fieldContext = fieldSettingsPanel._previousContext;
 
-						var settingsForm = fieldSettingsPanel.settingsForm;
-
-						if (JSON.stringify(fieldContext) != JSON.stringify(currentSettings)) {
+						if (JSON.stringify(fieldContext) != JSON.stringify(currentFieldSettings.context)) {
 							instance.confirmCancelFieldChangesDiolog(
 								function() {
-									instance.confirmCancelFieldChanges(field, fieldContext, settingsForm);
+									instance.confirmCancelFieldChanges(field, fieldContext, fieldSettingsPanel);
 								}
 							);
 						}
@@ -161,14 +159,16 @@ AUI.add(
 						}
 					},
 
-					confirmCancelFieldChanges: function(field, fieldContext, settingsForm) {
+					confirmCancelFieldChanges: function(field, fieldContext, fieldSettingsPanel) {
 						var instance = this;
 
 						field.set('context', fieldContext);
 
 						field.render();
 
-						field.updateSettingsFormValues(settingsForm);
+						fieldSettingsPanel.settingsForm.set('context', fieldSettingsPanel._previousFormContext);
+
+						fieldSettingsPanel.settingsForm.render();
 					},
 
 					confirmCancelFieldChangesDiolog: function(afterConfirm) {
