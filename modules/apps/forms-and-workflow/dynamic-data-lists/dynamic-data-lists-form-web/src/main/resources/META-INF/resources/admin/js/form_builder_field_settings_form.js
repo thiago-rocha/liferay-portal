@@ -122,8 +122,6 @@ AUI.add(
 					_afterSettingsFormRender: function() {
 						var instance = this;
 
-						var container = instance.get('container');
-
 						var labelField = instance.getField('label');
 						var nameField = instance.getField('name');
 
