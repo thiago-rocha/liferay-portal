@@ -3,7 +3,9 @@ AUI.add(
 	function(A) {
 		var CSS_PREFIX = A.getClassName('form', 'builder', 'field', 'settings', 'sidebar');
 
-		var loadingTPL = '<div class="loading-icon loading-icon-lg"></div>';
+		var TPL_LOADING = '<div class="loading-icon loading-icon-lg"></div>';
+
+		var TPL_NAVBAR_WRAPER = '<nav class="navbar navbar-default navbar-no-collapse"></nav>';
 
 		var FormBuilderFieldsSettingsSidebar = A.Component.create(
 			{
@@ -91,17 +93,22 @@ AUI.add(
 					_configureSideBar: function() {
 						var instance = this;
 
-						var boundingBox = instance.get('boundingBox');
-
 						var settingsForm = instance.settingsForm;
 
-						instance.set('bodyContent', settingsForm.get('container'));
+						var settingsFormContainer = settingsForm.get('container');
+
+						instance.set('bodyContent', settingsFormContainer);
+
+						settingsForm.after(
+							'render',
+							function() {
+								settingsFormContainer.one('.navbar-nav').wrap(TPL_NAVBAR_WRAPER);
+							}
+						);
 
 						settingsForm.render();
 
 						settingsForm.getFirstPageField().focus();
-
-						boundingBox.one('.nav-tabs').wrap('<nav class="navbar navbar-default navbar-no-collapse"></nav>');
 					},
 
 					_createToolbar: function() {
@@ -127,7 +134,7 @@ AUI.add(
 
 								field.setAttrs(field.getSettings(settingsForm));
 
-								instance._saveCurrentFieldContext();
+								instance._saveCurrentContext();
 
 								instance.fire(
 									'fieldSettingsFormLoaded',
@@ -140,14 +147,16 @@ AUI.add(
 						);
 					},
 
-					_saveCurrentFieldContext: function() {
+					_saveCurrentContext: function() {
 						var instance = this;
 
 						var field = instance.get('field');
 
-						var context = field.get('context');
+						var fieldContext = field.get('context');
 
-						instance._previousContext = context;
+						instance._previousContext = fieldContext;
+
+						instance._previousFormContext = instance.settingsForm.get('context');
 					},
 
 					_setBodyContent: function(content) {
@@ -166,8 +175,8 @@ AUI.add(
 						instance.set('description', '');
 						instance.set('title', '');
 
-						if (bodyContent !== loadingTPL) {
-							instance.set('bodyContent', loadingTPL);
+						if (bodyContent !== TPL_LOADING) {
+							instance.set('bodyContent', TPL_LOADING);
 						}
 					}
 				}
