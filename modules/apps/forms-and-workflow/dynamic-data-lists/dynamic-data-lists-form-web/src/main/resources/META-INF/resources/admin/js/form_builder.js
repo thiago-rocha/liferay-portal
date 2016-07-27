@@ -25,6 +25,8 @@ AUI.add(
 
 		var CSS_ROW_CONTAINER_ROW = A.getClassName('layout', 'row', 'container', 'row');
 
+		var TPL_CONFIRM_CANCEL_FIELD_EDITION = '<p>' + Liferay.Language.get('are-you-sure-you-want-to-cancel') + '</p>';
+
 		var TPL_REQURIED_FIELDS = '<label class="hide required-warning">{message}</label>';
 
 		var FormBuilder = A.Component.create(
@@ -175,7 +177,7 @@ AUI.add(
 						Liferay.Util.openWindow(
 							{
 								dialog: {
-									bodyContent: '<p>' + Liferay.Language.get('are-you-sure-you-want-to-cancel') + '</p>',
+									bodyContent: TPL_CONFIRM_CANCEL_FIELD_EDITION,
 									destroyOnHide: true,
 									draggable: false,
 									height: 210,
