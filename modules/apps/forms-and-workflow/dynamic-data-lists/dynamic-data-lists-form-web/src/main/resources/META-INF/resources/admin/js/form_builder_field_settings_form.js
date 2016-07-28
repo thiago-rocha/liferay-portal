@@ -120,7 +120,10 @@ AUI.add(
 					_afterSettingsFormRender: function() {
 						var instance = this;
 
+						var editModeValue = instance.get('editMode');
+
 						var labelField = instance.getField('label');
+
 						var nameField = instance.getField('name');
 
 						(new A.EventHandle(instance._fieldEventHandlers)).detach();
@@ -131,7 +134,8 @@ AUI.add(
 						);
 
 						labelField.set('key', nameField.getValue());
-						labelField.set('keyInputEnabled', instance.get('editMode'));
+						labelField.set('keyInputEnabled', editModeValue);
+						labelField.set('generationLocked', !editModeValue);
 					},
 
 					_createModeToggler: function() {
@@ -216,7 +220,7 @@ AUI.add(
 
 						var nameField = instance.getField('name');
 
-						nameField.set('value', event.newVal);
+						nameField.setValue(event.newVal);
 					},
 
 					_onNameChange: function(event) {
