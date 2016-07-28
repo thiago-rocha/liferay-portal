@@ -32,8 +32,6 @@ AUI.add(
 
 						var evaluator = instance.get('evaluator');
 
-						instance._initDataProvider();
-
 						instance._eventHandlers.push(
 							evaluator.after('evaluationStarted', A.bind('_saveSettings', instance)),
 							instance.after('render', instance._afterSettingsFormRender),
