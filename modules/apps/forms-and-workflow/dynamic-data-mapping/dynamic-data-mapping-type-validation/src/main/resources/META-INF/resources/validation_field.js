@@ -43,6 +43,10 @@ AUI.add(
 						value: 'validation'
 					},
 
+					typesOptions: {
+						value: []
+					},
+
 					validations: {
 						value: Util.getValidations()
 					},
@@ -62,8 +66,10 @@ AUI.add(
 						var instance = this;
 
 						instance._eventHandlers.push(
-							instance.after('containerChange', instance._afterValidationContainerChange),
-							instance.after('render', instance._afterValidationRender)
+							instance.bindContainerEvent('change', A.bind('_syncValidationUI', instance), '.enable-validation'),
+							instance.bindContainerEvent('change', A.bind('_syncValidationUI', instance), 'select'),
+							instance.bindContainerEvent('change', A.bind('_setParameterValue', instance), '.parameter-input'),
+							instance.bindContainerEvent('change', A.bind('_setErrorMessage', instance), '.message-input')
 						);
 					},
 
@@ -135,35 +141,6 @@ AUI.add(
 							errorMessage: instance._getMessageValue(),
 							expression: expression
 						};
-					},
-
-					_afterValidationContainerChange: function(event) {
-						var instance = this;
-
-						instance._bindContainerEvents();
-					},
-
-					_afterValidationRender: function() {
-						var instance = this;
-
-						instance._bindContainerEvents();
-					},
-
-					_afterValueChange: function() {
-						var instance = this;
-
-						instance.render();
-					},
-
-					_bindContainerEvents: function() {
-						var instance = this;
-
-						var container = instance.get('container');
-
-						instance._eventHandlers.push(
-							container.delegate('change', A.bind('_syncValidationUI', instance), '.enable-validation'),
-							container.delegate('change', A.bind('_syncValidationUI', instance), 'select')
-						);
 					},
 
 					_getEnableValidationValue: function() {
@@ -268,6 +245,26 @@ AUI.add(
 						);
 					},
 
+					_setErrorMessage: function(event) {
+						var instance = this;
+
+						var input = event.target;
+
+						instance.set('errorMessageValue', input.val());
+
+						instance.set('value', instance.getValue());
+					},
+
+					_setParameterValue: function(event) {
+						var instance = this;
+
+						var input = event.target;
+
+						instance.set('parameterValue', input.val());
+
+						instance.set('value', instance.getValue());
+					},
+
 					_setValue: function(validation) {
 						var instance = this;
 
@@ -298,6 +295,8 @@ AUI.add(
 								}
 							);
 						}
+
+						return validation;
 					},
 
 					_syncValidationUI: function(event) {

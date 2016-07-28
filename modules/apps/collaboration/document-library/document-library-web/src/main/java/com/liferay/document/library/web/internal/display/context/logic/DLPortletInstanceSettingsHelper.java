@@ -15,7 +15,7 @@
 package com.liferay.document.library.web.internal.display.context.logic;
 
 import com.liferay.document.library.kernel.util.DLUtil;
-import com.liferay.document.library.web.internal.constants.DLPortletKeys;
+import com.liferay.document.library.web.constants.DLPortletKeys;
 import com.liferay.document.library.web.internal.display.context.util.DLRequestHelper;
 import com.liferay.document.library.web.internal.settings.DLPortletInstanceSettings;
 import com.liferay.portal.kernel.language.LanguageUtil;
@@ -409,6 +409,8 @@ public class DLPortletInstanceSettingsHelper {
 
 		String[] mediaGalleryMimeTypes =
 			dlPortletInstanceSettings.getMimeTypes();
+
+		Arrays.sort(mediaGalleryMimeTypes);
 
 		ThemeDisplay themeDisplay = _dlRequestHelper.getThemeDisplay();
 
