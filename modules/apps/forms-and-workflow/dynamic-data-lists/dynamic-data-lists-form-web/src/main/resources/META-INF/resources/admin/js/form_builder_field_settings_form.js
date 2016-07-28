@@ -1,10 +1,6 @@
 AUI.add(
 	'liferay-ddl-form-builder-field-settings-form',
 	function(A) {
-		var Lang = A.Lang;
-
-		var TPL_OPTION = '<option {status} value="{value}">{label}</option>';
-
 		var TPL_SETTINGS_FORM = '<form action="javascript:;"></form>';
 
 		var TPL_SETTINGS_TOGGLER = '<button class="btn settings-toggler" type="button"><span class="settings-toggle-label"></span><span class="settings-toggle-icon"></span></button>';
