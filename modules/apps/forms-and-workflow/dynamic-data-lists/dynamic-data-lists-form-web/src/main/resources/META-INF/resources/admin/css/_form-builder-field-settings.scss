@@ -41,6 +41,12 @@
 				display: inline-block;
 			}
 
+			.key-value-input {
+				&[readonly] {
+					background-color: transparent;
+				}
+			}
+
 			.key-value-output {
 				display: none;
 			}
