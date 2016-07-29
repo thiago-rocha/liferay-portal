@@ -50,7 +50,10 @@ AUI.add(
 
 						instance._eventHandlers.push(
 							sortableList.after('drag:end', A.bind('_afterSortableListDragEnd', instance)),
-							sortableList.after('drag:start', A.bind('_afterSortableListDragStart', instance))
+							sortableList.after('drag:start', A.bind('_afterSortableListDragStart', instance)),
+							instance.after('valueChange', function(event) {
+								console.log(event.type);
+							})
 						);
 
 						instance._createMainOption();
@@ -345,8 +348,6 @@ AUI.add(
 
 						instance._mainOption = new Liferay.DDM.Field.KeyValue(config);
 
-						instance._mainOption.addTarget(instance);
-
 						instance._bindOptionUI(instance._mainOption);
 					},
 
@@ -400,6 +401,8 @@ AUI.add(
 						}
 
 						var value = instance.getValue();
+
+						instance.set('value', value);
 
 						if (value.length > 0 && instance.get('required')) {
 							instance.set('errorMessage', '');

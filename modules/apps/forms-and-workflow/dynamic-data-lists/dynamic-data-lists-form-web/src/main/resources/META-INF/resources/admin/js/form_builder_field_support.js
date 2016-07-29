@@ -134,6 +134,8 @@ AUI.add(
 
 				instance.setAttrs(instance.getSettings(settingsForm));
 
+				console.log(instance.getSettings(settingsForm));
+
 				instance.render();
 
 				instance.fire(

@@ -28,6 +28,8 @@ AUI.add(
 
 						var evaluator = instance.get('evaluator');
 
+						console.log(evaluator);
+
 						instance._eventHandlers.push(
 							evaluator.after('evaluationStarted', A.bind('_saveSettings', instance)),
 							instance.after('render', instance._afterSettingsFormRender),
