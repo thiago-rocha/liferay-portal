@@ -74,11 +74,11 @@ public class LPKGBundleTrackerCustomizer
 
 	public LPKGBundleTrackerCustomizer(
 		BundleContext bundleContext, Map<String, URL> urls,
-		Set<String> overwrittenFileNames) {
+		Set<String> overrideFileNames) {
 
 		_bundleContext = bundleContext;
 		_urls = urls;
-		_overwrittenFileNames = overwrittenFileNames;
+		_overrideFileNames = overrideFileNames;
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public class LPKGBundleTrackerCustomizer
 				while (enumeration.hasMoreElements()) {
 					url = enumeration.nextElement();
 
-					if (_checkOverwritten(symbolicName, url)) {
+					if (_checkOverridden(symbolicName, url)) {
 						continue;
 					}
 
@@ -134,7 +134,7 @@ public class LPKGBundleTrackerCustomizer
 			while (enumeration.hasMoreElements()) {
 				url = enumeration.nextElement();
 
-				if (_checkOverwritten(symbolicName, url)) {
+				if (_checkOverridden(symbolicName, url)) {
 					continue;
 				}
 
@@ -223,7 +223,7 @@ public class LPKGBundleTrackerCustomizer
 		return sb.toString();
 	}
 
-	private boolean _checkOverwritten(String symbolicName, URL url)
+	private boolean _checkOverridden(String symbolicName, URL url)
 		throws BundleException {
 
 		String path = url.getPath();
@@ -231,12 +231,12 @@ public class LPKGBundleTrackerCustomizer
 		Matcher matcher = _pattern.matcher(path);
 
 		if (matcher.matches()) {
-			path = matcher.group(1) + matcher.group(3);
+			path = matcher.group(1) + matcher.group(4);
 		}
 
 		path = StringUtil.toLowerCase(path);
 
-		if (_overwrittenFileNames.contains(path)) {
+		if (_overrideFileNames.contains(path)) {
 			Bundle bundle = _bundleContext.getBundle(url.getPath());
 
 			if (bundle != null) {
@@ -449,10 +449,10 @@ public class LPKGBundleTrackerCustomizer
 		LPKGBundleTrackerCustomizer.class);
 
 	private static final Pattern _pattern = Pattern.compile(
-		"/(.*?)(-\\d+\\.\\d+\\.\\d)(\\.[jw]ar)");
+		"/(.*?)(-\\d+\\.\\d+\\.\\d+)(\\..+)?(\\.[jw]ar)");
 
 	private final BundleContext _bundleContext;
-	private final Set<String> _overwrittenFileNames;
+	private final Set<String> _overrideFileNames;
 	private final Map<String, URL> _urls;
 
 }

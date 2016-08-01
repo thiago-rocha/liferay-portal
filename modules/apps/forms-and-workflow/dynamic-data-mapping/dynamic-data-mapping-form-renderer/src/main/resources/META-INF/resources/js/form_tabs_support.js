@@ -26,18 +26,20 @@ AUI.add(
 
 				var tabView = instance._tabView;
 
-				if (!tabView) {
-					var tabs = instance.get('container').one('.lfr-ddm-form-tabs');
+				if (tabView) {
+					tabView.destroy();
+				}
 
-					if (tabs) {
-						tabView = new A.TabView(
-							{
-								srcNode: tabs
-							}
-						);
+				var tabs = instance.get('container').one('.lfr-ddm-form-tabs');
 
-						instance._tabView = tabView;
-					}
+				if (tabs) {
+					tabView = new A.TabView(
+						{
+							srcNode: tabs
+						}
+					);
+
+					instance._tabView = tabView;
 				}
 
 				return tabView;
