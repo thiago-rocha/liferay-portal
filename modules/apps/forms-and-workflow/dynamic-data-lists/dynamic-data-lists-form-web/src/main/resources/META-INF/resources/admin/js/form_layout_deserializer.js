@@ -116,14 +116,14 @@ AUI.add(
 						var fieldClass = FormBuilderUtil.getFieldClass(context.type, context);
 
 						return new fieldClass(
-							{
+							A.merge(context, {
 								context: context,
 								dataProviders: builder.get('dataProviders'),
 								evaluatorURL: builder.get('evaluatorURL'),
 								getFieldNameSettingFormContextURL: builder.get('getFieldNameSettingFormContextURL'),
 								getFieldTypeSettingFormContextURL: builder.get('getFieldTypeSettingFormContextURL'),
 								parent: builder
-							}
+							})
 						);
 					},
 

@@ -92,6 +92,9 @@ AUI.add(
 										settingsForm: settingsForm
 									}
 								);
+							},
+							function(error) {
+								console.log(error);
 							}
 						);
 					},

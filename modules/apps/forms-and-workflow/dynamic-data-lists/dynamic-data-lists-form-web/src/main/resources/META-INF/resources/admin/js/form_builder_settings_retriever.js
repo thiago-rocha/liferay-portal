@@ -38,7 +38,7 @@ AUI.add(
 									};
 
 									var portletNamespace = instance.get('portletNamespace');
-
+console.log(portletNamespace);
 									A.io.request(
 										instance.get('getFieldTypeSettingFormContextURL'),
 										{

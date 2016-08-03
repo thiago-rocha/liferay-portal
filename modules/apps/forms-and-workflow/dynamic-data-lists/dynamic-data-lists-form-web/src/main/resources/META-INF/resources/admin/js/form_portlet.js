@@ -34,6 +34,10 @@ AUI.add(
 						valueFn: '_valueFormBuilder'
 					},
 
+					ruleBuilder: {
+						valueFn: '_valueRuleBuilder'
+					},
+
 					getFieldTypeSettingFormContextURL: {
 						value: ''
 					},
@@ -107,6 +111,10 @@ AUI.add(
 
 						instance.get('formBuilder').render(instance.one('#formBuilder'));
 
+						instance.get('ruleBuilder').render(instance.one('#ruleBuilder'));
+
+						instance.one('#ruleBuilder').hide();
+
 						instance.createEditor(instance.ns('descriptionEditor'));
 						instance.createEditor(instance.ns('nameEditor'));
 					},
@@ -124,6 +132,7 @@ AUI.add(
 							formBuilder._layoutBuilder.after('layout-builder:moveEnd', A.bind(instance._afterFormBuilderLayoutBuilderMoveEnd, instance)),
 							formBuilder._layoutBuilder.after('layout-builder:moveStart', A.bind(instance._afterFormBuilderLayoutBuilderMoveStart, instance)),
 							instance.one('.btn-cancel').on('click', A.bind('_onCancel', instance)),
+							instance.one('#rulesToggler').on('click', A.bind('_onRulesTogglerClick', instance)),
 							Liferay.on('destroyPortlet', A.bind('_onDestroyPortlet', instance))
 						];
 					},
@@ -428,6 +437,14 @@ AUI.add(
 						instance.destroy();
 					},
 
+					_onRulesTogglerClick: function() {
+						var instance = this;
+
+						instance.one('#formBuilder').hide();
+
+						instance.one('#ruleBuilder').show();
+					},
+
 					_onSubmitEditForm: function(event) {
 						var instance = this;
 
@@ -482,6 +499,15 @@ AUI.add(
 								recordSetId: instance.get('recordSetId')
 							}
 						);
+					},
+
+					_valueRuleBuilder: function() {
+						var instance = this;
+
+						return new Liferay.DDL.FormBuilderRuleBuilder({
+							formBuilder: instance.get('formBuilder'),
+							namespace: '<portlet:namespace />'
+						});
 					}
 				}
 			}
@@ -491,6 +517,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['liferay-ddl-form-builder', 'liferay-ddl-form-builder-definition-serializer', 'liferay-ddl-form-builder-layout-serializer', 'liferay-portlet-base', 'liferay-util-window']
+		requires: ['liferay-ddl-form-builder-rule-builder', 'liferay-ddl-form-builder', 'liferay-ddl-form-builder-definition-serializer', 'liferay-ddl-form-builder-layout-serializer', 'liferay-portlet-base', 'liferay-util-window']
 	}
 );
