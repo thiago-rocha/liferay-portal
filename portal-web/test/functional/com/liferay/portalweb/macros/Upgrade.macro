@@ -24,7 +24,7 @@
 			<var name="fieldValue" value="Text Field" />
 		</execute>
 
-		<execute macro="FormFields#save" />
+		<execute macro="Form#closeSidebar" />
 
 		<execute macro="Form#save" />
 
@@ -353,7 +353,7 @@
 
 	<command name="publishStagedSite">
 		<execute macro="Navigator#openSiteURL">
-			<var name="siteName" value="Staging Site" />
+			<var name="siteName" value="Staging Site Staging" />
 		</execute>
 
 		<execute function="AssertElementNotPresent" locator1="Home#PORTLET" />
