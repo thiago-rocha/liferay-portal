@@ -2900,7 +2900,9 @@ AUI.add(
 
 						var ddmFormValuesInput = instance.get('ddmFormValuesInput');
 
-						ddmFormValuesInput.val(JSON.stringify(instance.toJSON()));
+						if (ddmFormValuesInput) {
+							ddmFormValuesInput.val(JSON.stringify(instance.toJSON()));
+						}
 					},
 
 					_afterFormRegistered: function(event) {
