@@ -19,6 +19,7 @@ AUI.add(
 
 					options: {
 						getter: '_getOptions',
+						state: true,
 						validator: Array.isArray,
 						value: []
 					},

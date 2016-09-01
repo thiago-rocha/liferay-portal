@@ -22,7 +22,6 @@ AUI.add(
 					},
 
 					context: {
-						validator: Lang.isObject,
 						value: {}
 					},
 
@@ -32,6 +31,7 @@ AUI.add(
 					},
 
 					fieldName: {
+						state: true,
 						value: ''
 					},
 
@@ -40,12 +40,17 @@ AUI.add(
 						valueFn: '_valueInstanceId'
 					},
 
+					label: {
+						state: true,
+						value: ''
+					},
+
 					locale: {
 						value: themeDisplay.getLanguageId()
 					},
 
 					name: {
-						repaint: false,
+						state: true,
 						value: ''
 					},
 
@@ -62,6 +67,7 @@ AUI.add(
 					},
 
 					readOnly: {
+						state: true,
 						value: false
 					},
 
@@ -70,6 +76,7 @@ AUI.add(
 					},
 
 					showLabel: {
+						state: true,
 						value: true
 					},
 
@@ -77,12 +84,22 @@ AUI.add(
 						value: ''
 					},
 
+					validation: {
+						value: {
+							errorMessage: '',
+							expression: '',
+							type: ''
+						}
+					},
+
 					value: {
 						repaint: false,
+						state: true,
 						value: ''
 					},
 
 					visible: {
+						state: true,
 						value: true
 					}
 				},
