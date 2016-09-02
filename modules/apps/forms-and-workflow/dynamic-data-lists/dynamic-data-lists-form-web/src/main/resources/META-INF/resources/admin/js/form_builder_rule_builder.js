@@ -32,7 +32,11 @@ AUI.add(
 					renderUI: function() {
 						var instance = this;
 
-						instance.get('contentBox').setHTML(ddl.rule_builder({addRuleLabel: Liferay.Language.get('add-rule')}));
+						var rulesBuilder = ddl.rule_builder({
+							plusIcon: Liferay.Util.getLexiconIconTpl('plus', 'icon-monospaced')
+						})
+
+						instance.get('contentBox').setHTML(rulesBuilder);
 
 						instance._renderPopover();
 
