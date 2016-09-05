@@ -216,7 +216,10 @@ AUI.add(
 								cancelLabel: Liferay.Language.get('cancel'),
 								conditions: rule ? rule.conditions : [],
 								deleteIcon: Liferay.Util.getLexiconIconTpl('trash', 'icon-monospaced'),
-								saveLabel: Liferay.Language.get('save')
+								label: Liferay.Language.get('if'),
+								plusIcon: Liferay.Util.getLexiconIconTpl('plus', 'icon-monospaced'),
+								saveLabel: Liferay.Language.get('save'),
+								showLabel: false
 							}
 						);
 
@@ -288,7 +291,7 @@ AUI.add(
 
 						var index = event.currentTarget.getData('card-id');
 
-						if (instance.instance._actionsIndexes.length > 1) {
+						if (instance._actionsIndexes.length > 1) {
 							instance._actions[index + '-action-do'].destroy();
 							instance._actions[index + '-action-the'].destroy();
 
@@ -502,6 +505,7 @@ AUI.add(
 							{
 								bubbleTargets: [instance],
 								fieldName: index + '-condition-second-operand-select',
+								label: 'Put this label after',
 								options: instance.get('fields'),
 								showLabel: false,
 								value: value,
@@ -527,6 +531,7 @@ AUI.add(
 							{
 								bubbleTargets: [instance],
 								fieldName: index + '-condition-second-operand-options-select',
+								label: 'Put this label after',
 								showLabel: false,
 								value: value,
 								visible: instance._getSecondOperandTypeValue(index) === 'constant' &&
