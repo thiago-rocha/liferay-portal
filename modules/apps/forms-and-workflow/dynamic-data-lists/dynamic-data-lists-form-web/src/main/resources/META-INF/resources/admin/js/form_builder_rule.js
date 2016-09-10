@@ -216,7 +216,6 @@ AUI.add(
 								cancelLabel: Liferay.Language.get('cancel'),
 								conditions: rule ? rule.conditions : [],
 								deleteIcon: Liferay.Util.getLexiconIconTpl('trash', 'icon-monospaced'),
-								label: Liferay.Language.get('if'),
 								plusIcon: Liferay.Util.getLexiconIconTpl('plus', 'icon-monospaced'),
 								saveLabel: Liferay.Language.get('save'),
 								showLabel: false
