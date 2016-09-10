@@ -451,7 +451,7 @@ AUI.add(
 						instance.get('ruleBuilder').hide();
 
 						A.one('.ddl-form-builder-buttons').removeClass('hide');
-						A.one('.portlet-forms').removeClass('ddl-form-rule-builder');
+						A.one('.portlet-forms').removeClass('liferay-ddl-form-rule-builder');
 
 						instance.one('#showRules').removeClass('active');
 						instance.one('#showForm').addClass('active');
@@ -465,7 +465,7 @@ AUI.add(
 						instance.get('ruleBuilder').show();
 
 						A.one('.ddl-form-builder-buttons').addClass('hide');
-						A.one('.portlet-forms').addClass('ddl-form-rule-builder');
+						A.one('.portlet-forms').addClass('liferay-ddl-form-rule-builder');
 
 						instance.one('#showRules').addClass('active');
 						instance.one('#showForm').removeClass('active');
