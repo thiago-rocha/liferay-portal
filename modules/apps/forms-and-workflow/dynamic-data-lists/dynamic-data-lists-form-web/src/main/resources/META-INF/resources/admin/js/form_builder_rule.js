@@ -447,16 +447,14 @@ AUI.add(
 							value = condition.operator;
 						}
 
-						var field = new Liferay.DDM.Field.Select(
-							{
-								bubbleTargets: [instance],
-								fieldName: index + '-condition-operator',
-								options: textOperators,
-								showLabel: false,
-								value: value,
-								visible: true
-							}
-						);
+						var field = new Liferay.DDM.Field.Select({
+							bubbleTargets: [instance],
+							fieldName: index + '-condition-operator',
+							options: textOperators,
+							showLabel: false,
+							value: value,
+							visible: true
+						});
 
 						field.render(container);
 
