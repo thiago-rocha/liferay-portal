@@ -450,9 +450,8 @@ AUI.add(
 							{
 								bubbleTargets: [instance],
 								fieldName: index + '-condition-operator',
-								label: Liferay.Language.get('state'),
 								options: textOperators,
-								showLabel: true,
+								showLabel: false,
 								value: value,
 								visible: true
 							}
