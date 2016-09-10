@@ -17,6 +17,7 @@ package com.liferay.dynamic.data.mapping.type.key.value;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormRule;
+import com.liferay.dynamic.data.mapping.model.DDMFormRuleType;
 import com.liferay.dynamic.data.mapping.type.BaseDDMFormFieldTypeSettingsTest;
 import com.liferay.dynamic.data.mapping.type.key.value.internal.KeyValueDDMFormFieldTypeSettings;
 import com.liferay.dynamic.data.mapping.util.DDMFormFactory;
@@ -60,6 +61,9 @@ public class KeyValueDDMFormFieldTypeSettingsTest
 			new String[] {"set(fieldAt(\"tooltip\", 0), \"visible\", false)"},
 			ddmFormRuleActions.toArray());
 
+		Assert.assertEquals(
+			DDMFormRuleType.VISIBILITY, ddmFormRule.getDDMFormRuleType());
+
 		Map<String, DDMFormField> ddmFormFieldsMap =
 			ddmForm.getDDMFormFieldsMap(false);
 
@@ -69,12 +73,6 @@ public class KeyValueDDMFormFieldTypeSettingsTest
 		Assert.assertNotNull(placeholderDDMFormField);
 		Assert.assertEquals("string", placeholderDDMFormField.getDataType());
 		Assert.assertEquals("text", placeholderDDMFormField.getType());
-
-		DDMFormField tooltipDDMFormField = ddmFormFieldsMap.get("tooltip");
-
-		Assert.assertNotNull(tooltipDDMFormField);
-		Assert.assertEquals(
-			"FALSE", tooltipDDMFormField.getVisibilityExpression());
 	}
 
 }

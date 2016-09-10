@@ -17,6 +17,7 @@ package com.liferay.dynamic.data.mapping.type.date;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormRule;
+import com.liferay.dynamic.data.mapping.model.DDMFormRuleType;
 import com.liferay.dynamic.data.mapping.type.BaseDDMFormFieldTypeSettingsTest;
 import com.liferay.dynamic.data.mapping.type.date.internal.DateDDMFormFieldTypeSettings;
 import com.liferay.dynamic.data.mapping.util.DDMFormFactory;
@@ -62,6 +63,9 @@ public class DateDDMFormFieldTypeSettingsTest
 			},
 			ddmFormRuleActions.toArray());
 
+		Assert.assertEquals(
+			DDMFormRuleType.VISIBILITY, ddmFormRule.getDDMFormRuleType());
+
 		Map<String, DDMFormField> ddmFormFieldsMap =
 			ddmForm.getDDMFormFieldsMap(false);
 
@@ -81,8 +85,6 @@ public class DateDDMFormFieldTypeSettingsTest
 		Assert.assertEquals(
 			"ddm-validation", validationDDMFormField.getDataType());
 		Assert.assertEquals("validation", validationDDMFormField.getType());
-		Assert.assertEquals(
-			"FALSE", validationDDMFormField.getVisibilityExpression());
 	}
 
 }

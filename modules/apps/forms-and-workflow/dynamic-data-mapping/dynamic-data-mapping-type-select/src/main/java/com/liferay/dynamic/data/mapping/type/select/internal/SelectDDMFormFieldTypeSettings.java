@@ -24,6 +24,7 @@ import com.liferay.dynamic.data.mapping.annotations.DDMFormRule;
 import com.liferay.dynamic.data.mapping.form.field.type.DefaultDDMFormFieldTypeSettings;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldOptions;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
+import com.liferay.dynamic.data.mapping.model.DDMFormRuleType;
 
 /**
  * @author Marcellus Tavares
@@ -35,7 +36,8 @@ import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
 				"set(fieldAt(\"ddmDataProviderInstanceId\", 0), \"visible\", equals(get(fieldAt(\"dataSourceType\", 0), \"value\"), \"data-provider\"))",
 				"set(fieldAt(\"options\", 0), \"visible\", equals(get(fieldAt(\"dataSourceType\", 0), \"value\"), \"manual\"))",
 				"set(fieldAt(\"validation\", 0), \"visible\", false)"
-			}
+			},
+			type = DDMFormRuleType.VISIBILITY
 		)
 	}
 )
@@ -90,8 +92,7 @@ public interface SelectDDMFormFieldTypeSettings
 	public String dataSourceType();
 
 	@DDMFormField(
-		label = "%choose-a-data-provider", required = true, type = "select",
-		visibilityExpression = "equals(dataSourceType, \"data-provider\")"
+		label = "%choose-a-data-provider", required = true, type = "select"
 	)
 	public long ddmDataProviderInstanceId();
 
@@ -100,12 +101,11 @@ public interface SelectDDMFormFieldTypeSettings
 
 	@DDMFormField(
 		dataType = "ddm-options", label = "%options",
-		properties = {"showLabel=false"}, required = true, type = "options",
-		visibilityExpression = "equals(dataSourceType, \"manual\")"
+		properties = {"showLabel=false"}, required = true, type = "options"
 	)
 	public DDMFormFieldOptions options();
 
-	@DDMFormField(visibilityExpression = "FALSE")
+	@DDMFormField
 	@Override
 	public DDMFormFieldValidation validation();
 
