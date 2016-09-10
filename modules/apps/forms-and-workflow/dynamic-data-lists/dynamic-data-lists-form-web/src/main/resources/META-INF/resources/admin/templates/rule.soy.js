@@ -11,7 +11,7 @@ if (typeof ddl.rule == 'undefined') { ddl.rule = {}; }
 
 
 ddl.rule.settings = function(opt_data, opt_ignored) {
-  var output = '<div class="top-informations"><h2 class="text-default">Apply Show and Hide Rule</h2><h4 class="text-default">Define here a condition to show or hide fields and elements from your current form.</h4></div><ul class="timeline form-builder-rule-condition-list rules-list">' + ddl.rule.rulesHeader({title: 'Condition'});
+  var output = '<div class="top-informations"><h2 class="text-default">Apply Show and Hide Rule</h2><h4 class="text-default">Define here a condition to show or hide fields and elements from your current form.</h4></div><ul class="liferay-ddl-form-rule-builder-timeline liferay-ddl-form-rule-builder-condition-list timeline">' + ddl.rule.rulesHeader({title: 'Condition'});
   var conditionList47 = opt_data.conditions;
   var conditionListLen47 = conditionList47.length;
   if (conditionListLen47 > 0) {
@@ -22,7 +22,7 @@ ddl.rule.settings = function(opt_data, opt_ignored) {
   } else {
     output += ddl.rule.condition({index: 0, deleteIcon: opt_data.deleteIcon});
   }
-  output += '</ul>' + ddl.rule.btnAddNewTimelineItem({plusIcon: opt_data.plusIcon, cssClass: 'form-builder-rule-add-condition'}) + '<ul class="form-builder-rule-action-list timeline action-list">' + ddl.rule.rulesHeader({title: 'Actions'});
+  output += '</ul>' + ddl.rule.btnAddNewTimelineItem({plusIcon: opt_data.plusIcon, cssClass: 'form-builder-rule-add-condition'}) + '<ul class="action-list liferay-ddl-form-rule-builder-timeline liferay-ddl-form-rule-builder-action-list timeline">' + ddl.rule.rulesHeader({title: 'Actions'});
   var actionList63 = opt_data.actions;
   var actionListLen63 = actionList63.length;
   if (actionListLen63 > 0) {
@@ -33,7 +33,7 @@ ddl.rule.settings = function(opt_data, opt_ignored) {
   } else {
     output += ddl.rule.action({index: 0, deleteIcon: opt_data.deleteIcon});
   }
-  output += '</ul>' + ddl.rule.btnAddNewTimelineItem({plusIcon: opt_data.plusIcon, cssClass: 'form-builder-rule-add-action'}) + '<div class="form-builder-rule-builder-footer"><button class="btn btn-lg ddl-button btn-primary btn-default form-builder-rule-settings-save" type="button"><span class="form-builder-rule-settings-save-label">' + soy.$$escapeHtml(opt_data.saveLabel) + '</span></button><button type="button" class="btn btn-lg btn-cancel btn-default btn-link form-builder-rule-settings-cancel"><span class="lfr-btn-label">' + soy.$$escapeHtml(opt_data.cancelLabel) + '</span></button></div>';
+  output += '</ul>' + ddl.rule.btnAddNewTimelineItem({plusIcon: opt_data.plusIcon, cssClass: 'form-builder-rule-add-action'}) + '<div class="liferay-ddl-form-rule-builder-footer"><button class="btn btn-lg ddl-button btn-primary btn-default form-builder-rule-settings-save" type="button"><span class="form-builder-rule-settings-save-label">' + soy.$$escapeHtml(opt_data.saveLabel) + '</span></button><button type="button" class="btn btn-lg btn-cancel btn-default btn-link form-builder-rule-settings-cancel"><span class="lfr-btn-label">' + soy.$$escapeHtml(opt_data.cancelLabel) + '</span></button></div>';
   return output;
 };
 if (goog.DEBUG) {
