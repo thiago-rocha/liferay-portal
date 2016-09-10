@@ -1,25 +1,20 @@
 .timeline-item {
-    position: relative;
     color: #869CAD;
+    position: relative;
 
-    &:first-child {
-        .timeline-icon {
-            background-color: #869CAD;  
-        }
-    }
-
-    & .timeline-icon {
-        border: 2px solid #869CAD;
+    .action-panel {
+        display: table;
+        width: 100%;
     }
 
     .container__trash {
-        position: absolute;
-        top: 0;
         cursor: pointer;
-        right: 0;
-        padding: 10px;
         display: none;
-        
+        padding: 10px;
+        position: absolute;
+        right: 0;
+        top: 0;
+
         &:hover {
             color: #65B6F0;
         }
@@ -29,24 +24,29 @@
         }
     }
 
-    &:hover > .container__trash {
-        display: block;
-    }
-
-    .form-group {
-        margin: 0 10px;
+    &:first-child {
+        .timeline-icon {
+            background-color: #869CAD;
+        }
     }
 
     .form-control {
         color: #869CAD;
     }
 
+    .form-group {
+        margin: 0 10px;
+    }
+
+    &:hover > .container__trash {
+        display: block;
+    }
+
     .rule-choose-box {
         display: table-cell;
     }
 
-    .action-panel {
-        width: 100%; 
-        display: table;
+    & .timeline-icon {
+        border: 2px solid #869CAD;
     }
 }

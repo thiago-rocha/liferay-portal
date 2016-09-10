@@ -261,7 +261,7 @@ AUI.add(
 					_handleAddConditionClick: function() {
 						var instance = this;
 
-						var conditionListNode = instance.get('contentBox').one('.form-builder-rule-condition-list');
+						var conditionListNode = instance.get('contentBox').one('.liferay-ddl-form-rule-builder-condition-list');
 
 						var index = instance._conditionsIndexes[instance._conditionsIndexes.length - 1] + 1;
 
