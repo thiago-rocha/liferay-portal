@@ -22,6 +22,7 @@ import com.liferay.dynamic.data.mapping.annotations.DDMFormLayoutPage;
 import com.liferay.dynamic.data.mapping.annotations.DDMFormLayoutRow;
 import com.liferay.dynamic.data.mapping.annotations.DDMFormRule;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
+import com.liferay.dynamic.data.mapping.model.DDMFormRuleType;
 import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 import com.liferay.portal.kernel.util.StringPool;
 
@@ -36,7 +37,8 @@ import com.liferay.portal.kernel.util.StringPool;
 				"set(fieldAt(\"indexType\", 0), \"visible\", false)",
 				"set(fieldAt(\"localizable\", 0), \"visible\", false)",
 				"set(fieldAt(\"readOnly\", 0), \"visible\", false)"
-			}
+			},
+			type = DDMFormRuleType.VISIBILITY
 		)
 	}
 )
@@ -78,7 +80,7 @@ import com.liferay.portal.kernel.util.StringPool;
 public interface DefaultDDMFormFieldTypeSettings
 	extends DDMFormFieldTypeSettings {
 
-	@DDMFormField(visibilityExpression = "FALSE")
+	@DDMFormField
 	public String fieldNamespace();
 
 	@DDMFormField(
@@ -87,8 +89,7 @@ public interface DefaultDDMFormFieldTypeSettings
 			"%not-indexable", "%indexable-keyword", "%indexable-text"
 		},
 		optionValues = {StringPool.BLANK, "keyword", "text"},
-		predefinedValue = "keyword", type = "select",
-		visibilityExpression = "FALSE"
+		predefinedValue = "keyword", type = "select"
 	)
 	public String indexType();
 
@@ -102,7 +103,7 @@ public interface DefaultDDMFormFieldTypeSettings
 	)
 	public LocalizedValue label();
 
-	@DDMFormField(label = "%localizable", visibilityExpression = "FALSE")
+	@DDMFormField(label = "%localizable")
 	public boolean localizable();
 
 	@DDMFormField(
@@ -115,7 +116,7 @@ public interface DefaultDDMFormFieldTypeSettings
 	)
 	public LocalizedValue predefinedValue();
 
-	@DDMFormField(label = "%read-only", visibilityExpression = "FALSE")
+	@DDMFormField(label = "%read-only")
 	public boolean readOnly();
 
 	@DDMFormField(label = "%repeatable", properties = {"showAsSwitcher=true"})

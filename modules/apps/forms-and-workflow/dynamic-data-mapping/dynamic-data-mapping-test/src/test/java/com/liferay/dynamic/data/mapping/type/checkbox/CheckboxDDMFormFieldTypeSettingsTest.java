@@ -17,6 +17,7 @@ package com.liferay.dynamic.data.mapping.type.checkbox;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormRule;
+import com.liferay.dynamic.data.mapping.model.DDMFormRuleType;
 import com.liferay.dynamic.data.mapping.type.BaseDDMFormFieldTypeSettingsTest;
 import com.liferay.dynamic.data.mapping.type.checkbox.internal.CheckboxDDMFormFieldTypeSettings;
 import com.liferay.dynamic.data.mapping.util.DDMFormFactory;
@@ -63,6 +64,9 @@ public class CheckboxDDMFormFieldTypeSettingsTest
 			},
 			ddmFormRuleActions.toArray());
 
+		Assert.assertEquals(
+			DDMFormRuleType.VISIBILITY, ddmFormRule.getDDMFormRuleType());
+
 		Map<String, DDMFormField> ddmFormFieldsMap =
 			ddmForm.getDDMFormFieldsMap(false);
 
@@ -74,16 +78,8 @@ public class CheckboxDDMFormFieldTypeSettingsTest
 			"boolean", predefinedValueDDMFormField.getDataType());
 		Assert.assertEquals("checkbox", predefinedValueDDMFormField.getType());
 		Assert.assertEquals(true, predefinedValueDDMFormField.isLocalizable());
-
 		Assert.assertEquals(
 			"true", predefinedValueDDMFormField.getProperty("showAsSwitcher"));
-
-		DDMFormField repeatableDDMFormField = ddmFormFieldsMap.get(
-			"repeatable");
-
-		Assert.assertNotNull(repeatableDDMFormField);
-		Assert.assertEquals(
-			"FALSE", repeatableDDMFormField.getVisibilityExpression());
 
 		DDMFormField showAsSwitcherDDMFormField = ddmFormFieldsMap.get(
 			"showAsSwitcher");
@@ -92,16 +88,8 @@ public class CheckboxDDMFormFieldTypeSettingsTest
 		Assert.assertEquals("checkbox", showAsSwitcherDDMFormField.getType());
 		Assert.assertEquals(
 			"boolean", showAsSwitcherDDMFormField.getDataType());
-
 		Assert.assertEquals(
 			"true", showAsSwitcherDDMFormField.getProperty("showAsSwitcher"));
-
-		DDMFormField validationDDMFormField = ddmFormFieldsMap.get(
-			"validation");
-
-		Assert.assertNotNull(validationDDMFormField);
-		Assert.assertEquals(
-			"FALSE", validationDDMFormField.getVisibilityExpression());
 	}
 
 }

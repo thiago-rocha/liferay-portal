@@ -17,6 +17,7 @@ package com.liferay.dynamic.data.mapping.type.select;
 import com.liferay.dynamic.data.mapping.model.DDMForm;
 import com.liferay.dynamic.data.mapping.model.DDMFormField;
 import com.liferay.dynamic.data.mapping.model.DDMFormRule;
+import com.liferay.dynamic.data.mapping.model.DDMFormRuleType;
 import com.liferay.dynamic.data.mapping.type.BaseDDMFormFieldTypeSettingsTest;
 import com.liferay.dynamic.data.mapping.type.select.internal.SelectDDMFormFieldTypeSettings;
 import com.liferay.dynamic.data.mapping.util.DDMFormFactory;
@@ -68,6 +69,9 @@ public class SelectDDMFormFieldTypeSettingsTest
 			},
 			ddmFormRuleActions.toArray());
 
+		Assert.assertEquals(
+			DDMFormRuleType.VISIBILITY, ddmFormRule.getDDMFormRuleType());
+
 		Map<String, DDMFormField> ddmFormFieldsMap =
 			ddmForm.getDDMFormFieldsMap(false);
 
@@ -86,9 +90,6 @@ public class SelectDDMFormFieldTypeSettingsTest
 		Assert.assertNotNull(ddmDataProviderInstanceIdDDMFormField.getLabel());
 		Assert.assertEquals(
 			"select", ddmDataProviderInstanceIdDDMFormField.getType());
-		Assert.assertEquals(
-			"equals(dataSourceType, \"data-provider\")",
-			ddmDataProviderInstanceIdDDMFormField.getVisibilityExpression());
 
 		DDMFormField multipleDDMFormField = ddmFormFieldsMap.get("multiple");
 
@@ -106,16 +107,6 @@ public class SelectDDMFormFieldTypeSettingsTest
 			"false", optionsDDMFormField.getProperty("showLabel"));
 		Assert.assertTrue(optionsDDMFormField.isRequired());
 		Assert.assertEquals("options", optionsDDMFormField.getType());
-		Assert.assertEquals(
-			"equals(dataSourceType, \"manual\")",
-			optionsDDMFormField.getVisibilityExpression());
-
-		DDMFormField validationDDMFormField = ddmFormFieldsMap.get(
-			"validation");
-
-		Assert.assertNotNull(validationDDMFormField);
-		Assert.assertEquals(
-			"FALSE", validationDDMFormField.getVisibilityExpression());
 	}
 
 }
