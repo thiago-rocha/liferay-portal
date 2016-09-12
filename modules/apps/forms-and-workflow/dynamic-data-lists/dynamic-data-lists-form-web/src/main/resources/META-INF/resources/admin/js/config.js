@@ -25,6 +25,7 @@
 								'liferay-ddl-form-builder-pages-manager',
 								'liferay-ddl-form-builder-rule',
 								'liferay-ddl-form-builder-rule-builder',
+								'liferay-ddl-form-builder-rule-visibility',
 								'liferay-ddl-form-builder-util',
 								'liferay-ddm-form-field-types',
 								'liferay-ddm-form-renderer'
@@ -146,6 +147,10 @@
 								'soyutils'
 							]
 						},
+						'liferay-ddl-form-builder-rule-visibility': {
+							path: 'form_builder_rule_visibility.js',
+							requires: ['liferay-ddl-form-builder-visibility-template']
+						},
 						'liferay-ddl-form-builder-settings-retriever': {
 							path: 'form_builder_settings_retriever.js',
 							requires: [
@@ -167,6 +172,12 @@
 							requires: [
 								'liferay-ddl-form-builder-field-support',
 								'liferay-ddm-form-renderer-util'
+							]
+						},
+						'liferay-ddl-form-builder-visibility-template': {
+							path: '../templates/visibility.soy.js',
+							requires: [
+								'soyutils'
 							]
 						},
 						'liferay-ddl-form-sidebar-soy': {
