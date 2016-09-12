@@ -11,24 +11,24 @@ if (typeof ddl.rule == 'undefined') { ddl.rule = {}; }
 
 
 ddl.rule.settings = function(opt_data, opt_ignored) {
-  var output = '<div class="top-informations"><h2 class="text-default">Apply Show and Hide Rule</h2><h4 class="text-default">Define here a condition to show or hide fields and elements from your current form.</h4></div><ul class="liferay-ddl-form-rule-builder-timeline liferay-ddl-form-rule-builder-condition-list timeline">' + ddl.rule.rulesHeader({title: 'Condition'});
-  var conditionList47 = opt_data.conditions;
-  var conditionListLen47 = conditionList47.length;
-  if (conditionListLen47 > 0) {
-    for (var conditionIndex47 = 0; conditionIndex47 < conditionListLen47; conditionIndex47++) {
-      var conditionData47 = conditionList47[conditionIndex47];
-      output += ddl.rule.condition({index: conditionIndex47, deleteIcon: opt_data.deleteIcon, type: conditionData47.type});
+  var output = '<div class="top-informations"><h2 class="text-default">Apply Show and Hide Rule</h2><h4 class="text-default">Define here a condition to show or hide fields and elements from your current form.</h4></div><ul class="liferay-ddl-form-rule-builder-timeline liferay-ddl-form-rule-builder-condition-list timeline">' + ddl.rule.rulesHeader({title: 'Condition', extraContent: soydata.VERY_UNSAFE.$$ordainSanitizedHtmlForInternalBlocks('' + ddl.rule.operatorsOptions(null))});
+  var conditionList49 = opt_data.conditions;
+  var conditionListLen49 = conditionList49.length;
+  if (conditionListLen49 > 0) {
+    for (var conditionIndex49 = 0; conditionIndex49 < conditionListLen49; conditionIndex49++) {
+      var conditionData49 = conditionList49[conditionIndex49];
+      output += ddl.rule.condition({index: conditionIndex49, deleteIcon: opt_data.deleteIcon, type: conditionData49.type});
     }
   } else {
     output += ddl.rule.condition({index: 0, deleteIcon: opt_data.deleteIcon});
   }
   output += '</ul>' + ddl.rule.btnAddNewTimelineItem({plusIcon: opt_data.plusIcon, cssClass: 'form-builder-rule-add-condition'}) + '<ul class="action-list liferay-ddl-form-rule-builder-timeline liferay-ddl-form-rule-builder-action-list timeline">' + ddl.rule.rulesHeader({title: 'Actions'});
-  var actionList63 = opt_data.actions;
-  var actionListLen63 = actionList63.length;
-  if (actionListLen63 > 0) {
-    for (var actionIndex63 = 0; actionIndex63 < actionListLen63; actionIndex63++) {
-      var actionData63 = actionList63[actionIndex63];
-      output += ddl.rule.action({index: actionIndex63, deleteIcon: opt_data.deleteIcon});
+  var actionList65 = opt_data.actions;
+  var actionListLen65 = actionList65.length;
+  if (actionListLen65 > 0) {
+    for (var actionIndex65 = 0; actionIndex65 < actionListLen65; actionIndex65++) {
+      var actionData65 = actionList65[actionIndex65];
+      output += ddl.rule.action({index: actionIndex65, deleteIcon: opt_data.deleteIcon});
     }
   } else {
     output += ddl.rule.action({index: 0, deleteIcon: opt_data.deleteIcon});
@@ -58,8 +58,16 @@ if (goog.DEBUG) {
 
 
 ddl.rule.rulesHeader = function(opt_data, opt_ignored) {
-  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<li class="timeline-item"><div class="panel panel-default"><div class="panel-body flex-container"><div class="h4 panel-title">' + soy.$$escapeHtml(opt_data.title) + '</div><div class="btn-group dropdown" style="block"><button class="btn btn-default dropdown-toggle text-uppercase" data-toggle="dropdown" type="button">or <span class="caret"></span></button><ul class="dropdown-menu"><li class="operation-item text-uppercase"><a>or</a></li><li class="divider"></li><li class="operation-item text-uppercase"><a>and</a></li></ul></div><div class="timeline-increment-icon"><span class="timeline-icon"></span></div></div></div></li>');
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<li class="timeline-item"><div class="panel panel-default"><div class="panel-body flex-container"><div class="h4 panel-title">' + soy.$$escapeHtml(opt_data.title) + '</div>' + ((opt_data.extraContent) ? soy.$$escapeHtml(opt_data.extraContent) : '') + '<div class="timeline-increment-icon"><span class="timeline-icon"></span></div></div></div></li>');
 };
 if (goog.DEBUG) {
   ddl.rule.rulesHeader.soyTemplateName = 'ddl.rule.rulesHeader';
+}
+
+
+ddl.rule.operatorsOptions = function(opt_data, opt_ignored) {
+  return soydata.VERY_UNSAFE.ordainSanitizedHtml('<div class="btn-group dropdown" style="block"><button class="btn btn-default dropdown-toggle text-uppercase" data-toggle="dropdown" type="button">or <span class="caret"></span></button><ul class="dropdown-menu"><li class="operation-item text-uppercase"><a>or</a></li><li class="divider"></li><li class="operation-item text-uppercase"><a>and</a></li></ul></div>');
+};
+if (goog.DEBUG) {
+  ddl.rule.operatorsOptions.soyTemplateName = 'ddl.rule.operatorsOptions';
 }

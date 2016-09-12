@@ -19,6 +19,9 @@
 	<ul class="liferay-ddl-form-rule-builder-timeline liferay-ddl-form-rule-builder-condition-list timeline">
 		{call .rulesHeader}
 			{param title: 'Condition' /}
+			{param extraContent kind="html"}
+				{call .operatorsOptions /}
+			{/param}
 		{/call}
 
 		{foreach $condition in $conditions}
@@ -133,9 +136,9 @@
 
 /**
  * @param title
+ * @param? extraContent
  */
 {template .rulesHeader}
-	
 	<li class="timeline-item">
 		<div class="panel panel-default">
 			<div class="panel-body flex-container">
@@ -143,23 +146,31 @@
 					{$title}
 				</div>
 
-				<div class="btn-group dropdown" style="block">
-				    <button class="btn btn-default dropdown-toggle text-uppercase" data-toggle="dropdown" type="button">
-				       or <span class="caret"></span>
-				    </button>
-
-				    <ul class="dropdown-menu">
-				        <li class="operation-item text-uppercase"><a>or</a></li>
-				        <li class="divider"></li>
-				        <li class="operation-item text-uppercase"><a>and</a></li>
-				    </ul>
-				</div>
+				{if $extraContent}
+				{$extraContent}
+				{/if}
 
 				<div class="timeline-increment-icon">
 					<span class="timeline-icon"></span>
 				</div>
 			</div>
 		</div>
-	</li>					
+	</li>
+{/template}
 
+/**
+ * Select to list operations options.
+ */
+{template .operatorsOptions}
+	<div class="btn-group dropdown" style="block">
+		<button class="btn btn-default dropdown-toggle text-uppercase" data-toggle="dropdown" type="button">
+		   or <span class="caret"></span>
+		</button>
+
+		<ul class="dropdown-menu">
+			<li class="operation-item text-uppercase"><a>or</a></li>
+			<li class="divider"></li>
+			<li class="operation-item text-uppercase"><a>and</a></li>
+		</ul>
+	</div>
 {/template}
