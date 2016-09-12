@@ -38,7 +38,12 @@ AUI.add(
 						value: []
 					},
 					logicOperator: {
-						value: 'OR'
+						validation: function(val) {
+							return val.toUpperCase() === 'OR' || val.toUpperCase() === 'AND';
+						},
+						valueFn: function(val) {
+							return val.toUpperCase();
+						}
 					},
 					title: {
 						value: ''
@@ -56,6 +61,7 @@ AUI.add(
 					initializer: function() {
 						var instance = this;
 
+						instance.set('logicOperator', 'or');
 						instance._conditions = {};
 						instance._actions = {};
 					},
@@ -82,7 +88,10 @@ AUI.add(
 						contentBox.delegate('click', A.bind(instance._handleAddConditionClick, instance), '.form-builder-rule-add-condition');
 						contentBox.delegate('click', A.bind(instance._handleAddActionClick, instance), '.form-builder-rule-add-action');
 
+						contentBox.delegate('click', A.bind(instance._handleLogicOperatorChange, instance), '.logic-operator');
+
 						instance.on('*:valueChanged', A.bind(instance._handleFieldValueChanged, instance));
+						instance.on('logicOperatorChange', A.bind(instance._onLogicOperatorChanged, instance));
 					},
 
 					renderRule: function(rule) {
@@ -135,9 +144,10 @@ AUI.add(
 								operator: instance._getOperatorValue(index)
 							};
 
-							if (index > 0) {
+							if (index !== instance._conditionsIndexes.length - 1) {
 								condition['logic-operator'] = instance.get('logicOperator');
 							}
+
 							if (instance._getSecondOperandType(index).get('visible')) {
 								if (instance._getSecondOperandTypeValue(index) === 'constant') {
 									condition.operands.push(
@@ -250,13 +260,30 @@ AUI.add(
 						return instance._getSecondOperandType(index).getValue();
 					},
 
-					_getSecondOperandValue: function(index) {
+					_getSecondOperandValue: function(index, type) {
 						var instance = this;
 
-						return instance._getSecondOperand(index).getValue();
+						return instance._getSecondOperand(index, type).getValue();
 					},
 
 					_handleAddActionClick: function() {},
+
+					_handleLogicOperatorChange: function(event) {
+						var instance = this;
+
+						instance.set('logicOperator', event.currentTarget.get('text'));
+					},
+
+					_onLogicOperatorChanged: function(event) {
+						var instance = this;
+
+						if (event.newVal === 'or') {
+							A.one('.operator .panel-body').set('text', Liferay.Language.get('or'));
+						}
+						else {
+							A.one('.operator .panel-body').set('text', Liferay.Language.get('and'));
+						}
+					},
 
 					_handleAddConditionClick: function() {
 						var instance = this;
@@ -402,8 +429,10 @@ AUI.add(
 
 						var conditionsQuant = conditions.length;
 
-						for (var i = 0; i < conditionsQuant; i++) {
-							instance._addCondition(i, conditions[i]);
+						var index = 0;
+
+						for (var i = conditionsQuant - 1; i >= 0; i--) {
+							instance._addCondition(index++, conditions[i]);
 						}
 
 						if (instance._conditionsIndexes.length === 0) {
@@ -467,7 +496,11 @@ AUI.add(
 
 						var value;
 
-						if (condition && instance._isBinaryCondition(index)) {
+						var visible = instance._getSecondOperandTypeValue(index) === 'constant' &&
+							(instance._getFirstOperand(index).get('type') === 'text' ||
+							!!instance._getFieldOptions(instance._getFirstOperandValue(index)));
+
+						if (condition && instance._isBinaryCondition(index) && visible) {
 							value = condition.operands[1].value;
 						}
 
@@ -479,9 +512,7 @@ AUI.add(
 								showLabel: false,
 								strings: {},
 								value: value,
-								visible: instance._getSecondOperandTypeValue(index) === 'constant' &&
-									(instance._getFirstOperand(index).get('type') === 'text' ||
-									!!instance._getFieldOptions(instance._getFirstOperandValue(index)))
+								visible: visible
 							}
 						);
 
@@ -495,7 +526,9 @@ AUI.add(
 
 						var value;
 
-						if (condition && instance._isBinaryCondition(index)) {
+						var visible = instance._getSecondOperandTypeValue(index) === 'field';
+
+						if (condition && instance._isBinaryCondition(index) && visible) {
 							value = condition.operands[1].value;
 						}
 
@@ -507,7 +540,7 @@ AUI.add(
 								options: instance.get('fields'),
 								showLabel: false,
 								value: value,
-								visible: instance._getSecondOperandTypeValue(index) === 'other-field'
+								visible: visible
 							}
 						);
 
@@ -521,7 +554,11 @@ AUI.add(
 
 						var value;
 
-						if (condition && instance._isBinaryCondition(index)) {
+						var visible = instance._getSecondOperandTypeValue(index) === 'constant' &&
+							instance._getFieldOptions(instance._getFirstOperandValue(index)).length > 0 &&
+							instance._getFirstOperand(index).get('type') !== 'text';
+
+						if (condition && instance._isBinaryCondition(index) && visible) {
 							value = condition.operands[1].value;
 						}
 
@@ -532,15 +569,17 @@ AUI.add(
 								label: 'Put this label after',
 								showLabel: false,
 								value: value,
-								visible: instance._getSecondOperandTypeValue(index) === 'constant' &&
-									instance._getFieldOptions(instance._getFirstOperandValue(index)).length > 0 &&
-									instance._getFirstOperand(index).get('type') !== 'text'
+								visible: visible
 							}
 						);
 
 						field.render(container);
 
 						instance._conditions[index + '-condition-second-operand-options-select'] = field;
+					},
+
+					_secondOperandSelectOptionsVisibility: function(index) {
+
 					},
 
 					_renderSecondOperandType: function(index, condition, container) {
