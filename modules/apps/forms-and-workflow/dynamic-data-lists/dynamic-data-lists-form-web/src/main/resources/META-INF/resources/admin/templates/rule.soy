@@ -4,19 +4,18 @@
  * Prints the DDL rule settings.
  *
  * @param actions
- * @param cancelLabel
  * @param conditions
  * @param deleteIcon
  * @param plusIcon
- * @param saveLabel
+ * @param strings
  */
 {template .settings autoescape="deprecated-contextual"}
 	<div class="top-informations">
-		<h2 class="text-default">Apply Show and Hide Rule</h2>
-		<h4 class="text-default">Define here a condition to show or hide fields and elements from your current form.</h4>
+		<h2 class="text-default">{$strings.title}</h2>
+		<h4 class="text-default">{$strings.description}</h4>
 	</div>
 
-	<ul class="liferay-ddl-form-rule-builder-timeline liferay-ddl-form-rule-builder-condition-list timeline">
+	<ul class="liferay-ddl-form-rule-builder-timeline liferay-ddl-form-builder-rule-condition-list timeline">
 		{call .rulesHeader}
 			{param title: 'Condition' /}
 		{/call}
@@ -25,12 +24,13 @@
 			{call .condition}
 				{param index: index($condition) /}
 				{param deleteIcon: $deleteIcon /}
-				{param type: $condition.type /}
+				{param logicOperator: $conditions['logic-operator'] /}
 			{/call}
 			{ifempty}
 				{call .condition}
 					{param index: 0 /}
 					{param deleteIcon: $deleteIcon /}
+					{param logicOperator: $conditions['logic-operator'] /}
 				{/call}
 		{/foreach}
 	</ul>
@@ -40,7 +40,7 @@
 		{param cssClass: 'form-builder-rule-add-condition' /}
 	{/call}
 
-	<ul class="action-list liferay-ddl-form-rule-builder-timeline liferay-ddl-form-rule-builder-action-list timeline">
+	<ul class="action-list liferay-ddl-form-rule-builder-timeline liferay-ddl-form-builder-rule-action-list timeline">
 		{call .rulesHeader}
 			{param title: 'Actions' /}
 		{/call}
@@ -65,10 +65,10 @@
 
 	<div class="liferay-ddl-form-rule-builder-footer">
 		<button class="btn btn-lg ddl-button btn-primary btn-default form-builder-rule-settings-save" type="button">
-			<span class="form-builder-rule-settings-save-label">{$saveLabel}</span>
+			<span class="form-builder-rule-settings-save-label">{$strings.save}</span>
 		</button>
 		<button type="button" class="btn btn-lg btn-cancel btn-default btn-link form-builder-rule-settings-cancel">
-			<span class="lfr-btn-label">{$cancelLabel}</span>
+			<span class="lfr-btn-label">{$strings.cancel}</span>
 		</button>
 	</div>
 {/template}
@@ -78,7 +78,7 @@
  *
  * @param index
  * @param deleteIcon
- * @param? type
+ * @param? logicOperator
  */
 {template .condition autoescape="deprecated-contextual"}
 	<li class="form-builder-rule-condition-container-{$index} timeline-item">
@@ -99,7 +99,7 @@
 		</div>
 
 		<div class="operator panel panel-default panel-inline">
-			<div class="panel-body text-uppercase">Or {$type} (Fixed value)</div>
+			<div class="panel-body text-uppercase">{$logicOperator}</div>
 		</div>
 
 		<div class="container__trash">
@@ -149,9 +149,9 @@
 				    </button>
 
 				    <ul class="dropdown-menu">
-				        <li class="operation-item text-uppercase"><a>or</a></li>
+				        <li class="logic-operator text-uppercase"><a>or</a></li>
 				        <li class="divider"></li>
-				        <li class="operation-item text-uppercase"><a>and</a></li>
+				        <li class="logic-operator text-uppercase"><a>and</a></li>
 				    </ul>
 				</div>
 
@@ -162,4 +162,36 @@
 		</div>
 	</li>					
 
+{/template}
+
+/**
+ * Prints the DDL property change action.
+ *
+ * @param index
+ * @param deleteIcon
+ */
+{template .action autoescape="deprecated-contextual"}
+	<li class="form-builder-rule-action-container-{$index} timeline-item">
+		<div class="panel panel-default">
+			<div class="panel-body flex-container">
+				<h4>Do</h4>
+
+				<div class="action-{$index} form-group"></div>
+				<div class="target-{$index} form-group"></div>
+
+				<div class="timeline-increment-icon">
+ 					<span class="timeline-icon"></span>
+  				</div>
+			</div>
+		</div>
+		<div class="container__trash">
+			<button
+				class="btn btn-link action-card-delete icon-monospaced"
+				data-card-id="{$index}"
+				href="javascript:;"
+				type="button">
+				{$deleteIcon|noAutoescape}
+			</button>
+		</div>
+	</li>
 {/template}

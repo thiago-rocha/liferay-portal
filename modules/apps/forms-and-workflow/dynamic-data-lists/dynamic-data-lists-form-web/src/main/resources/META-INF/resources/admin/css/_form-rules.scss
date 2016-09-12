@@ -22,7 +22,7 @@
 .liferay-ddl-form-rule-builder-timeline {
 	margin-bottom: 0;
 
-	&.liferay-ddl-form-rule-builder-action-list {
+	&.liferay-ddl-form-builder-rule-action-list {
 		.timeline-item:last-child::before {
 			bottom: 42px;
 		}
@@ -50,7 +50,7 @@
 		}
 	}
 
-	&.liferay-ddl-form-rule-builder-condition-list {
+	&.liferay-ddl-form-builder-rule-condition-list {
 		.timeline-item {
 			&:first-child::before {
 				top: 35px;

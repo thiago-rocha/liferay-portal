@@ -17,34 +17,48 @@ AUI.add(
 			{
 				label: Liferay.Language.get('not-contains'),
 				value: 'not-contains'
-			},
-			{
-				label: Liferay.Language.get('is-email-address'),
-				value: 'is-email-address'
-			},
-			{
-				label: Liferay.Language.get('is-url'),
-				value: 'is-url'
 			}
 		];
 
 		var FormBuilderRule = A.Component.create(
 			{
 				ATTRS: {
-					description: {
-						value: ''
-					},
 					fields: {
 						value: []
 					},
 					logicOperator: {
-						value: 'OR'
+						setter: function(val) {
+							return val.toUpperCase();
+						},
+						validator: function(val) {
+							var instance = this;
+
+							if (A.Lang.isString(val)) {
+								var valUpperCase = val.toUpperCase();
+
+								return valUpperCase === instance.get('strings').or || val.toUpperCase() === instance.get('strings').and;
+							}
+
+							return false;
+						},
+						value: Liferay.Language.get('or')
 					},
-					title: {
-						value: ''
-					},
-					type: {
-						value: 'RULE'
+					strings: {
+						value: {
+							and: Liferay.Language.get('and'),
+							cancel: Liferay.Language.get('cancel'),
+							if: Liferay.Language.get('if'),
+							otherField: Liferay.Language.get('other-field'),
+							or: Liferay.Language.get('or'),
+							save: Liferay.Language.get('save'),
+							the: Liferay.Language.get('the'),
+							value: Liferay.Language.get('value'),
+							description: Liferay.Language.get('define-here-a-condition-to-change-fields-and-elements-from-your-current-form'),
+							title: Liferay.Language.get('rule'),
+							show: Liferay.Language.get('show'),
+							enable: Liferay.Language.get('enable'),
+							require: Liferay.Language.get('require')
+						}
 					}
 				},
 
@@ -60,69 +74,210 @@ AUI.add(
 						instance._actions = {};
 					},
 
-					renderUI: function() {
-						var instance = this;
-
-						var contentBox = instance.get('contentBox');
-
-						contentBox.setHTML(instance._getRuleContainerTemplate());
-					},
-
 					bindUI: function() {
 						var instance = this;
 
-						var contentBox = instance.get('contentBox');
+						var boundingBox = instance.get('boundingBox');
 
-						contentBox.delegate('click', A.bind(instance._handleSaveClick, instance), '.form-builder-rule-settings-save');
-						contentBox.delegate('click', A.bind(instance._handleCancelClick, instance), '.form-builder-rule-settings-cancel');
+						boundingBox.delegate('click', A.bind(instance._handleSaveClick, instance), '.form-builder-rule-settings-save');
+						boundingBox.delegate('click', A.bind(instance._handleCancelClick, instance), '.form-builder-rule-settings-cancel');
 
-						contentBox.delegate('click', A.bind(instance._handleDeleteConditionClick, instance), '.condition-card-delete');
-						contentBox.delegate('click', A.bind(instance._handleDeleteActionClick, instance), '.action-card-delete');
+						boundingBox.delegate('click', A.bind(instance._handleDeleteConditionClick, instance), '.condition-card-delete');
+						boundingBox.delegate('click', A.bind(instance._handleDeleteActionClick, instance), '.action-card-delete');
 
-						contentBox.delegate('click', A.bind(instance._handleAddConditionClick, instance), '.form-builder-rule-add-condition');
-						contentBox.delegate('click', A.bind(instance._handleAddActionClick, instance), '.form-builder-rule-add-action');
+						boundingBox.delegate('click', A.bind(instance._handleAddConditionClick, instance), '.form-builder-rule-add-condition');
+						boundingBox.delegate('click', A.bind(instance._handleAddActionClick, instance), '.form-builder-rule-add-action');
+
+						boundingBox.delegate('click', A.bind(instance._handleLogicOperatorChange, instance), '.logic-operator');
 
 						instance.on('*:valueChanged', A.bind(instance._handleFieldValueChanged, instance));
+						instance.on('logicOperatorChange', A.bind(instance._onLogicOperatorChanged, instance));
 					},
 
-					renderRule: function(rule) {
+					render: function(rule) {
 						var instance = this;
 
-						var contentBox = instance.get('contentBox');
+						var boundingBox = instance.get('boundingBox');
 
-						contentBox.setHTML(instance._getRuleContainerTemplate(rule));
+						if (!rule) {
+							rule = {
+								actions: [],
+								conditions: []
+							};
+						}
+
+						if (rule.conditions[0]) {
+							instance.set('logicOperator', rule.conditions[0]["logic-operator"]);
+						}
+
+						boundingBox.setHTML(instance._getRuleContainerTemplate(rule));
 
 						instance._conditionsIndexes = [];
 						instance._actionsIndexes = [];
 
 						instance._renderConditions(rule.conditions);
 						instance._renderActions(rule.actions);
+
+						return FormBuilderRule.superclass.render.apply(instance, []);
 					},
 
 					_addCondition: function(index, condition) {
 						var instance = this;
 
-						var contentBox = instance.get('contentBox');
+						var boundingBox = instance.get('boundingBox');
 
-						instance._renderFirstOperand(index, condition, contentBox.one('.condition-if-' + index));
-						instance._renderOperator(index, condition, contentBox.one('.condition-operator-' + index));
-						instance._renderSecondOperandType(index, condition, contentBox.one('.condition-the-' + index));
-						instance._renderSecondOperandInput(index, condition, contentBox.one('.condition-type-value-' + index));
-						instance._renderSecondOperandSelectField(index, condition, contentBox.one('.condition-type-value-' + index));
-						instance._renderSecondOperandSelectOptions(index, condition, contentBox.one('.condition-type-value-options-' + index));
+						instance._renderFirstOperand(index, condition, boundingBox.one('.condition-if-' + index));
+						instance._renderOperator(index, condition, boundingBox.one('.condition-operator-' + index));
+						instance._renderSecondOperandType(index, condition, boundingBox.one('.condition-the-' + index));
+						instance._renderSecondOperandInput(index, condition, boundingBox.one('.condition-type-value-' + index));
+						instance._renderSecondOperandSelectField(index, condition, boundingBox.one('.condition-type-value-' + index));
+						instance._renderSecondOperandSelectOptions(index, condition, boundingBox.one('.condition-type-value-options-' + index));
 
 						instance._conditionsIndexes.push(Number(index));
 					},
 
+					_addAction: function(index, action) {
+						var instance = this;
+
+						var boundingBox = instance.get('boundingBox');
+
+						instance._createActionSelect(index, action, boundingBox.one('.action-' + index));
+						instance._createTargetSelect(index, action, boundingBox.one('.target-' + index));
+
+						instance._actionsIndexes.push(Number(index));
+					},
+
+					_createActionSelect: function(index, action, container) {
+						var instance = this;
+
+						var value;
+
+						if (action && action.action) {
+							value = action.action;
+						}
+
+						var field = new Liferay.DDM.Field.Select(
+							{
+								fieldName: index + '-target',
+								options: instance.getActionOptions(),
+								value: value,
+								visible: true
+							}
+						);
+
+						field.render(container);
+
+						instance._actions[index + '-target'] = field;
+					},
+
+					getActionOptions: function() {
+						var instance = this;
+
+						var options;
+
+						var strings = instance.get('strings');
+
+						options = [
+							{
+								label: strings.show,
+								value: 'show'
+							},
+							{
+								label: strings.enable,
+								value: 'enable'
+							},
+							{
+								label: strings.require,
+								value: 'require'
+							}
+						];
+
+						return options;
+					},
+
+					_createTargetSelect: function(index, action, container) {
+						var instance = this;
+
+						var value;
+
+						if (action && action.target) {
+							value = action.target;
+						}
+
+						var field = new Liferay.DDM.Field.Select(
+							{
+								fieldName: index + '-action',
+								label: Liferay.Language.get('the'),
+								options: instance.get('fields'),
+								showLabel: true,
+								value: value,
+								visible: true
+							}
+						);
+
+						field.render(container);
+
+						instance._actions[index + '-action'] = field;
+					},
+
 					_getActions: function() {
+						var instance = this;
+
+						var actions = [];
+
+						for (var i = instance._actionsIndexes.length - 1; i >= 0; i--) {
+							var index = instance._actionsIndexes[i];
+
+							var action = {
+								action: instance._actions[index + '-target'].getValue(),
+								target: instance._actions[index + '-action'].getValue()
+							};
+
+							actions.push(action);
+						}
+
+						return actions;
+					},
+
+					_handleAddActionClick: function() {
+						var instance = this;
+
+						var actionListNode = instance.get('boundingBox').one('.liferay-ddl-form-builder-rule-action-list');
+
+						var index = instance._actionsIndexes[instance._actionsIndexes.length - 1] + 1;
+
+						actionListNode.append(
+							ddl.rule.action(
+								{
+									deleteIcon: Liferay.Util.getLexiconIconTpl('trash', 'icon-monospaced'),
+									index: index
+								}
+							)
+						);
+
+						instance._addAction(index);
+					},
+
+					_renderActions: function(actions) {
+						var instance = this;
+
+						var actionsQuant = actions.length;
+
+						for (var i = 0; i < actionsQuant; i++) {
+							instance._addAction(i, actions[i]);
+						}
+
+						if (instance._actionsIndexes.length === 0) {
+							instance._addAction(0);
+						}
 					},
 
 					_getConditions: function() {
 						var instance = this;
 
 						var conditions = [];
-
-						for (var i = instance._conditionsIndexes.length - 1; i >= 0; i--) {
+//_conditionsIndexes posso usar o count sem --
+						for (var i = 0; i < instance._conditionsIndexes.length; i++) {
 							var index = instance._conditionsIndexes[i];
 
 							var condition = {
@@ -135,10 +290,11 @@ AUI.add(
 								operator: instance._getOperatorValue(index)
 							};
 
-							if (index > 0) {
+							if (index !== instance._conditionsIndexes.length - 1) {
 								condition['logic-operator'] = instance.get('logicOperator');
 							}
-							if (instance._getSecondOperandType(index).get('visible')) {
+
+							if (instance._isBinaryCondition(index)) {
 								if (instance._getSecondOperandTypeValue(index) === 'constant') {
 									condition.operands.push(
 										{
@@ -171,7 +327,7 @@ AUI.add(
 						var options = [];
 
 						for (var i = 0; i < fields.length; i++) {
-							if (fields[i].label === fieldName) {
+							if (fields[i].value === fieldName) {
 								options = fields[i].options;
 
 								break;
@@ -213,12 +369,10 @@ AUI.add(
 						ruleSettingsContainer = ddl.rule.settings(
 							{
 								actions: rule ? rule.actions : [],
-								cancelLabel: Liferay.Language.get('cancel'),
 								conditions: rule ? rule.conditions : [],
 								deleteIcon: Liferay.Util.getLexiconIconTpl('trash', 'icon-monospaced'),
 								plusIcon: Liferay.Util.getLexiconIconTpl('plus', 'icon-monospaced'),
-								saveLabel: Liferay.Language.get('save'),
-								showLabel: false
+								strings: instance.get('strings')
 							}
 						);
 
@@ -250,18 +404,37 @@ AUI.add(
 						return instance._getSecondOperandType(index).getValue();
 					},
 
-					_getSecondOperandValue: function(index) {
+					_getSecondOperandValue: function(index, type) {
 						var instance = this;
 
-						return instance._getSecondOperand(index).getValue();
+						return instance._getSecondOperand(index, type).getValue();
 					},
 
-					_handleAddActionClick: function() {},
+					_handleLogicOperatorChange: function(event) {
+						var instance = this;
+
+						instance.set('logicOperator', event.currentTarget.get('text'));
+					},
+
+					_onLogicOperatorChanged: function(event) {
+						var instance = this;
+
+						if (event.newVal === 'or') {
+							A.all('.operator .panel-body').each(function(operatorNode) {
+								operatorNode.set('text', instance.get('strings').or);
+							});
+						}
+						else {
+							A.all('.operator .panel-body').each(function(operatorNode) {
+								operatorNode.set('text', instance.get('strings').and);
+							});
+						}
+					},
 
 					_handleAddConditionClick: function() {
 						var instance = this;
 
-						var conditionListNode = instance.get('contentBox').one('.liferay-ddl-form-rule-builder-condition-list');
+						var conditionListNode = instance.get('boundingBox').one('.liferay-ddl-form-builder-rule-condition-list');
 
 						var index = instance._conditionsIndexes[instance._conditionsIndexes.length - 1] + 1;
 
@@ -297,7 +470,7 @@ AUI.add(
 							delete instance._actions[index + '-action-do'];
 							delete instance._actions[index + '-action-the'];
 
-							instance.get('contentBox').one('.form-builder-rule-action-container-' + index).remove(true);
+							instance.get('boundingBox').one('.form-builder-rule-action-container-' + index).remove(true);
 
 							var actionIndex = instance._actionsIndexes.indexOf(Number(index));
 
@@ -325,7 +498,7 @@ AUI.add(
 							delete instance._conditions[index + '-condition-second-operand-select'];
 							delete instance._conditions[index + '-condition-second-operand-input'];
 
-							instance.get('contentBox').one('.form-builder-rule-condition-container-' + index).remove(true);
+							instance.get('boundingBox').one('.form-builder-rule-condition-container-' + index).remove(true);
 
 							var conditionIndex = instance._conditionsIndexes.indexOf(Number(index));
 
@@ -363,8 +536,7 @@ AUI.add(
 							'saveRule',
 							{
 								actions: instance._getActions(),
-								condition: instance._getConditions(),
-								type: instance.get('type')
+								condition: instance._getConditions()
 							}
 						);
 					},
@@ -391,10 +563,6 @@ AUI.add(
 						var value = instance._getOperatorValue(index);
 
 						return value === 'is-email-address' || value === 'is-url';
-					},
-
-					_renderActions: function() {
-
 					},
 
 					_renderConditions: function(conditions) {
@@ -424,7 +592,7 @@ AUI.add(
 							{
 								bubbleTargets: [instance],
 								fieldName: index + '-condition-first-operand',
-								label: Liferay.Language.get('if'),
+								label: instance.get('strings').if,
 								options: instance.get('fields'),
 								showLabel: true,
 								value: value,
@@ -467,7 +635,10 @@ AUI.add(
 
 						var value;
 
-						if (condition && instance._isBinaryCondition(index)) {
+						var visible = instance._getSecondOperandTypeValue(index) === 'constant' &&
+							!instance._isFieldList(instance._getFirstOperand(index));
+
+						if (condition && instance._isBinaryCondition(index) && visible) {
 							value = condition.operands[1].value;
 						}
 
@@ -479,9 +650,7 @@ AUI.add(
 								showLabel: false,
 								strings: {},
 								value: value,
-								visible: instance._getSecondOperandTypeValue(index) === 'constant' &&
-									(instance._getFirstOperand(index).get('type') === 'text' ||
-									!!instance._getFieldOptions(instance._getFirstOperandValue(index)))
+								visible: visible
 							}
 						);
 
@@ -490,12 +659,20 @@ AUI.add(
 						instance._conditions[index + '-condition-second-operand-input'] = field;
 					},
 
+					_isFieldList: function (field) {
+						var instance = this;
+
+						return instance._getFieldOptions(field.getValue()).length > 0 && field.get('type') !== 'text';
+					},
+
 					_renderSecondOperandSelectField: function(index, condition, container) {
 						var instance = this;
 
 						var value;
 
-						if (condition && instance._isBinaryCondition(index)) {
+						var visible = instance._getSecondOperandTypeValue(index) === 'field';
+
+						if (condition && instance._isBinaryCondition(index) && visible) {
 							value = condition.operands[1].value;
 						}
 
@@ -507,7 +684,7 @@ AUI.add(
 								options: instance.get('fields'),
 								showLabel: false,
 								value: value,
-								visible: instance._getSecondOperandTypeValue(index) === 'other-field'
+								visible: visible
 							}
 						);
 
@@ -521,7 +698,13 @@ AUI.add(
 
 						var value;
 
-						if (condition && instance._isBinaryCondition(index)) {
+						var options = [];
+
+						var visible = instance._getSecondOperandTypeValue(index) === 'constant' &&
+							instance._isFieldList(instance._getFirstOperand(index));
+
+						if (condition && instance._isBinaryCondition(index) && visible) {
+							options = instance._getFieldOptions(instance._getFirstOperandValue(index));
 							value = condition.operands[1].value;
 						}
 
@@ -530,17 +713,20 @@ AUI.add(
 								bubbleTargets: [instance],
 								fieldName: index + '-condition-second-operand-options-select',
 								label: 'Put this label after',
+								options: options,
 								showLabel: false,
 								value: value,
-								visible: instance._getSecondOperandTypeValue(index) === 'constant' &&
-									instance._getFieldOptions(instance._getFirstOperandValue(index)).length > 0 &&
-									instance._getFirstOperand(index).get('type') !== 'text'
+								visible: visible
 							}
 						);
 
 						field.render(container);
 
 						instance._conditions[index + '-condition-second-operand-options-select'] = field;
+					},
+
+					_secondOperandSelectOptionsVisibility: function(index) {
+
 					},
 
 					_renderSecondOperandType: function(index, condition, container) {
@@ -556,14 +742,14 @@ AUI.add(
 							{
 								bubbleTargets: [instance],
 								fieldName: index + '-condition-second-operand-type',
-								label: Liferay.Language.get('the'),
+								label: instance.get('strings').the,
 								options: [
 									{
-										label: Liferay.Language.get('value'),
+										label: instance.get('strings').value,
 										value: 'constant'
 									},
 									{
-										label: Liferay.Language.get('other-field'),
+										label: instance.get('strings').otherField,
 										value: 'field'
 									}
 								],
