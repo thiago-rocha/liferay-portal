@@ -14,14 +14,18 @@
 
 package com.liferay.dynamic.data.mapping.model;
 
+import aQute.bnd.annotation.ProviderType;
+
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author Leonardo Barros
  */
+@ProviderType
 public class DDMFormRule implements Serializable {
 
 	public DDMFormRule() {
@@ -29,13 +33,26 @@ public class DDMFormRule implements Serializable {
 
 	public DDMFormRule(DDMFormRule ddmFormRule) {
 		_condition = ddmFormRule._condition;
-		_actions = new ArrayList<>(ddmFormRule._actions);
+		_actions.addAll(ddmFormRule.getActions());
+		_ddmFormRuleType = ddmFormRule._ddmFormRuleType;
 		_enabled = ddmFormRule._enabled;
 	}
 
-	public DDMFormRule(String condition, List<String> actions) {
+	public DDMFormRule(
+		String condition, DDMFormRuleType ddmFormRuleType,
+		List<String> actions) {
+
 		_condition = condition;
-		_actions = actions;
+		_ddmFormRuleType = ddmFormRuleType;
+		_actions.addAll(actions);
+	}
+
+	public DDMFormRule(
+		String condition, DDMFormRuleType ddmFormRuleType, String... actions) {
+
+		_condition = condition;
+		_ddmFormRuleType = ddmFormRuleType;
+		_actions.addAll(Arrays.asList(actions));
 	}
 
 	public void addAction(String action) {
@@ -50,6 +67,10 @@ public class DDMFormRule implements Serializable {
 		return _condition;
 	}
 
+	public DDMFormRuleType getDDMFormRuleType() {
+		return _ddmFormRuleType;
+	}
+
 	public boolean isEnabled() {
 		return _enabled;
 	}
@@ -62,12 +83,17 @@ public class DDMFormRule implements Serializable {
 		_condition = condition;
 	}
 
+	public void setDDMFormRuleType(DDMFormRuleType ddmFormRuleType) {
+		_ddmFormRuleType = ddmFormRuleType;
+	}
+
 	public void setEnabled(boolean enabled) {
 		_enabled = enabled;
 	}
 
 	private List<String> _actions = new ArrayList<>();
 	private String _condition;
+	private DDMFormRuleType _ddmFormRuleType;
 	private boolean _enabled = true;
 
 }

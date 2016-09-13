@@ -23,6 +23,7 @@ import com.liferay.dynamic.data.mapping.annotations.DDMFormLayoutRow;
 import com.liferay.dynamic.data.mapping.annotations.DDMFormRule;
 import com.liferay.dynamic.data.mapping.form.field.type.DefaultDDMFormFieldTypeSettings;
 import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
+import com.liferay.dynamic.data.mapping.model.DDMFormRuleType;
 import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 
 /**
@@ -38,7 +39,8 @@ import com.liferay.dynamic.data.mapping.model.LocalizedValue;
 				"set(fieldAt(\"showLabel\", 0), \"visible\", false)",
 				"set(fieldAt(\"tip\", 0), \"visible\", false)",
 				"set(fieldAt(\"validation\", 0), \"visible\", false)"
-			}
+			},
+			type = DDMFormRuleType.VISIBILITY
 		)
 	}
 )
@@ -88,19 +90,19 @@ public interface ParagraphDDMFormFieldTypeSettings
 	@Override
 	public LocalizedValue label();
 
-	@DDMFormField(visibilityExpression = "FALSE")
+	@DDMFormField
 	@Override
 	public LocalizedValue predefinedValue();
 
-	@DDMFormField(visibilityExpression = "FALSE")
+	@DDMFormField
 	@Override
 	public boolean repeatable();
 
-	@DDMFormField(visibilityExpression = "FALSE")
+	@DDMFormField
 	@Override
 	public boolean required();
 
-	@DDMFormField(visibilityExpression = "FALSE")
+	@DDMFormField
 	@Override
 	public boolean showLabel();
 
@@ -111,14 +113,11 @@ public interface ParagraphDDMFormFieldTypeSettings
 	)
 	public String text();
 
-	@DDMFormField(visibilityExpression = "FALSE")
+	@DDMFormField
 	@Override
 	public LocalizedValue tip();
 
-	@DDMFormField(
-		dataType = "ddm-validation", type = "validation",
-		visibilityExpression = "FALSE"
-	)
+	@DDMFormField(dataType = "ddm-validation", type = "validation")
 	@Override
 	public DDMFormFieldValidation validation();
 
