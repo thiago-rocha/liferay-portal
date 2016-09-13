@@ -19,12 +19,12 @@ if (goog.DEBUG) {
 
 ddl.rule_list = function(opt_data, opt_ignored) {
   var output = '';
-  var ruleList129 = opt_data.rules;
-  var ruleListLen129 = ruleList129.length;
-  if (ruleListLen129 > 0) {
-    for (var ruleIndex129 = 0; ruleIndex129 < ruleListLen129; ruleIndex129++) {
-      var ruleData129 = ruleList129[ruleIndex129];
-      output += '<div class="card card-horizontal card-rule"><div class="card-row card-row-padded"><div class="card-col-content card-col-gutters"><h4>' + soy.$$escapeHtml(ruleData129.type) + '</h4><p>' + soy.$$escapeHtml(ruleData129.description) + '</p></div><div class="card-col-field"><div class="dropdown"><a class="dropdown-toggle icon-monospaced" data-toggle="dropdown" href="#1">' + soy.$$filterNoAutoescape(opt_data.kebab) + '</a><ul class="dropdown-menu dropdown-menu-right"><li class="rule-card-edit" data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex129) + '" data-rule-type=' + soy.$$escapeHtmlAttributeNospace(ruleData129.type) + '><a href="javascript:;">Edit</a></li><li class="rule-card-delete"  data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex129) + '"><a href="javascript:;">Delete</a></li></ul></div></div></div></div>';
+  var ruleList137 = opt_data.rules;
+  var ruleListLen137 = ruleList137.length;
+  if (ruleListLen137 > 0) {
+    for (var ruleIndex137 = 0; ruleIndex137 < ruleListLen137; ruleIndex137++) {
+      var ruleData137 = ruleList137[ruleIndex137];
+      output += '<div class="card card-horizontal card-rule"><div class="card-row card-row-padded"><div class="card-col-content card-col-gutters"><h4>' + soy.$$escapeHtml(ruleData137.type) + '</h4><p>' + soy.$$escapeHtml(ruleData137.description) + '</p></div><div class="card-col-field"><div class="dropdown"><a class="dropdown-toggle icon-monospaced" data-toggle="dropdown" href="#1">' + soy.$$filterNoAutoescape(opt_data.kebab) + '</a><ul class="dropdown-menu dropdown-menu-right"><li class="rule-card-edit" data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex137) + '" data-rule-type=' + soy.$$escapeHtmlAttributeNospace(ruleData137.type) + '><a href="javascript:;">Edit</a></li><li class="rule-card-delete"  data-card-id="' + soy.$$escapeHtmlAttribute(ruleIndex137) + '"><a href="javascript:;">Delete</a></li></ul></div></div></div></div>';
     }
   } else {
     output += soy.$$escapeHtml(opt_data.emptyListText);
