@@ -126,7 +126,7 @@ AUI.add(
 
 						instance._currentRuleId = ruleId;
 
-						renderRule(instance.get('rules')[ruleId]);
+						instance.renderRule(instance.get('rules')[ruleId]);
 					},
 
 					_handleAddRuleClick: function() {
@@ -145,7 +145,7 @@ AUI.add(
 							conditions: event.condition,
 							'logical-operator': event['logical-operator']
 						};
-debugger;
+
 						if (instance._currentRuleId) {
 							rules[instance._currentRuleId] = rule;
 						}
