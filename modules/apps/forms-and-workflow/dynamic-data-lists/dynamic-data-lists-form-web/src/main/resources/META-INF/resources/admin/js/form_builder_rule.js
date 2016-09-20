@@ -533,7 +533,7 @@ AUI.add(
 							{
 								actions: instance._getActions(),
 								condition: instance._getConditions(),
-								'logic-operator': instance.get('logicOperator')
+								'logical-operator': instance.get('logicOperator')
 							}
 						);
 					},
