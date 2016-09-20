@@ -193,6 +193,7 @@ public class DDLFormRuleToDDMFormRuleRuleConverter {
 	{
 		_operatorsToFunctionMap.put("contains", "contains");
 		_operatorsToFunctionMap.put("isEmailAddress", "isEmailAddress");
+		_operatorsToFunctionMap.put("equals-to", "equals");
 	}
 
 	private Map<String, String> _operatorsMap = new HashMap<>();
