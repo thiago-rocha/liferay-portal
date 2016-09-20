@@ -40,6 +40,7 @@ import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
 import com.liferay.dynamic.data.mapping.storage.StorageType;
 import com.liferay.dynamic.data.mapping.util.DDMFormFactory;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONDeserializer;
 import com.liferay.portal.kernel.json.JSONFactory;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseTransactionalMVCActionCommand;
@@ -331,10 +332,15 @@ public class AddRecordSetMVCActionCommand
 			return Collections.emptyList();
 		}
 
-		JSONDeserializer<List<DDLFormRule>> jsonDeserializer =
-			_jsonFactory.createJSONDeserializer();
+		JSONArray jsonArray = _jsonFactory.createJSONArray(rules);
 
-		List<DDLFormRule> ddlFormRules = jsonDeserializer.deserialize(rules);
+		List<DDLFormRule> ddlFormRules = new ArrayList<>();
+
+		for (int i = 0; i < jsonArray.length(); i++) {
+			JSONDeserializer<DDLFormRule> jsonDeserializer = _jsonFactory.createJSONDeserializer();
+
+			ddlFormRules.add(jsonDeserializer.deserialize(jsonArray.getJSONObject(i).toString(), DDLFormRule.class));
+		}
 
 		List<DDMFormRule> ddmFormRules = new ArrayList<>();
 

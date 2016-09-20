@@ -22,6 +22,9 @@ import java.util.Objects;
  */
 public class DDLFormRuleCondition {
 
+	public DDLFormRuleCondition() {
+	}
+
 	public DDLFormRuleCondition(String operator, List<Operand> operands) {
 		_operator = operator;
 		_operands = operands;
@@ -31,8 +34,16 @@ public class DDLFormRuleCondition {
 		return _operands;
 	}
 
+	public void setOperands(List<Operand> operands) {
+		_operands = operands;
+	}
+
 	public String getOperator() {
 		return _operator;
+	}
+
+	public void setOperator(String operator) {
+		_operator = operator;
 	}
 
 	@Override
@@ -62,10 +73,23 @@ public class DDLFormRuleCondition {
 
 	public static class Operand {
 
+		public Operand() {
+
+		}
 		public Operand(String type, String value) {
 			_type = type;
 			_value = value;
 		}
+
+		public void setValue(String value) {
+			_value = value;
+		}
+
+
+		public void setType(String type) {
+			_type = type;
+		}
+
 
 		public String getType() {
 			return _type;

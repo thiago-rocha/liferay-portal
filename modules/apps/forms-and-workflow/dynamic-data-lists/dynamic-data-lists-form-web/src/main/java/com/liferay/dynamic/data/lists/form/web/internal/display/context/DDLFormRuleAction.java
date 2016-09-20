@@ -21,6 +21,10 @@ import java.util.Objects;
  */
 public class DDLFormRuleAction {
 
+	public DDLFormRuleAction() {
+
+	}
+
 	public DDLFormRuleAction(String action, String target) {
 		this(action, target, null);
 	}
@@ -35,12 +39,24 @@ public class DDLFormRuleAction {
 		return _action;
 	}
 
+	public void setAction(String action) {
+		_action = action;
+	}
+
 	public String getTarget() {
 		return _target;
 	}
 
+	public void setTarget(String target) {
+		_target = target;
+	}
+
 	public String getValue() {
 		return _value;
+	}
+
+	public void setValue(String value) {
+		_value = value;
 	}
 
 	@Override

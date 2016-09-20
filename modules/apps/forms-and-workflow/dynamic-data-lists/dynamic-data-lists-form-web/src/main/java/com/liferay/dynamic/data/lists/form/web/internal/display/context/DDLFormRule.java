@@ -23,6 +23,7 @@ import java.util.Objects;
 /**
  * @author Marcellus Tavares
  */
+
 public class DDLFormRule {
 
 	public void addDDLFormRuleAction(DDLFormRuleAction ddlFormRuleAction) {
@@ -33,19 +34,23 @@ public class DDLFormRule {
 		_ddlFormRuleConditions.add(ddlFormRuleCondition);
 	}
 
+	@JSON(name = "logical-operator")
 	public void setLogicalOperator(String logicalOperator) {
 		_logicalOperator = logicalOperator;
 	}
 
+	@JSON(name = "logical-operator")
 	public String getLogicalOperator() {
 		return _logicalOperator;
 	}
 
+	@JSON(name = "conditions")
 	public void setDDLFormRuleConditions(
 		List<DDLFormRuleCondition> ddlFormRuleConditions) {
 		_ddlFormRuleConditions = ddlFormRuleConditions;
 	}
 
+	@JSON(name = "actions")
 	public void setDDLFormRuleActions(
 		List<DDLFormRuleAction> ddlFormRuleActions) {
 		_ddlFormRuleActions = ddlFormRuleActions;
@@ -81,7 +86,10 @@ public class DDLFormRule {
 		return false;
 	}
 
+
 	private List<DDLFormRuleAction> _ddlFormRuleActions = new ArrayList<>();
+
+
 	private List<DDLFormRuleCondition> _ddlFormRuleConditions = new ArrayList<>();
 	private String _logicalOperator = "and";
 }
