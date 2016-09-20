@@ -143,7 +143,7 @@ AUI.add(
 						var rule = {
 							actions: event.actions,
 							conditions: event.condition,
-							'logic-operator': event['logic-operator']
+							'logical-operator': event['logical-operator']
 						};
 debugger;
 						if (instance._currentRuleId) {
