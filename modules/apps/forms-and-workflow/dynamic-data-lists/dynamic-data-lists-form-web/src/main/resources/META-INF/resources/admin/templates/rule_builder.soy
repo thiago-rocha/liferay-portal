@@ -39,14 +39,14 @@
 						{foreach $condition in $rule.conditions}
 							{call .condition}
 								{param operandType: $condition.operands[0].type /}
-								{param operandValue: $condition.operands[0].label /}
+								{param operandValue: isNonnull($condition.operands[0].label) ? $condition.operands[0].label : $condition.operands[0].value /}
 							{/call}
 
 							<b class="text-lowercase"><em> {$strings[$condition.operator]} </em></b>
 
 							{call .condition}
 								{param operandType: $condition.operands[1].type /}
-								{param operandValue: $condition.operands[1].label /}
+								{param operandValue: isNonnull($condition.operands[1].label) ? $condition.operands[1].label : $condition.operands[1].value /}
 							{/call}
 
 							{if not isLast($condition)}
