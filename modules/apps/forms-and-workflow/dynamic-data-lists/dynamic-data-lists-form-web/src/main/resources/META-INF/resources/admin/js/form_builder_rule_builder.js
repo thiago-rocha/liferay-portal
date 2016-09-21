@@ -75,7 +75,7 @@ AUI.add(
 							function(field) {
 								fields.push(
 									{
-										label: field.get('label'),
+										label: field.get('label') || field.get('fieldName'),
 										options: field.get('options'),
 										value: field.get('fieldName'),
 										type: field.get('type')
