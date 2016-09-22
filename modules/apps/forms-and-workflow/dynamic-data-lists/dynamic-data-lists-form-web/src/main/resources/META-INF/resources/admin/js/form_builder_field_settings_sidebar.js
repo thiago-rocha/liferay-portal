@@ -55,6 +55,7 @@ AUI.add(
 						];
 
 						instance._eventHandlers = eventHandlers;
+						instance._eventOpenedStateHandlers = [];
 					},
 
 					destructor: function() {
@@ -67,6 +68,7 @@ AUI.add(
 						instance.destroyFieldSettingsForm();
 
 						(new A.EventHandle(instance._eventHandlers)).detach();
+						(new A.EventHandle(instance._eventOpenedStateHandlers)).detach();
 					},
 
 					destroyFieldSettingsForm: function() {
@@ -108,7 +110,7 @@ AUI.add(
 					_afterOpenChange: function(value) {
 						var instance = this;
 
-						var eventHandlers = [];
+						var eventHandlers = instance._eventOpenedStateHandlers;
 
 						if (value) {
 							eventHandlers.push(
@@ -126,7 +128,6 @@ AUI.add(
 							);
 						}
 						else {
-							console.log('oi');
 							(new A.EventHandle(eventHandlers)).detach();
 						}
 					},
