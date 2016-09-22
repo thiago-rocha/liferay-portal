@@ -59,6 +59,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -188,7 +189,7 @@ public class AddRecordSetMVCActionCommand
 
 		String rules = ParamUtil.getString(actionRequest, "rules");
 
-		if (Validator.isNull(rules)) {
+		if (Validator.isNull(rules) || Objects.equals("[]", rules)) {
 			return Collections.emptyList();
 		}
 
