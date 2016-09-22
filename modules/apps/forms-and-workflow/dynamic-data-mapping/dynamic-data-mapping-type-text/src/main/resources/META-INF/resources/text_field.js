@@ -46,8 +46,7 @@ AUI.add(
 						var instance = this;
 
 						instance._eventHandlers.push(
-							instance.after('optionsChange', instance._afterOptionsChange),
-							instance.after('visibleChange', instance._afterTextFieldVisibleChange)
+							instance.after('optionsChange', instance._afterOptionsChange)
 						);
 
 						instance.bindInputEvent('focus', instance._onFocusInput);
@@ -70,7 +69,7 @@ AUI.add(
 
 						var inputNode = instance.getInputNode();
 
-						if (autoComplete) {
+						if (autoComplete && instance.get('visible')) {
 							autoComplete.set('inputNode', inputNode);
 						}
 						else {
@@ -129,14 +128,6 @@ AUI.add(
 									src: A.AutoCompleteBase.UI_SRC
 								}
 							);
-						}
-					},
-
-					_afterTextFieldVisibleChange: function() {
-						var instance = this;
-
-						if(!instance._autoComplete) {
-							instance._createAutocomplete();
 						}
 					},
 
