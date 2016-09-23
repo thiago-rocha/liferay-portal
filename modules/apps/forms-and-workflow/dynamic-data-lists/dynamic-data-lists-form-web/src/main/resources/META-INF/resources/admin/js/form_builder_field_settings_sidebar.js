@@ -50,8 +50,7 @@ AUI.add(
 
 						eventHandlers = [
 							instance.after('open', instance._afterSidebarOpen),
-							instance.after('open:start', instance._afterOpenStart),
-							instance.after('openChange', instance._afterOpenChange)
+							instance.after('open:start', instance._afterOpenStart)
 						];
 
 						instance._eventHandlers = eventHandlers;
@@ -68,7 +67,6 @@ AUI.add(
 						instance.destroyFieldSettingsForm();
 
 						(new A.EventHandle(instance._eventHandlers)).detach();
-						(new A.EventHandle(instance._eventOpenedStateHandlers)).detach();
 					},
 
 					destroyFieldSettingsForm: function() {
@@ -105,31 +103,6 @@ AUI.add(
 						var currentFieldSettings = instance.getFieldSettings();
 
 						return JSON.stringify(previousContext) !== JSON.stringify(currentFieldSettings.context);
-					},
-
-					_afterOpenChange: function(value) {
-						var instance = this;
-
-						var eventHandlers = instance._eventOpenedStateHandlers;
-
-						if (value) {
-							eventHandlers.push(
-								A.one(document).on('click', function(event) {
-									var target = event.target;
-
-									var isChield = instance.get('boundingBox').contains(target);
-
-									var isConfirmationChield = A.one('.modal-content').contains(target);
-
-									if (!isConfirmationChield && !isChield && !target.hasClass('form-builder-field-content-target')) {
-										instance.close();
-									}
-								})
-							);
-						}
-						else {
-							(new A.EventHandle(eventHandlers)).detach();
-						}
 					},
 
 					_afterOpenStart: function() {
