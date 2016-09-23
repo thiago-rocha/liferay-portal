@@ -69,16 +69,13 @@ AUI.add(
 
 						var inputNode = instance.getInputNode();
 
-						if (instance.get('visible')) {
-							if (autoComplete) {
-								autoComplete.set('inputNode', inputNode);
-							}
-							else {
-								instance._createAutocomplete();
-								autoComplete = instance._autoComplete;
-							}	
+						if (autoComplete) {
+							autoComplete.set('inputNode', inputNode);
 						}
-						
+						else {
+							instance._createAutocomplete();
+							autoComplete = instance._autoComplete;
+						}						
 
 						return autoComplete;
 					},
@@ -94,10 +91,8 @@ AUI.add(
 
 						var options = instance.get('options');
 
-						if (options.length) {
-							var autoComplete = instance.getAutoComplete();
-
-							// autoComplete.set('source', instance.get('options'));
+						if (options.length && instance.get('visible')) {
+							instance._createAutocomplete();
 						}
 
 						return instance;
@@ -139,22 +134,24 @@ AUI.add(
 
 						var inputNode = instance.getInputNode();
 
-						autoComplete = new A.AutoComplete(
-								{
-									after: {
-										select: A.bind(instance.evaluate, instance)
-									},
-									inputNode: inputNode,
-									source: instance.get('options'),
-									maxResults: 10,
-									render: true,
-									resultFilters: ['charMatch', 'subWordMatch'],
-									resultHighlighter: 'subWordMatch',
-									resultTextLocator: 'label'
-								}
-							);
+						if (instance._autocomplete) {
+							instance._autocomplete.destroy();
+						}
 
-						instance._autoComplete = autoComplete;
+						instance._autocomplete = new A.AutoComplete(
+							{
+								after: {
+									select: A.bind(instance.evaluate, instance)
+								},
+								inputNode: inputNode,
+								source: instance.get('options'),
+								maxResults: 10,
+								render: true,
+								resultFilters: ['charMatch', 'subWordMatch'],
+								resultHighlighter: 'subWordMatch',
+								resultTextLocator: 'label'
+							}
+						);
 					},
 
 					_onFocusInput: function() {
