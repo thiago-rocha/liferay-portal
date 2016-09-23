@@ -69,13 +69,16 @@ AUI.add(
 
 						var inputNode = instance.getInputNode();
 
-						if (autoComplete && instance.get('visible')) {
-							autoComplete.set('inputNode', inputNode);
+						if (instance.get('visible')) {
+							if (autoComplete) {
+								autoComplete.set('inputNode', inputNode);
+							}
+							else {
+								instance._createAutocomplete();
+								autoComplete = instance._autoComplete;
+							}	
 						}
-						else {
-							instance._createAutocomplete();
-							autoComplete = instance._autoComplete;
-						}
+						
 
 						return autoComplete;
 					},
@@ -94,7 +97,7 @@ AUI.add(
 						if (options.length) {
 							var autoComplete = instance.getAutoComplete();
 
-							autoComplete.set('source', instance.get('options'));
+							// autoComplete.set('source', instance.get('options'));
 						}
 
 						return instance;
@@ -142,6 +145,7 @@ AUI.add(
 										select: A.bind(instance.evaluate, instance)
 									},
 									inputNode: inputNode,
+									source: instance.get('options'),
 									maxResults: 10,
 									render: true,
 									resultFilters: ['charMatch', 'subWordMatch'],
