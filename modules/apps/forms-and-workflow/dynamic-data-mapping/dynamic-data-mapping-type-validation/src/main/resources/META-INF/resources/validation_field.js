@@ -99,7 +99,7 @@ AUI.add(
 						}
 
 						var value = instance.get('value');
-
+debugger;
 						return A.merge(
 							ValidationField.superclass.getTemplateContext.apply(instance, arguments),
 							{

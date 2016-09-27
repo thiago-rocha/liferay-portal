@@ -63,7 +63,7 @@ AUI.add(
 							rule.conditions.forEach(function(condition) {
 								condition.operands.forEach(function(operand) {
 									operand.label = instance._getFieldLabel(operand.value);
-								})
+								});
 							});
 
 							rule.actions.forEach(function(action) {
@@ -72,6 +72,17 @@ AUI.add(
 						});
 
 						instance._renderCards(rules);
+
+						if (!instance._sortableCards) {
+							instance._sortableCards = new A.Sortable({
+								container: instance.get('boundingBox'),
+								nodes: 'li'
+							});
+
+							instance._sortableCards.drop.on('drag:end', function(event) {
+								debugger;
+							});
+						}
 					},
 
 					_getFieldLabel: function(fieldValue) {
@@ -218,6 +229,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-popover', 'event-outside', 'liferay-ddl-form-builder-rule']
+		requires: ['sortable', 'aui-popover', 'event-outside', 'liferay-ddl-form-builder-rule']
 	}
 );
