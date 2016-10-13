@@ -64,7 +64,7 @@ AUI.add(
 					hasFocus: function() {
 						var instance = this;
 
-						return EditorField.superclass.hasFocus.apply(instance, arguments) || instance._hasAlloyEditorFocus();
+						return instance._hasFocus() || instance._hasAlloyEditorFocus();
 					},
 
 					render: function() {
@@ -139,10 +139,12 @@ AUI.add(
 						return !!instance._findAncestor(document.activeElement, 'ae-ui');
 					},
 
-					_onActionPerformed: function() {
+					_hasFocus: function() {
 						var instance = this;
 
-						instance._onChangeEditor(instance.getValue());
+						var container = instance.get('container');
+
+						return container.contains(document.activeElement);
 					},
 
 					_onChangeEditor: function(value) {

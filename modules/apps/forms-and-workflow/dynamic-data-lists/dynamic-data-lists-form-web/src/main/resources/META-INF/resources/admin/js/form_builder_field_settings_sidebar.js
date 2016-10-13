@@ -190,6 +190,10 @@ AUI.add(
 						);
 					},
 
+					_isNotAlloyEditorNode: function(node) {
+						return node.ancestorsByClassName('ae-ui').isEmpty();
+					},
+
 					_loadFieldSettingsForm: function(field) {
 						var instance = this;
 
