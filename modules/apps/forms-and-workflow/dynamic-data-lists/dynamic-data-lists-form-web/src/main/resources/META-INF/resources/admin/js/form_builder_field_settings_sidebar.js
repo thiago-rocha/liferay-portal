@@ -190,6 +190,12 @@ AUI.add(
 						);
 					},
 
+					_isClickInAField: function(node) {
+						var instance = this;
+
+						return node.ancestorsByClassName('.ddm-form-field-container').size();
+					},
+
 					_isNotAlloyEditorNode: function(node) {
 						return node.ancestorsByClassName('ae-ui').isEmpty();
 					},
@@ -231,7 +237,7 @@ AUI.add(
 
 						var target = event.target;
 
-						if (instance.get('open') && !instance._containsNode(target) && !settingsForm.hasFocus()) {
+						if (instance.get('open') && !instance._containsNode(target) && !settingsForm.hasFocus() && !instance._isClickInAField(target)) {
 							instance.close();
 						}
 					},
