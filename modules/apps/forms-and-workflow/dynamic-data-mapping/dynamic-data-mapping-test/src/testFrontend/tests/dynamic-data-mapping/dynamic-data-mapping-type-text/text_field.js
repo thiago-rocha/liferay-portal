@@ -12,6 +12,7 @@ describe(
 					function(A) {
 						Liferay.DDM.Renderer.FieldTypes.register(
 							{
+								'javaScriptClass': 'Liferay.DDM.Renderer.Text',
 								'name': 'text',
 								'templateNamespace': 'ddm.text'
 							}
