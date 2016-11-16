@@ -37,6 +37,9 @@ AUI.add(
 						validator: '_isValidLogicOperator',
 						value: Liferay.Language.get('or')
 					},
+					pages: {
+						value: []
+					},
 					strings: {
 						value: {
 							and: Liferay.Language.get('and'),
@@ -237,6 +240,10 @@ AUI.add(
 							{
 								label: strings.enable,
 								value: 'enable'
+							},
+							{
+								label: strings.jumpToPage,
+								value: 'jumpToPage'
 							},
 							{
 								label: strings.require,
