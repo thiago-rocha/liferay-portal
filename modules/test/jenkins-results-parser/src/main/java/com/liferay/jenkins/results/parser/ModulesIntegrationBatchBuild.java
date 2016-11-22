@@ -44,6 +44,10 @@ public class ModulesIntegrationBatchBuild extends BatchBuild {
 	public void update() {
 		super.update();
 
+		if (_notificationsComplete) {
+			return;
+		}
+
 		Build reinvokeErrorAxisBuild = null;
 		String reinvokeErrorMarker = null;
 
@@ -102,10 +106,12 @@ public class ModulesIntegrationBatchBuild extends BatchBuild {
 				sb.append(reinvokeErrorAxisBuild.getBuildURL());
 				sb.append(". Previous failure was at ");
 				sb.append(badBuildURLs.get(0));
-				sb.append("\n\nError Marker:\n");
+				sb.append("\n\nError marker:\n");
 				sb.append(reinvokeErrorMarker);
 
 				System.out.println(sb);
+
+				_notificationsComplete = true;
 			}
 
 			try {
@@ -142,5 +148,7 @@ public class ModulesIntegrationBatchBuild extends BatchBuild {
 
 	private static final String _REINVOKE_ERROR_MARKER_TEMPLATE =
 		"reinvoke.error.marker[modules-integration-?]";
+
+	private boolean _notificationsComplete;
 
 }
