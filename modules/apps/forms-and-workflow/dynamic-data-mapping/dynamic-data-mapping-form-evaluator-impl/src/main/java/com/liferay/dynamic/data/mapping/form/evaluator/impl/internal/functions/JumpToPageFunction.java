@@ -35,11 +35,11 @@ public class JumpToPageFunction
 			throw new IllegalArgumentException("One parameter is expected");
 		}
 
-		String pageIndex = parameters[0].toString();
+		Double pageIndex = Double.parseDouble(parameters[0].toString());
 
 		setChanged();
 
-		notifyObservers(pageIndex);
+		notifyObservers(String.valueOf(pageIndex.intValue()));
 
 		return true;
 	}
