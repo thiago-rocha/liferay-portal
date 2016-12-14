@@ -46,6 +46,17 @@ AUI.add(
 				NAME: 'liferay-ddm-form-field-select',
 
 				prototype: {
+
+					initializer: function() {
+						var instance = this;
+
+						instance._eventHandlers.push(
+							A.one('doc').after('click', A.bind(instance.closeList, instance)),
+							instance.bindContainerEvent('mousedown', instance._afterClickSelectTrigger, '.form-builder-select-field'),
+							instance.bindContainerEvent('mousedown', instance._onClickItem, 'li')
+						);
+					},
+
 					cleanSelect: function() {
 						var instance = this;
 
@@ -56,6 +67,22 @@ AUI.add(
 						instance.set('value', []);
 					},
 
+					closeList: function(event) {
+						var instance = this;
+
+						var container = instance.get('container');
+
+						var ancestor = event.target.ancestor('.form-builder-select-field');
+
+						if (ancestor && ancestor == container.one('.form-builder-select-field')) {
+							return;
+						}
+
+						if (instance._isListOpen()) {
+							instance.get('container').one('.drop-chosen').addClass('hide');
+						}
+					},
+
 					getTemplateContext: function() {
 						var instance = this;
 
@@ -63,8 +90,9 @@ AUI.add(
 							SelectField.superclass.getTemplateContext.apply(instance, arguments),
 							{
 								options: instance.get('options'),
+								selecteCaretDoubleIcon: Liferay.Util.getLexiconIconTpl('caret-double-l', 'icon-monospaced'),
 								strings: instance.get('strings'),
-								value: instance.getValueArray()
+								value: instance.getValueSelected()
 							}
 						);
 					},
@@ -96,7 +124,7 @@ AUI.add(
 						return value;
 					},
 
-					getValueArray: function() {
+					getValueSelected: function() {
 						var instance = this;
 
 						var value = instance.get('value');
@@ -105,7 +133,13 @@ AUI.add(
 							value = [value];
 						}
 
-						return value;
+						var values = instance._getOptionsSelected(value);
+
+						if (!instance.get('multiple')) {
+							return values[0];
+						}
+
+						return values;
 					},
 
 					render: function() {
@@ -135,17 +169,26 @@ AUI.add(
 						return instance;
 					},
 
-					setValue: function(value) {
+					setValue: function(values) {
 						var instance = this;
 
 						var inputNode = instance.getInputNode();
 
-						if (Lang.isArray(value)) {
+						if (Lang.isArray(values)) {
 							inputNode.all('option').each(
 								function(optionNode, index) {
-									var selected = value.indexOf(optionNode.val()) > -1;
 
-									if (index === 0 && value.length === 0) {
+									var selected = false;
+
+									if (values.length > 0 && optionNode.val()) {
+										var value = values[0].value;
+
+										if (value) {
+											selected = instance._getIndexOfOption(value, optionNode.val()) > -1;
+										}
+									}
+
+									if (index === 0 && values.length === 0) {
 										selected = true;
 									}
 
@@ -159,7 +202,7 @@ AUI.add(
 							);
 						}
 						else {
-							inputNode.val(value);
+							inputNode.val(values);
 						}
 					},
 
@@ -173,6 +216,16 @@ AUI.add(
 						var inputGroup = container.one('.input-select-wrapper');
 
 						inputGroup.insert(container.one('.help-block'), 'after');
+					},
+
+					_afterClickSelectTrigger: function(event) {
+						event.stopPropagation();
+
+						var instance = this;
+
+						if (!instance.get('readOnly')) {
+							instance.get('container').one('.drop-chosen').toggleClass('hide');
+						}
 					},
 
 					_getDataSourceType: function(value) {
@@ -191,10 +244,70 @@ AUI.add(
 						return value;
 					},
 
+					_getIndexOfOption: function(value, optionValue) {
+						return value.indexOf(optionValue);
+					},
+
 					_getOptions: function(options) {
+						return options || [];
+					},
+
+					_getOptionsSelected: function(value) {
 						var instance = this;
 
-						return options || [];
+						var options = instance.get('options');
+
+						var optionsSelected = [];
+
+						if (Lang.isArray(value)) {
+							value.forEach(
+								function(value, index) {
+									options.forEach(
+										function(option, index) {
+											if (option.value.indexOf(value) > -1) {
+												optionsSelected.push(option);
+											}
+										}
+									);
+								}
+							);
+						}
+
+						return optionsSelected;
+					},
+
+					_isListOpen: function() {
+						var instance = this;
+
+						var container = instance.get('container');
+
+						if (container.one('.drop-chosen')) {
+							var openList = container.one('.drop-chosen').hasClass('hide');
+
+							return !openList;
+						}
+					},
+
+					_onClickItem: function(event) {
+						var instance = this;
+
+						var options = instance.get('options');
+
+						var index = event.target.getAttribute('data-option-index');
+
+						var option = options[index];
+
+						instance._syncInputSelect(option);
+
+						instance.set('value', [option.value]);
+
+						instance.get('container').one('.option-selected').text(option.label);
+					},
+
+					_syncInputSelect: function(option) {
+						var instance = this;
+
+						instance.setValue([option]);
 					}
 				}
 			}
