@@ -56,7 +56,7 @@ AUI.add(
 						value: ''
 					},
 
-					functionOperatorsMetadata: {
+					functionsMetadata: {
 						value: []
 					},
 
