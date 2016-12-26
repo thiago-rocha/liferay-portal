@@ -55,7 +55,7 @@ AUI.add(
 					formURL: {
 					},
 
-					functionOperatorsMetadata: {
+					functionsMetadata: {
 						value: []
 					},
 
