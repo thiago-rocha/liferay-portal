@@ -198,18 +198,16 @@ AUI.add(
 						inputGroup.insert(container.one('.help-block'), 'after');
 					},
 
-					_afterClickSelectTrigger: function(event) {
-						event.stopPropagation();
-
+					_afterClickSelectTrigger: function() {
 						var instance = this;
 
-						var container = instance.get('container');
-
-						var selectGroup = container.one('.form-builder-select-field');
-
-						selectGroup.addClass('active');
-
 						if (!instance.get('readOnly')) {
+							var container = instance.get('container');
+
+							var selectGroup = container.one('.form-builder-select-field');
+
+							selectGroup.addClass('active');
+
 							container.one('.drop-chosen').toggleClass('hide');
 						}
 					},
