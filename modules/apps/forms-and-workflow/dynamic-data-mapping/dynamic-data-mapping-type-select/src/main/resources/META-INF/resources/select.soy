@@ -26,36 +26,26 @@
  * @param visible
  */
 {template .select autoescape="deprecated-contextual"}
+	{let $optionsSelected: $value /}
+
 	<div class="form-group{$visible ? '' : ' hide'}" data-fieldname="{$name}">
 		<div class="input-select-wrapper">
 
 			{if $showLabel}
-				{call ddm.select_label data="all"}
-					{param name: $name /}
-					{param label: $label /}
-					{param required: $required /}
-					{param tip: $tip /}
-				{/call}
+				{call ddm.select_label data="all" /}
 			{/if}
 
 			<div class="form-builder-select-field input-group-container">
 
 				{if not $readOnly}
-					{call ddm.hidden_select data="all"}
-						{param options: $options /}
-						{param name: $name /}
-						{param multiple: $multiple /}
-						{param dir: $dir /}
-						{param value: $value /}
-						{param string: $strings /}
-					{/call}
+					{call ddm.hidden_select data="all"/}
 				{/if}
 
 				{if not $multiple}
 					<a class="form-control select-field-trigger" dir="{$dir}" href="javascript:;" id="{$name}" name="{$name}">
 						{if not $readOnly}
-							{if $value and $value.value}
-								<span class="option-selected">{$value.label}</span>
+							{if $optionsSelected and $optionsSelected.value}
+								<span class="option-selected">{$optionsSelected.label}</span>
 							{else}
 								<span class="option-selected option-selected-placeholder">{$strings.chooseAnOption}</span>
 							{/if}
@@ -72,8 +62,8 @@
 						<ul class="results-chosen">
 							{foreach $option in $options}
 								{let $selectedValue}
-									{if $value and $value.value}
-										{$value.value}
+									{if $optionsSelected and $optionsSelected.value}
+										{$optionsSelected.value}
 									{/if}
 								{/let}
 
