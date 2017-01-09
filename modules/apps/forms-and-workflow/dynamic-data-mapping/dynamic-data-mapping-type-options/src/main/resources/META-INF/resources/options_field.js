@@ -38,9 +38,13 @@ AUI.add(
 					},
 
 					value: {
-						setter: '_setValue',
-						validator: Array.isArray,
-						value: []
+						validator: '_validationValue',
+						value: [
+							{
+								label: 'Option',
+								value: 'Option'
+							}
+						]
 					}
 				},
 
@@ -439,7 +443,12 @@ AUI.add(
 
 						option.remove();
 
-						instance.set('value', instance.getValue());
+						if (instance.getValue().length === 0) {
+							instance.set('value', [{label: 'Option', value: 'Option'}], {doNotSendRequestToServer: true});
+						}
+						else {
+							instance.set('value', instance.getValue());
+						}
 
 						instance.render();
 					},
@@ -492,25 +501,6 @@ AUI.add(
 						option.set('key', contextValue.value);
 					},
 
-					_setValue: function(val) {
-						var instance = this;
-
-						if (!instance.get('allowEmptyOptions')) {
-
-							if (val.length === 0) {
-
-								return [
-									{
-										label: 'Option',
-										value: 'Option'
-									}
-								];
-							}
-						}
-
-						return val;
-					},
-
 					_syncOptionUI: function(option) {
 						var instance = this;
 
@@ -523,6 +513,10 @@ AUI.add(
 						var sortableList = instance.get('sortableList');
 
 						sortableList.add(container);
+					},
+
+					_validationValue: function(val) {
+						return Array.isArray(val) && val.length > 0;
 					},
 
 					_valueSortableList: function() {

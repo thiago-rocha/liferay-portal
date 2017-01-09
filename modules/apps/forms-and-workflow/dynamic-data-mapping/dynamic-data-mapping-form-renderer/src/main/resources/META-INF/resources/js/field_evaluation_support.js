@@ -32,6 +32,10 @@ AUI.add(
 			evaluate: function() {
 				var instance = this;
 
+				if (arguments[0].doNotSendRequestToServer) {
+					return;
+				}
+
 				var evaluator = instance.get('evaluator');
 
 				if (evaluator && instance.get('rendered') && instance.get('evaluable')) {
