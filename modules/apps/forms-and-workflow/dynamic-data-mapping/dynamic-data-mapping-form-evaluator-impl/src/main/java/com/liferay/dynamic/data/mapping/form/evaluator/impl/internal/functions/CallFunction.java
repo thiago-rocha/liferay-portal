@@ -162,7 +162,7 @@ public class CallFunction extends BaseDDMFormRuleFunction {
 				outputParameterSettings.outputParameterPath(),
 				CharPool.SEMICOLON);
 
-			if (paths.length == 1 && outputType.equals("list")) {
+			if (paths.length == 1 && outputType.equals("[\"list\"]")) {
 				paths = ArrayUtil.append(paths, paths[0]);
 			}
 
@@ -385,11 +385,11 @@ public class CallFunction extends BaseDDMFormRuleFunction {
 		Map<Object, Object> data, String ddmFormFieldName,
 		String propertyName) {
 
-		if (!data.containsKey(propertyName)) {
+		if (!data.containsKey(propertyName.toLowerCase())) {
 			return;
 		}
 
-		Object value = data.get(propertyName);
+		Object value = data.get(propertyName.toLowerCase());
 
 		DDMFormFieldEvaluationResult ddmFormFieldEvaluationResult =
 			getDDMFormFieldEvaluationResult(ddmFormFieldName);
@@ -424,7 +424,8 @@ public class CallFunction extends BaseDDMFormRuleFunction {
 //					data, ddmFormFieldName, keyValuePair.getKey(),
 //					keyValuePair.getValue());
 //			}
-			else {
+			else if(!data.isEmpty()){
+				
 				setDDMFormFieldValue(
 					data.get(0), ddmFormFieldName, String.valueOf(value));
 			}

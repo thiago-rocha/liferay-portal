@@ -50,18 +50,28 @@ public class AutoFillDDLFormRuleActionFactory {
 
 		Map<String, String> map = new LinkedHashMap<>();
 
-		if (Validator.isNull(paramsExpression)) {
+		if (Validator.isNull(paramsExpression))  {
 			return map;
 		}
-
+		
 		String[] innerExpressions = StringUtil.split(
 			paramsExpression, CharPool.SEMICOLON);
 
-		for (String innerExpression : innerExpressions) {
+		if (innerExpressions.length == 0) {
 			String[] tokens = StringUtil.split(
-				innerExpression, CharPool.EQUAL);
+				paramsExpression, CharPool.EQUAL);
 
 			map.put(tokens[0], tokens[1]);
+		}
+		else {
+			for (String innerExpression : innerExpressions) {
+				String[] tokens = StringUtil.split(
+					innerExpression, CharPool.EQUAL);
+
+				if (tokens.length == 2) {
+					map.put(tokens[0], tokens[1]);
+				}
+			}
 		}
 
 		return map;
@@ -72,18 +82,22 @@ public class AutoFillDDLFormRuleActionFactory {
 
 		Map<String, String> map = new LinkedHashMap<>();
 
-		if (Validator.isNull(resultMapExpression)) {
-			return map;
-		}
-
 		String[] innerExpressions = StringUtil.split(
 			resultMapExpression, CharPool.SEMICOLON);
 
-		for (String innerExpression : innerExpressions) {
+		if (innerExpressions.length == 0) {
 			String[] tokens = StringUtil.split(
-				innerExpression, CharPool.EQUAL);
+				resultMapExpression, CharPool.EQUAL);
 
 			map.put(tokens[1], tokens[0]);
+		}
+		else {
+			for (String innerExpression : innerExpressions) {
+				String[] tokens = StringUtil.split(
+					innerExpression, CharPool.EQUAL);
+
+				map.put(tokens[1], tokens[0]);
+			}
 		}
 
 		return map;
