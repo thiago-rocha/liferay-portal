@@ -83,16 +83,6 @@ public interface DDMRESTDataProviderSettings
 	public String filterParameterName();
 
 	@DDMFormField(
-		label = "%displayed-json-attribute",
-		properties = {
-			"placeholder=%enter-the-attribute-to-be-displayed",
-			"tooltip=%the-attribute-whose-value-is-displayed-to-the-end-user-for-selection"
-		},
-		required = true
-	)
-	public String key();
-
-	@DDMFormField(
 		label = "%password",
 		properties = {
 			"placeholder=%enter-a-password",
@@ -116,15 +106,5 @@ public interface DDMRESTDataProviderSettings
 		}
 	)
 	public String username();
-
-	@DDMFormField(
-		label = "%stored-json-attribute",
-		properties = {
-			"placeholder=%enter-the-attribute-to-be-stored",
-			"tooltip=%the-attribute-whose-value-is-stored-in-the-database-when-selected-by-a-user"
-		},
-		required = true
-	)
-	public String value();
 
 }
