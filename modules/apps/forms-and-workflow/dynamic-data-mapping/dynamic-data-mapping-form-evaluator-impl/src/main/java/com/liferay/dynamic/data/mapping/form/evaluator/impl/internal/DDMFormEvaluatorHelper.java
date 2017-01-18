@@ -118,6 +118,9 @@ public class DDMFormEvaluatorHelper {
 			new DDMFormFieldEvaluationResult(
 				ddmFormField.getName(), ddmFormFieldValue.getInstanceId());
 
+		setDDMFormFieldEvaluationResultFieldType(
+			ddmFormFieldEvaluationResult, ddmFormField);
+
 		setDDMFormFieldEvaluationResultReadOnly(
 			ddmFormFieldEvaluationResult, ddmFormField);
 		setDDMFormFieldEvaluationResultRequired(
@@ -438,6 +441,14 @@ public class DDMFormEvaluatorHelper {
 					ddmFormFieldName, valueString);
 			}
 		}
+	}
+
+	protected void setDDMFormFieldEvaluationResultFieldType(
+		DDMFormFieldEvaluationResult ddmFormFieldEvaluationResult,
+		DDMFormField ddmFormField) {
+
+		ddmFormFieldEvaluationResult.setProperty(
+			"fieldType", ddmFormField.getType());
 	}
 
 	protected void setDDMFormFieldEvaluationResultReadOnly(
