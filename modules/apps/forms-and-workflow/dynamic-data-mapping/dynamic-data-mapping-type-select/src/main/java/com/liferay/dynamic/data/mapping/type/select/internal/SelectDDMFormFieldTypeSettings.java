@@ -32,6 +32,18 @@ import com.liferay.dynamic.data.mapping.model.DDMFormFieldValidation;
 	rules = {
 		@DDMFormRule(
 			actions = {
+				"setVisible('ddmDataProviderInstanceId', equals(getValue('dataSourceType'), 'data-provider'))",
+				"setRequired('ddmDataProviderInstanceId', equals(getValue('dataSourceType'), 'data-provider'))",
+				"setVisible('ddmDataProviderOutput', equals(getValue('dataSourceType'), 'data-provider'))",
+				"setRequired('ddmDataProviderOutput', equals(getValue('dataSourceType'), 'data-provider'))",
+				"setVisible('options', equals(getValue('dataSourceType'), 'manual'))",
+				"setRequired('options', equals(getValue('dataSourceType'), 'manual'))",
+				"setVisible('validation', FALSE)"
+			},
+			condition = "TRUE"
+		),
+		@DDMFormRule(
+			actions = {
 				"call('getDataProviderInstanceOutputParameters', 'dataProviderInstanceId=ddmDataProviderInstanceId', 'ddmDataProviderOutput={key: outputParameterName, value: outputParameterName}')"
 			},
 			condition = "not(equals(getValue('ddmDataProviderInstanceId'), 0))"
@@ -104,12 +116,11 @@ public interface SelectDDMFormFieldTypeSettings
 
 	@DDMFormField(
 		dataType = "ddm-options", label = "%options",
-		properties = {"showLabel=false"}, required = true, type = "options",
-		visibilityExpression = "equals(dataSourceType, \"manual\")"
+		properties = {"showLabel=false"}, type = "options"
 	)
 	public DDMFormFieldOptions options();
 
-	@DDMFormField(visibilityExpression = "FALSE")
+	@DDMFormField
 	@Override
 	public DDMFormFieldValidation validation();
 
