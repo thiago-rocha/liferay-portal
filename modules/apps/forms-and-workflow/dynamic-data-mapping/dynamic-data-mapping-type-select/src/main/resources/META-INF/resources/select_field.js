@@ -125,6 +125,17 @@ AUI.add(
 							value = inputNode.val();
 						}
 
+						if (!value) {
+							var contextValue = instance._getContextValue();
+
+							var hasCorrespondentOption =
+								instance._hasCorrespondentOption(contextValue);
+
+							if (contextValue && !hasCorrespondentOption) {
+								value = contextValue;
+							}
+						}
+
 						return value;
 					},
 
@@ -233,6 +244,18 @@ AUI.add(
 						}
 					},
 
+					_getContextValue: function() {
+						var instance = this;
+
+						var contextValue = instance.get('value');
+
+						if (Lang.isArray(contextValue)) {
+							contextValue = contextValue[0];
+						}
+
+						return contextValue;
+					},
+
 					_getDataSourceType: function(value) {
 						if (Lang.isString(value)) {
 							try {
@@ -283,6 +306,24 @@ AUI.add(
 						return instance.get('container').one('.' + CSS_SELECT_TRIGGER_ACTION);
 					},
 
+					_hasCorrespondentOption: function(value) {
+						var instance = this;
+
+						var hasCorrespondentOption = false;
+
+						var inputNode = instance.getInputNode();
+
+						inputNode.all('option').each(
+							function(optionNode) {
+								if (optionNode.val() === value) {
+									hasCorrespondentOption = true;
+								}
+							}
+						);
+
+						return hasCorrespondentOption;
+					},
+
 					_isClickingOutSide: function(event) {
 						var instance = this;
 
@@ -296,6 +337,10 @@ AUI.add(
 
 						var container = instance.get('container');
 
+						if (!container.one('.drop-chosen')) {
+							return false;
+						}
+
 						var openList = container.one('.drop-chosen').hasClass('hide');
 
 						return !openList;
@@ -303,8 +348,6 @@ AUI.add(
 
 					_onClickItem: function(event) {
 						var instance = this;
-
-						var options = instance.get('options');
 
 						var value = event.target.getAttribute('data-option-value');
 
