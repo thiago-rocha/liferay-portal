@@ -18,11 +18,11 @@ AUI.add(
 						value: null
 					},
 
-					getDataProviderParametersSettingsURL: {
+					getDataProviderInstancesURL: {
 						value: ''
 					},
 
-					getDataProviderInstancesURL: {
+					getDataProviderParametersSettingsURL: {
 						value: ''
 					},
 
@@ -171,10 +171,10 @@ AUI.add(
 									bubbleTargets: [instance],
 									contentBox: instance.get('contentBox'),
 									fields: instance.getFields(),
-									getDataProviderParametersSettingsURL: instance.get('getDataProviderParametersSettingsURL'),
 									getDataProviderInstancesURL: instance.get('getDataProviderInstancesURL'),
-									portletNamespace: instance.get('portletNamespace'),
-									pages: instance.getPages()
+									getDataProviderParametersSettingsURL: instance.get('getDataProviderParametersSettingsURL'),
+									pages: instance.getPages(),
+									portletNamespace: instance.get('portletNamespace')
 								}
 							);
 						}
@@ -302,10 +302,12 @@ AUI.add(
 						var rulesDescription = [];
 
 						for (var i = 0; i < rules.length; i++) {
-							rulesDescription.push({
-								actions: instance._getActionsDescription(rules[i].actions),
-								conditions: rules[i].conditions
-							});
+							rulesDescription.push(
+								{
+									actions: instance._getActionsDescription(rules[i].actions),
+									conditions: rules[i].conditions
+								}
+							);
 						}
 
 						return rulesDescription;

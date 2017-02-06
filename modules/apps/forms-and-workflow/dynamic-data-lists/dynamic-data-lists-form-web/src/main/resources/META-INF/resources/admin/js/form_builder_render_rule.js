@@ -35,14 +35,12 @@ AUI.add(
 					fields: {
 						value: []
 					},
-					getDataProviderParametersSettingsURL: {
-						value: ''
-					},
+
 					getDataProviderInstancesURL: {
 						value: ''
 					},
-					
-					portletNamespace: {
+
+					getDataProviderParametersSettingsURL: {
 						value: ''
 					},
 
@@ -53,9 +51,15 @@ AUI.add(
 						validator: '_isValidLogicOperator',
 						value: Liferay.Language.get('or')
 					},
+
 					pages: {
 						value: 0
 					},
+
+					portletNamespace: {
+						value: ''
+					},
+
 					strings: {
 						value: {
 							and: Liferay.Language.get('and'),
@@ -90,10 +94,10 @@ AUI.add(
 						instance._actionFactory = new Liferay.DDL.FormBuilderActionFactory(
 							{
 								fields: instance.get('fields'),
-								getDataProviderParametersSettingsURL: instance.get('getDataProviderParametersSettingsURL'),
 								getDataProviderInstancesURL: instance.get('getDataProviderInstancesURL'),
-								portletNamespace: instance.get('portletNamespace'),
-								pages: instance.get('pages')
+								getDataProviderParametersSettingsURL: instance.get('getDataProviderParametersSettingsURL'),
+								pages: instance.get('pages'),
+								portletNamespace: instance.get('portletNamespace')
 							}
 						);
 					},
@@ -557,13 +561,19 @@ AUI.add(
 						var index = event.currentTarget.getData('card-id');
 
 						if (instance._actionsIndexes.length > 1) {
-							instance._actions[index + '-action'].destroy();
-							instance._actions[index + '-target'].destroy();
+							var action = instance._actions[index + '-action'];
+
+							if (action) {
+								instance._actions[index + '-action'].destroy();
+							}
+							else {
+								instance._actions[index + '-target'].destroy();
+
+								instance.get('boundingBox').one('.form-builder-rule-action-container-' + index).remove(true);
+							}
 
 							delete instance._actions[index + '-action'];
 							delete instance._actions[index + '-target'];
-
-							instance.get('boundingBox').one('.form-builder-rule-action-container-' + index).remove(true);
 
 							var actionIndex = instance._actionsIndexes.indexOf(Number(index));
 
