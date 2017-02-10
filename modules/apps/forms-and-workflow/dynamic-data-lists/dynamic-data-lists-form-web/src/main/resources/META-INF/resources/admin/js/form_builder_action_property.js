@@ -29,10 +29,7 @@ AUI.add(
 					getValue: function() {
 						var instance = this;
 
-						var type = instance.get('type');
-
 						return {
-							action: type,
 							target: instance._field.getValue()
 						};
 					},
