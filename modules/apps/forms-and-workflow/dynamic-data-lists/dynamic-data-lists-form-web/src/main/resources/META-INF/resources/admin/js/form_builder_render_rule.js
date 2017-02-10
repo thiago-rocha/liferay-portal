@@ -52,6 +52,7 @@ AUI.add(
 
 						instance._actionFactory = new Liferay.DDL.FormBuilderActionFactory(
 							{
+								bubbleTargets: [instance],
 								fields: instance.get('fields'),
 								pages: instance.get('pages')
 							}
