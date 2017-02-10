@@ -259,17 +259,23 @@ AUI.add(
 
 				var fieldName = field.get('fieldName');
 
-				var index = fieldName.split('-')[0];
+				var index;
 
-				if (fieldName.match('-condition-first-operand')) {
+				if (fieldName && fieldName.match('-condition-first-operand')) {
+					index = fieldName.split('-')[0];
+
 					instance._updateOperatorList(field.get('dataType'), index);
 					instance._updateSecondOperandFieldVisibility(index);
 				}
-				else if (fieldName.match('-condition-operator')) {
+				else if (fieldName && fieldName.match('-condition-operator')) {
+					index = fieldName.split('-')[0];
+
 					instance._updateTypeFieldVisibility(index);
 					instance._updateSecondOperandFieldVisibility(index);
 				}
-				else if (fieldName.match('-condition-second-operand-type')) {
+				else if (fieldName && fieldName.match('-condition-second-operand-type')) {
+					index = fieldName.split('-')[0];
+
 					instance._updateSecondOperandFieldVisibility(index);
 				}
 			},
@@ -590,11 +596,15 @@ AUI.add(
 			_updateSecondOperandFieldVisibility: function(index) {
 				var instance = this;
 
-				instance._hideSecondOperandField(index);
-
 				var secondOperandType = instance._getSecondOperandType(index);
 
+				if (!secondOperandType) {
+					return;
+				}
+
 				var secondOperandTypeValue = secondOperandType.getValue();
+
+				instance._hideSecondOperandField(index);
 
 				if (secondOperandTypeValue && secondOperandType.get('visible')) {
 					var secondOperandFields = instance._getSecondOperand(index, 'fields');
@@ -629,6 +639,9 @@ AUI.add(
 
 				var secondOperandType = instance._getSecondOperandType(index);
 
+				if (!secondOperandType) {
+					return;////////////////////////////////////////////////////////////////////////////////////////////////////
+				}
 				if (instance._getFirstOperandValue(index) && instance._getOperatorValue(index) && !instance._isUnaryCondition(index)) {
 					secondOperandType.set('visible', true);
 				}
