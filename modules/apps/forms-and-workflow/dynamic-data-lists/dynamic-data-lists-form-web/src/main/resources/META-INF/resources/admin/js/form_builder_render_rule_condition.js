@@ -1,6 +1,12 @@
 AUI.add(
 	'liferay-ddl-form-builder-render-rule-condition',
 	function(A) {
+		var currentUser = {
+			dataType: 'user',
+			label: 'User',
+			value: 'user'
+		};
+
 		var FormBuilderRenderRuleCondition = function(config) {};
 
 		FormBuilderRenderRuleCondition.ATTRS = {
@@ -252,6 +258,20 @@ AUI.add(
 				instance._addCondition(index);
 			},
 
+			_getDataType: function(value, options) {
+				var instance = this;
+
+				var option;
+
+				for (var i = 0; i < options.length; i++) {
+					option = options[i];
+
+					if (option.value === value) {
+						return option.dataType;
+					}
+				}
+			},
+
 			_handleConditionFieldsChange: function(event) {
 				var instance = this;
 
@@ -262,7 +282,7 @@ AUI.add(
 				var index = fieldName.split('-')[0];
 
 				if (fieldName.match('-condition-first-operand')) {
-					instance._updateOperatorList(field.get('dataType'), index);
+					instance._updateOperatorList(instance._getDataType(field.getValue(), field.get('options')), index);
 					instance._updateSecondOperandFieldVisibility(index);
 				}
 				else if (fieldName.match('-condition-operator')) {
@@ -383,12 +403,17 @@ AUI.add(
 					value = condition.operands[0].value;
 				}
 
+				var options = instance.get('fields');
+					
+				options.push(currentUser);
+
+
 				var field = new Liferay.DDM.Field.Select(
 					{
 						bubbleTargets: [instance],
 						fieldName: index + '-condition-first-operand',
 						label: instance.get('strings').if,
-						options: instance.get('fields'),
+						options: options,
 						showLabel: false,
 						value: value,
 						visible: true
@@ -579,6 +604,18 @@ AUI.add(
 									value: operatorTypes.number[j].name
 								},
 								operatorTypes.number[j]
+							)
+						);
+					}
+				}
+				else if (dataType === 'user') {
+					for (var k = 0; k < operatorTypes.user.length; k++) {
+						options.push(
+							A.merge(
+								{
+									value: operatorTypes.user[k].name
+								},
+								operatorTypes.user[k]
 							)
 						);
 					}
