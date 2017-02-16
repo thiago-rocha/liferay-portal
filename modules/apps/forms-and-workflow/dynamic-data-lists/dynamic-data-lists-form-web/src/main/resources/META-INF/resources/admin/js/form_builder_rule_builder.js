@@ -144,7 +144,7 @@ AUI.add(
 						return fields;
 					},
 
-					getPageIndex: function (field) {
+					getPageIndex: function(field) {
 						var instance = this;
 
 						var formBuilder = instance.get('formBuilder');
