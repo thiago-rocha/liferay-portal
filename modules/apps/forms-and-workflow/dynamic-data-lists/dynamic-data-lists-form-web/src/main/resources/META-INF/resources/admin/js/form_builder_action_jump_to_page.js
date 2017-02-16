@@ -22,9 +22,12 @@ AUI.add(
 
 					strings: {
 						value: {
-							from: Liferay.Language.get('from'),
 							to: Liferay.Language.get('to')
 						}
+					},
+
+					type: {
+						value: 'jump-to-page'
 					}
 				},
 
@@ -58,7 +61,6 @@ AUI.add(
 
 						var strings = instance.get('strings');
 
-						instance._createLabel(strings.from);
 						instance._createSourceField().render(boundingBox);
 						instance._createLabel(strings.to);
 						instance._createTargetField().render(boundingBox);
@@ -106,7 +108,7 @@ AUI.add(
 								options: instance.get('options'),
 								showLabel: false,
 								value: value,
-								visible: true
+								visible: false
 							}
 						);
 
