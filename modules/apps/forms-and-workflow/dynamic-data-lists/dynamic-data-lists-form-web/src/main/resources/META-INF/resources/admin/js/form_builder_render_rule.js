@@ -96,7 +96,7 @@ AUI.add(
 						boundingBox.delegate('click', A.bind(instance._handleDeleteActionClick, instance), '.action-card-delete');
 						boundingBox.delegate('click', A.bind(instance._handleSaveClick, instance), '.form-builder-rule-settings-save');
 
-						instance.after(instance._toggleShowRemoveButton, instance, '_addAction');
+						instance.after(instance._toggleDeleteActionButton, instance, '_addAction');
 
 						instance.after('fieldsChange', A.bind(instance._afterFieldsChange, instance));
 						instance.after('pagesChange', A.bind(instance._afterPagesChange, instance));
@@ -444,7 +444,7 @@ AUI.add(
 							}
 						}
 
-						instance._toggleShowRemoveButton();
+						instance._toggleDeleteActionButton();
 					},
 
 					_handleSaveClick: function() {
@@ -482,20 +482,14 @@ AUI.add(
 						}
 					},
 
-					_toggleShowRemoveButton: function() {
+					_toggleDeleteActionButton: function() {
 						var instance = this;
 
 						var contentBox = instance.get('contentBox');
 
-						var conditionList = contentBox.one('.liferay-ddl-form-builder-rule-condition-list');
-
 						var actionList = contentBox.one('.liferay-ddl-form-builder-rule-action-list');
 
-						var conditionItems = conditionList.all('.timeline-item');
-
 						var actionItems = actionList.all('.timeline-item');
-
-						conditionList.toggleClass(CSS_CAN_REMOVE_ITEM, conditionItems.size() > 2);
 
 						actionList.toggleClass(CSS_CAN_REMOVE_ITEM, actionItems.size() > 2);
 					},

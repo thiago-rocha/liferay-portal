@@ -1,6 +1,8 @@
 AUI.add(
 	'liferay-ddl-form-builder-render-rule-condition',
 	function(A) {
+		var CSS_CAN_REMOVE_ITEM = A.getClassName('can', 'remove', 'item');
+
 		var FormBuilderRenderRuleCondition = function(config) {};
 
 		FormBuilderRenderRuleCondition.ATTRS = {
@@ -27,7 +29,7 @@ AUI.add(
 				boundingBox.delegate('click', A.bind(instance._handleDeleteConditionClick, instance), '.condition-card-delete');
 				boundingBox.delegate('click', A.bind(instance._handleAddConditionClick, instance), '.form-builder-rule-add-condition');
 
-				instance.after(instance._toggleShowRemoveButton, instance, '_addCondition');
+				instance.after(instance._toggleDeleteConditionButton, instance, '_addCondition');
 
 				instance.on('logicOperatorChange', A.bind(instance._onLogicOperatorChange, instance));
 				instance.on('*:valueChange', A.bind(instance._handleConditionFieldsChange, instance));
@@ -310,7 +312,7 @@ AUI.add(
 					instance._deleteCondition(index);
 				}
 
-				instance._toggleShowRemoveButton();
+				instance._toggleDeleteConditionButton();
 
 				instance._updateLogicOperatorVisibility();
 			},
@@ -587,6 +589,18 @@ AUI.add(
 				if (field) {
 					field.set('visible', false);
 				}
+			},
+
+			_toggleDeleteConditionButton: function() {
+				var instance = this;
+
+				var contentBox = instance.get('contentBox');
+
+				var conditionList = contentBox.one('.liferay-ddl-form-builder-rule-condition-list');
+
+				var conditionItems = conditionList.all('.timeline-item');
+
+				conditionList.toggleClass(CSS_CAN_REMOVE_ITEM, conditionItems.size() > 2);
 			},
 
 			_updateOperatorList: function(dataType, conditionIndex) {
