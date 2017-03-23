@@ -260,6 +260,21 @@ AUI.add(
 				);
 
 				instance._addCondition(index);
+
+				instance._updateLogicOperatorVisibility();
+			},
+
+			_updateLogicOperatorVisibility: function() {
+				var instance = this;
+
+				var logicOperatorNode = instance.get('boundingBox').one('.liferay-ddl-form-builder-rule-condition-list').one('.dropdown');
+
+				if (instance._conditionsIndexes.length > 1) {
+					logicOperatorNode.removeClass('hide');
+				}
+				else {
+					logicOperatorNode.addClass('hide');
+				}
 			},
 
 			_handleConditionFieldsChange: function(event) {
@@ -296,6 +311,8 @@ AUI.add(
 				}
 
 				instance._toggleShowRemoveButton();
+
+				instance._updateLogicOperatorVisibility();
 			},
 
 			_handleLogicOperatorChange: function(event) {
