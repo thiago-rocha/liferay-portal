@@ -171,6 +171,12 @@
 								'liferay-ddl-form-builder-wizard'
 							]
 						},
+						'liferay-ddl-form-builder-pagination': {
+							path: 'form_builder_pagination.js',
+							requires: [
+								'aui-pagination'
+							]
+						},
 						'liferay-ddl-form-builder-render-rule': {
 							path: 'form_builder_render_rule.js',
 							requires: ['liferay-ddl-form-builder-action-factory', 'liferay-ddl-form-builder-rule-template', 'liferay-ddl-form-builder-rule-validator', 'liferay-ddm-form-renderer-field']
