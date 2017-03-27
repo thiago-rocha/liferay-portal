@@ -16,7 +16,6 @@ AUI.add(
 				prototype: {
 					CONTENT_TEMPLATE: '<ul class="pagination"></ul>',
 					ITEM_TEMPLATE: '<li class="{cssClass}"><a href="#">{content}</a></li>',
-					SUCCESS_PAGE_ITEM_TEMPLATE: '<li class="{cssClass}"><a href="#">{content}</a></li>',
 
 					initializer: function() {
 						var instance = this;
@@ -31,36 +30,52 @@ AUI.add(
 					},
 
 					_renderItemsUI: function(total) {
-						var instance = this,
-							tpl = instance.ITEM_TEMPLATE,
-							formatter = instance.get('formatter'),
-							offset = instance.get('offset'),
-							i,
-							buffer = '';
+						var instance = this;
 
-						buffer += A.Lang.sub(tpl, {
-							content: instance.getString('prev'),
-							cssClass: 'pagination-control'
-						});
+						var template = instance.ITEM_TEMPLATE;
+
+						var formatter = instance.get('formatter');
+
+						var offset = instance.get('offset');
+
+						var i;
+
+						var buffer = '';
+
+						buffer += A.Lang.sub(
+							template,
+							{
+								content: instance.getString('prev'),
+								cssClass: 'pagination-control'
+							}
+						);
 
 						for (i = offset; i <= (offset + total - 1); i++) {
 							buffer += formatter.apply(instance, [i]);
 						}
 
 						if (instance.get('successPage')) {
-							buffer += A.Lang.sub(tpl, {
-								content: Liferay.Language.get('success-page'),
-								cssClass: 'pagination-success-page'
-							});
+							buffer += A.Lang.sub(
+								template,
+								{
+									content: Liferay.Language.get('success-page'),
+									cssClass: 'pagination-success-page'
+								}
+							);
 						}
 
-						buffer += A.Lang.sub(tpl, {
-							content: instance.getString('next'),
-							cssClass: 'pagination-control'
-						});
+						buffer += A.Lang.sub(
+							template,
+							{
+								content: instance.getString('next'),
+								cssClass: 'pagination-control'
+							}
+						);
 
 						var items = A.NodeList.create(buffer);
+
 						instance.set('items', items);
+
 						instance.get('contentBox').setContent(items);
 
 						// When show controls is false, remove the first and last items from

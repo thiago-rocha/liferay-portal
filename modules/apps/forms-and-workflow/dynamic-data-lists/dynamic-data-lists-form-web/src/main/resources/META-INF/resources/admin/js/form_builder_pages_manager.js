@@ -290,6 +290,7 @@ AUI.add(
 						var pagesQuantity = wizard.get('items').length;
 
 						var pagination = instance._getPagination();
+
 						if (wizard.get('successPage') && selectedWizard === pagesQuantity) {
 							instance._showSuccessPage();
 
@@ -315,8 +316,8 @@ AUI.add(
 								},
 								page: instance.get('activePageNumber'),
 								strings: {
-									prev: '&#xAB;',
-									next: '&#xBB;'
+									next: '&#xBB;',
+									prev: '&#xAB;'
 								},
 								total: instance.get('pagesQuantity')
 							}
