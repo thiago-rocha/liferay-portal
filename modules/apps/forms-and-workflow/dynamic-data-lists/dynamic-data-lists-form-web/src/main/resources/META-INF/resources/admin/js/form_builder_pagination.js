@@ -24,10 +24,66 @@ AUI.add(
 						instance.after('successPageChange', A.bind(instance._afterSuccessPageChange, instance));
 					},
 
-					_afterSuccessPageChange: function() {
+					next: function() {
+						var instance = this;
+
+						var	total = instance.get('total');
+
+						if (instance.get('successPage')) {
+							total++;
+						}
+
+						if (total === 0) {
+							return;
+						}
+
+						var page = instance.get('page');
+
+						instance._dispatchRequest(
+							{
+								page: (instance.get('circular') && (page === total)) ? 1 : Math.min(total, ++page)
+							}
+						);
+
+						return instance;
+					},
+
+					prev: function() {
+						var instance = this;
+
+						var	total = instance.get('total');
+
+						if (instance.get('successPage')) {
+							total++;
+						}
+
+						if (total === 0) {
+							return;
+						}
+
+						var page = instance.get('page');
+
+						instance._dispatchRequest(
+							{
+								page: (instance.get('circular') && (page === 1)) ? total : Math.max(1, --page)
+							}
+						);
+
+						return instance;
+					},
+
+					_afterSuccessPageChange: function(event) {
 						var instance = this;
 
 						instance._renderItemsUI(instance.get('total'));
+
+						if (event.newVal) {
+							instance._dispatchRequest(
+								{
+									page: instance.get('total') + 1
+								}
+							);
+						}
 					},
 
 					_renderItemsUI: function(total) {
