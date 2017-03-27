@@ -87,35 +87,42 @@ AUI.add(
 					},
 
 					_renderItemsUI: function(total) {
-						var instance = this,
-							tpl = instance.ITEM_TEMPLATE,
-							formatter = instance.get('formatter'),
-							offset = instance.get('offset'),
-							i,
-							buffer = '';
+						var instance = this;
 
-						buffer += A.Lang.sub(tpl, {
-							content: instance.getString('prev'),
-							cssClass: 'pagination-control'
-						});
+						var	offset = instance.get('offset');
 
-						for (i = offset; i <= (offset + total - 1); i++) {
-							buffer += formatter.apply(instance, [i]);
+						var buffer = A.Lang.sub(
+							instance.ITEM_TEMPLATE,
+							{
+								content: instance.getString('prev'),
+								cssClass: 'pagination-control'
+							}
+						);
+
+						for (var i = offset; i <= (offset + total - 1); i++) {
+							buffer += instance.get('formatter').apply(instance, [i]);
 						}
 
 						if (instance.get('successPage')) {
-							buffer += A.Lang.sub(tpl, {
-								content: Liferay.Language.get('success-page'),
-								cssClass: 'pagination-success-page'
-							});
+							buffer += A.Lang.sub(
+								instance.ITEM_TEMPLATE,
+								{
+									content: Liferay.Language.get('success-page'),
+									cssClass: 'pagination-success-page'
+								}
+							);
 						}
 
-						buffer += A.Lang.sub(tpl, {
-							content: instance.getString('next'),
-							cssClass: 'pagination-control'
-						});
+						buffer += A.Lang.sub(
+							instance.ITEM_TEMPLATE,
+							{
+								content: instance.getString('next'),
+								cssClass: 'pagination-control'
+							}
+						);
 
 						var items = A.NodeList.create(buffer);
+
 						instance.set('items', items);
 						instance.get('contentBox').setContent(items);
 
