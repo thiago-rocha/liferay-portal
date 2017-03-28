@@ -35,8 +35,11 @@ AUI.add(
 						getter: '_getOptions',
 						validator: Array.isArray,
 						value: []
-					}
+					},
 
+					value: {
+						value: []
+					}
 				},
 
 				EXTENDS: Liferay.DDM.Renderer.Field,
@@ -80,7 +83,7 @@ AUI.add(
 							}
 						);
 
-						return values.join();
+						return values;
 					},
 
 					setValue: function(value) {
