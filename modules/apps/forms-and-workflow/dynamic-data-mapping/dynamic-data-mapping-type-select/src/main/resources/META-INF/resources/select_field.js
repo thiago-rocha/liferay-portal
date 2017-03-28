@@ -152,7 +152,7 @@ AUI.add(
 							}
 						);
 
-						value = value.join();
+						value = value;
 
 						if (!value) {
 							var contextValue = instance._getContextValue();
