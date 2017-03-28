@@ -18,7 +18,6 @@ AUI.add(
 		var CheckboxMultipleField = A.Component.create(
 			{
 				ATTRS: {
-
 					showAsSwitcher: {
 						value: false
 					},
