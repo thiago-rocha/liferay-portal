@@ -7,7 +7,7 @@ AUI.add(
 			{
 				ATTRS: {
 					advancedOperators: {
-						value: []
+						value: ''
 					},
 					strings: {
 						value: {
@@ -16,7 +16,7 @@ AUI.add(
 					}
 				},
 
-				AUGMENTS: [],
+				EXTENDS: A.Widget,
 
 				NAME: 'liferay-ddl-form-builder-calculator',
 
@@ -72,5 +72,6 @@ AUI.add(
 	},
 	'',
 	{
+		requires: ['aui-base', 'aui-component', 'widget', 'liferay-ddm-soy-template-util']
 	}
 );

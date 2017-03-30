@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<testsuites>
+  <testsuite name="Firefox 37.0.0 (Mac OS X 10.12.0)" package="" timestamp="2017-03-30T14:44:35" id="0" hostname="java.local" tests="1" errors="1" failures="1" time="0">
+    <properties>
+      <property name="browser.fullName" value="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:37.0) Gecko/20100101 Firefox/37.0"/>
+    </properties>
+    <testcase name="&quot;before all&quot; hook" time="0" classname="Firefox 37.0.0 (Mac OS X 10.12.0).Liferay_DDL_FormBuilderCalculator">
+      <failure type="">TypeError: A.getClassName is not a function (src/main/resources/META-INF/resources/admin/js/form_builder_calculator.js:4)
+</failure>
+    </testcase>
+    <system-out><![CDATA[Firefox 37.0.0 (Mac OS X 10.12.0) WARN: 'yui: NOT loaded: aui-base'
+,Firefox 37.0.0 (Mac OS X 10.12.0) WARN: 'yui: NOT loaded: aui-component'
+,Firefox 37.0.0 (Mac OS X 10.12.0) WARN: 'yui: NOT loaded: aui-base'
+,Firefox 37.0.0 (Mac OS X 10.12.0) WARN: 'yui: NOT loaded: aui-component'
+,Firefox 37.0.0 (Mac OS X 10.12.0) WARN: 'yui: NOT loaded: aui-base'
+,Firefox 37.0.0 (Mac OS X 10.12.0) WARN: 'yui: NOT loaded: aui-component'
+
+]]></system-out>
+    <system-err/>
+  </testsuite>
+</testsuites>
