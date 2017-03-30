@@ -6,6 +6,9 @@ AUI.add(
 		var FormBuilderCalculator = A.Component.create(
 			{
 				ATTRS: {
+					advancedOperators: {
+						value: []
+					},
 					strings: {
 						value: {
 							addField: Liferay.Language.get('add-field')
@@ -18,17 +21,6 @@ AUI.add(
 				NAME: 'liferay-ddl-form-builder-calculator',
 
 				prototype: {
-					_handleButtonClick: function(event) {
-						var instance = this;
-
-						instance.fire(
-							'clickedKey',
-							{
-								key: event.currentTarget.getData('calculator-key')
-							}
-						);
-					},
-
 					renderUI: function() {
 						var instance = this;
 
@@ -54,13 +46,24 @@ AUI.add(
 
 						return calculatorTemplateRenderer(
 							{
-								strings: strings,
+								advancedOperators: instance.get('advancedOperators'),
 								calculatorAngleLeft: Liferay.Util.getLexiconIconTpl('angle-left', 'icon-monospaced'),
-								calculatorEllipsis: Liferay.Util.getLexiconIconTpl('ellipsis-h', 'icon-monospaced')
+								calculatorEllipsis: Liferay.Util.getLexiconIconTpl('ellipsis-h', 'icon-monospaced'),
+								strings: strings
 							}
 						);
 					},
 
+					_handleButtonClick: function(event) {
+						var instance = this;
+
+						instance.fire(
+							'clickedKey',
+							{
+								key: event.currentTarget.getData('calculator-key')
+							}
+						);
+					}
 				}
 			}
 		);

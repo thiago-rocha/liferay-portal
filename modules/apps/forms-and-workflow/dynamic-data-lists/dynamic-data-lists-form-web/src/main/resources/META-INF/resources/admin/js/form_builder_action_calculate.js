@@ -1,8 +1,6 @@
 AUI.add(
 	'liferay-ddl-form-builder-action-calculate',
 	function(A) {
-		var Lang = A.Lang;
-
 		var CSS_CALCULATE_CONTAINER_CALCULATOR = A.getClassName('calculate', 'container', 'calculator', 'component');
 
 		var CSS_CALCULATE_CONTAINER_FIELDS = A.getClassName('calculate', 'container', 'fields');
@@ -33,21 +31,9 @@ AUI.add(
 					initializer: function() {
 						var instance = this;
 
-						instance._calculator = instance._createCalculator();
+						var calculator = instance._getCalculator();
 
-						instance._calculator.after('addMumber', instance._afterAddNumber);
-					},
-
-					_createCalculator: function() {
-						var instance = this;
-
-						var calculator = new Liferay.DDL.FormBuilderCalculator(
-							{
-
-							}
-						);
-
-						return calculator;
+						calculator.after('addMumber', instance._afterAddNumber);
 					},
 
 					getValue: function() {
@@ -60,16 +46,6 @@ AUI.add(
 						};
 					},
 
-					_getRuleContainerTemplate: function() {
-						var instance = this;
-
-						var calculateTemplateRenderer = Liferay.DDM.SoyTemplateUtil.getTemplateRenderer('ddl.calculate.settings');
-
-						return calculateTemplateRenderer(
-							{}
-						);
-					},
-
 					render: function() {
 						var instance = this;
 
@@ -79,21 +55,9 @@ AUI.add(
 
 						calculateContainer.setHTML(instance._getRuleContainerTemplate());
 
-						instance._calculator.render(instance._getCalculatorContainer());
+						instance._getCalculator().render(instance._getCalculatorContainer());
 
 						instance._createCalculateFieldsSettings();
-					},
-
-					_getCalculatorContainer: function() {
-						var instance = this;
-
-						var index = instance.get('index');
-
-						var boundingBox = instance.get('boundingBox');
-
-						var calculatorContainer = boundingBox.one('.additional-info-' + index).one('.' + CSS_CALCULATE_CONTAINER_CALCULATOR);
-
-						return calculatorContainer;
 					},
 
 					_createCalculateFieldsSettings: function() {
@@ -105,9 +69,17 @@ AUI.add(
 
 						var calculateFieldsContainer = boundingBox.one('.additional-info-' + index).one('.' + CSS_CALCULATE_CONTAINER_FIELDS);
 
-						instance._createTargetField().render(calculateFieldsContainer);
-
 						instance._createExpressionField().render(calculateFieldsContainer);
+
+						instance._createTargetField().render(calculateFieldsContainer);
+					},
+
+					_createCalculator: function() {
+						var instance = this;
+
+						var calculator = new Liferay.DDL.FormBuilderCalculator();
+
+						return calculator;
 					},
 
 					_createExpressionField: function() {
@@ -156,6 +128,36 @@ AUI.add(
 						);
 
 						return instance._targetField;
+					},
+
+					_getCalculator: function() {
+						var instance = this;
+
+						if (!instance._calculator) {
+							instance._calculator = instance._createCalculator();
+						}
+
+						return instance._calculator;
+					},
+
+					_getCalculatorContainer: function() {
+						var instance = this;
+
+						var index = instance.get('index');
+
+						var boundingBox = instance.get('boundingBox');
+
+						var calculatorContainer = boundingBox.one('.additional-info-' + index).one('.' + CSS_CALCULATE_CONTAINER_CALCULATOR);
+
+						return calculatorContainer;
+					},
+
+					_getRuleContainerTemplate: function() {
+						var instance = this;
+
+						var calculateTemplateRenderer = Liferay.DDM.SoyTemplateUtil.getTemplateRenderer('ddl.calculate.settings');
+
+						return calculateTemplateRenderer();
 					}
 				}
 			}
