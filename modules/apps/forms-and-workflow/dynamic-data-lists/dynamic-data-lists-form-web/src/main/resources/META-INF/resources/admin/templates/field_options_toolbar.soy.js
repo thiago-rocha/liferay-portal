@@ -19,11 +19,11 @@ if (goog.DEBUG) {
 
 ddl.field_settings_toolbar_list = function(opt_data, opt_ignored) {
   var output = '<ul class="dropdown-menu dropdown-menu-right">';
-  var optionList42 = opt_data.options;
-  var optionListLen42 = optionList42.length;
-  for (var optionIndex42 = 0; optionIndex42 < optionListLen42; optionIndex42++) {
-    var optionData42 = optionList42[optionIndex42];
-    output += ddl.field_settings_toolbar_item({option: optionData42});
+  var optionList56 = opt_data.options;
+  var optionListLen56 = optionList56.length;
+  for (var optionIndex56 = 0; optionIndex56 < optionListLen56; optionIndex56++) {
+    var optionData56 = optionList56[optionIndex56];
+    output += ddl.field_settings_toolbar_item({option: optionData56});
   }
   output += '</ul>';
   return output;
